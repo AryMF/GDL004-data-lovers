@@ -1,0 +1,70 @@
+.mainScreenClass {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0%;
+    padding: 0%;
+}
+
+.header {
+    display: flex;
+    justify-content: center;
+    width: 99vw;
+    height: fit-content;
+    margin-bottom: 10px;
+    background-color: red;
+}
+
+.header button {
+    width: 30vw;
+    height: fit-content;
+    margin: 15px;
+    padding: 4px;
+}
+
+.pokemonContainerGrid{
+    display: flex;
+    flex-flow: row wrap;
+    background-color: transparent;
+    width: 99vw;
+}
+
+.divContainerClass {
+    display: flex;
+    justify-content: center;
+    flex: 20%;
+    padding: 5px;
+}
+
+@media screen and (max-width: 768px) {
+    .divContainerClass {
+        flex: 33.33%;
+    }
+}
+
+@media screen and (max-width: 500px) {
+    .divContainerClass {
+        flex: 100%;
+    }
+}
+
+.divPokemonCardClass{
+    border-radius: 10%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: fit-content;
+    height: fit-content;
+}
+
+.TextFormat {
+    font-family: 'Helvetica',sans-serif;
+    font-size: 18px;
+    font-weight: bold;
+    text-align: center;
+    margin: 18px;
+}
+
+.imagePokemon{
+    margin: 25px;
+}

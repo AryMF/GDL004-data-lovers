@@ -6,9 +6,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="style.css" />
+    <script type="module" src="main.js"></script>
+    <script type="module" src="data.js"></script>
   </head>
   <body>
-    <div id="root"></div>
-    <script type="module" src="main.js"></script>
+    <div id="mainScreen" class="mainScreenClass">
+      <div class="header">
+        <button>Sort by</button>
+        <button>Filter</button>
+        <button>Search</button>
+      </div>
+      <div id="pokemonContainer" class="pokemonContainerGrid"></div>
+    </div>
+
   </body>
 </html>
