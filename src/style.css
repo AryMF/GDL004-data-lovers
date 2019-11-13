@@ -68,3 +68,9 @@
 .imagePokemon{
     margin: 25px;
 }
+
+.buttonCloseClass{
+    background-color: transparent;
+    border: none;
+    font-size: 2rem;
+}

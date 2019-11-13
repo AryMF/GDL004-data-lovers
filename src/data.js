@@ -8,9 +8,7 @@
 
 window.data =  {
   filterData: function(data, condition){
-    let filterJSON = [];
-    let dataLength = Object.keys(data.pokemon); //Por si se necesita
-  
+    let filterJSON = [];  
 
     const filteredByNameOrNumber = (array) =>{
       if(("name" in array && array.name == condition) || ("id" in array && array.id == condition)){
@@ -20,7 +18,7 @@ window.data =  {
       }
     }    
 
-    filterJSON = data.pokemon.filter(filteredByNameOrNumber);
+    filterJSON = data.filter(filteredByNameOrNumber);
 
     return filterJSON;
 

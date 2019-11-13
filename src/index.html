@@ -8,14 +8,23 @@
     <link rel="stylesheet" href="style.css" />
     <script type="module" src="main.js"></script>
     <script type="module" src="data.js"></script>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   </head>
   <body>
     <div id="mainScreen" class="mainScreenClass">
       <div class="header">
-        <button>Sort by</button>
-        <button>Filter</button>
-        <button>Search</button>
+        <button aria-label="Botón de ordenado">Sort by</button>
+        <button id="filterButton" aria-label="Botón de filtrado">Filter</button>
+        <button aria-label="Botón de búsqueda">Search</button>
       </div>
+
+      <dialog id="filterByPromp" class="material-icons">
+          <button type="buttonClose" class="buttonCloseClass" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+          </button>
+
+      </dialog>
+      <dialog></dialog>
       <div id="pokemonContainer" class="pokemonContainerGrid"></div>
     </div>
 

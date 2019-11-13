@@ -1,21 +1,19 @@
 const DATA_URL = "https://raw.githubusercontent.com/AryMF/GDL004-data-lovers/master/src/data/pokemon/pokemon.json";
-let dataJSON = {};
+let dataPokemon = {};
 
 async function getData (){
     const dataRequest = await fetch(DATA_URL);
-    dataJSON = await dataRequest.json(); 
+    const dataJSON = await dataRequest.json(); 
     return dataJSON;
 };
 
 const main = ()  =>{
     getData()
         .then(dataJSON => {
+            dataPokemon = dataJSON.pokemon;
             console.log("Tu JSON obtenido por fetch es:");
-            console.log(dataJSON);
-            // let filterJSON = window.data.filterData(dataJSON, "Bulbasaur");
-            // console.log("Tu JSON filtrado es:");
-            //  console.log(filterJSON);
-            printPokemonCards(dataJSON.pokemon);
+            console.log(dataPokemon);
+            printPokemonCards(dataPokemon);
         })
         .catch(error => {
             console.error("Error al cargar JSON por fetch");
@@ -26,12 +24,13 @@ const main = ()  =>{
 window.addEventListener("load", main);
 
 const printPokemonCards = (dataArray) => {
-    let i=0;
     let divContainer;
     let divPokemonCard;
     let pokemonImage;
     let pokemonName;
     let randomColor;    
+
+    document.getElementById("pokemonContainer").innerHTML = "";
 
     dataArray.forEach(element => {
         divContainer = document.createElement("DIV");
@@ -64,3 +63,11 @@ const printPokemonCards = (dataArray) => {
         
     });
 }
+
+document.getElementById("filterButton").addEventListener("click", () =>{
+    let searchCondition = prompt("Nombre del Pokemon:", "Bulbasaur");
+    let filterJSON = window.data.filterData(dataPokemon, searchCondition);
+    console.log("Tu JSON filtrado es:");
+    console.log(filterJSON);
+    printPokemonCards(filterJSON);
+});
