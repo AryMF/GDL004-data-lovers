@@ -13,19 +13,44 @@
   <body>
     <div id="mainScreen" class="mainScreenClass">
       <div class="header">
-        <button aria-label="Botón de ordenado">Sort by</button>
-        <button id="filterButton" aria-label="Botón de filtrado">Filter</button>
-        <button aria-label="Botón de búsqueda">Search</button>
+        <button aria-label="Ordenar">Sort by</button>
+        <button id="filterButton" aria-label="Filtrado">Filter</button>
+        <button id="searchButton" aria-label="Búsqueda">Search</button>
+        <button id="resetButton" aria-label="Reset">Reset</button>
+      </div>
+      <div id="pokemonContainer" class="pokemonContainerGrid" ></div>
+    </div>
+
+    <div id="promptContainer" class="promptContainerBackgroundClass">
+      <!-- Prompt de búsqueda-->
+      <div id="searchByPrompt" class="promptSearchWindowClass">
+        <div>
+          <span class="buttonCloseClass" aria-label="Close" aria-hidden="true">&times;</span>
+        </div>
+        <div class="centerElements">
+          <div class="searchBarMargin">
+            <input id="searchPromptInput" class="searchPromptInputClass textFormat" type="text" placeholder="Bulbasaur or 1"></input>
+            <button id="searchPromptButton" class="searchPromptButtonClass"> search </button>
+          </div>
+        </div>
       </div>
 
-      <dialog id="filterByPromp" class="material-icons">
-          <button type="buttonClose" class="buttonCloseClass" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-          </button>
+      <!-- Prompt de filtrado-->
+      <div id="filterByPrompt" class="promptFilterWindowClass">
+        <div>
+          <span class="buttonCloseClass" aria-label="Close" aria-hidden="true">&times;</span>
+          </br>
+          <h1>Filtrar por</h1>
+          </br>
+        </div>
+        <div id="typeButtonsDiv">
+          <!--Lista-->
+        </div>
+        <div>
+          <!--Botones-->
+        </div>
 
-      </dialog>
-      <dialog></dialog>
-      <div id="pokemonContainer" class="pokemonContainerGrid"></div>
+      </div>
     </div>
 
   </body>
