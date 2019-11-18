@@ -1,66 +1,91 @@
-const DATA_URL = "https://raw.githubusercontent.com/AryMF/GDL004-data-lovers/master/src/data/pokemon/pokemon.json";
-let dataJSON = {};
+const DATA_URL =
+  "https://raw.githubusercontent.com/AryMF/GDL004-data-lovers/master/src/data/pokemon/pokemon.json";
+let dataPokemon = {};
 
-async function getData (){
-    const dataRequest = await fetch(DATA_URL);
-    dataJSON = await dataRequest.json(); 
-    return dataJSON;
-};
+async function getData() {
+  const dataRequest = await fetch(DATA_URL);
+  const dataJSON = await dataRequest.json();
+  return dataJSON;
+}
 
-const main = ()  =>{
-    getData()
-        .then(dataJSON => {
-            console.log("Tu JSON obtenido por fetch es:");
-            console.log(dataJSON);
-            // let filterJSON = window.data.filterData(dataJSON, "Bulbasaur");
-            // console.log("Tu JSON filtrado es:");
-            //  console.log(filterJSON);
-            printPokemonCards(dataJSON.pokemon);
-        })
-        .catch(error => {
-            console.error("Error al cargar JSON por fetch");
-            console.log(error);
-        });
+const main = () => {
+  getData()
+    .then(dataJSON => {
+      dataPokemon = dataJSON.pokemon;
+      console.log("Tu JSON obtenido por fetch es:");
+      console.log(dataJSON);
+      // let filterJSON = window.data.filterData(dataJSON, "Bulbasaur");
+      // console.log("Tu JSON filtrado es:");
+      //  console.log(filterJSON);
+      printPokemonCards(dataPokemon);
+    })
+    .catch(error => {
+      console.error("Error al cargar JSON por fetch");
+      console.log(error);
+    });
 };
 
 window.addEventListener("load", main);
 
-const printPokemonCards = (dataArray) => {
-    let i=0;
-    let divContainer;
-    let divPokemonCard;
-    let pokemonImage;
-    let pokemonName;
-    let randomColor;    
+const printPokemonCards = dataArray => {
+  let i = 0;
+  let divContainer;
+  let divPokemonCard;
+  let pokemonImage;
+  let pokemonName;
+  let randomColor;
 
-    dataArray.forEach(element => {
-        divContainer = document.createElement("DIV");
-        // randomColor = "background-color: #" + Math.floor(Math.random()*16777215).toString(16) + ";";
-        // divContainer.setAttribute("style", randomColor);
-        divContainer.classList.add("divContainerClass");
-        document.getElementById("pokemonContainer").appendChild(divContainer);
+  document.getElementById("pokemonContainer").innerHTML = "";
 
-        divPokemonCard = document.createElement("DIV");
-        randomColor = "background-color: #" + Math.floor(Math.random()*16777215).toString(16) + ";";
-        divPokemonCard.setAttribute("style", randomColor);
-        divPokemonCard.classList.add("divPokemonCardClass");
-        divContainer.appendChild(divPokemonCard);
+  dataArray.forEach(element => {
+    divContainer = document.createElement("DIV");
+    // randomColor = "background-color: #" + Math.floor(Math.random()*16777215).toString(16) + ";";
+    // divContainer.setAttribute("style", randomColor);
+    divContainer.classList.add("divContainerClass");
+    document.getElementById("pokemonContainer").appendChild(divContainer);
 
-        pokemonImage = document.createElement("IMG");
-        // pokemonImage.className = "imagen";
-        pokemonImage.setAttribute("id", element.id);
-        pokemonImage.setAttribute("src", element.img);
-        pokemonImage.setAttribute("alt", element.name);
-        pokemonImage.classList.add("imagePokemon");
-        pokemonImage.addEventListener("click", function() {
-            alert("Hola yo soy " + element.name);
-        });
-        divPokemonCard.appendChild(pokemonImage);
+    divPokemonCard = document.createElement("DIV");
+    randomColor =
+      "background-color: #" +
+      Math.floor(Math.random() * 16777215).toString(16) +
+      ";";
+    divPokemonCard.setAttribute("style", randomColor);
+    divPokemonCard.classList.add("divPokemonCardClass");
+    divContainer.appendChild(divPokemonCard);
 
-        pokemonName = document.createElement("SPAN");
-        pokemonName.innerHTML = element.name;
-        pokemonName.classList.add("TextFormat");
-        divPokemonCard.appendChild(pokemonName);
-        
+    pokemonImage = document.createElement("IMG");
+    // pokemonImage.className = "imagen";
+    pokemonImage.setAttribute("id", element.id);
+    pokemonImage.setAttribute("src", element.img);
+    pokemonImage.setAttribute("alt", element.name);
+
+    pokemonImage.classList.add("imagePokemon");
+
+    pokemonImage.addEventListener("click", function() {
+      alert("Hola yo soy " + element.name);
     });
-}
+    divPokemonCard.appendChild(pokemonImage);
+
+    pokemonName = document.createElement("SPAN");
+    pokemonName.innerHTML = element.name;
+    pokemonName.classList.add("TextFormat");
+    divPokemonCard.appendChild(pokemonName);
+  });
+};
+
+document.getElementById("filterButton").addEventListener("click", () => {
+  let searchCondition = prompt("Nombre del Pokemon:", "Bulbasaur");
+  let filterJSON = window.data.filterData(dataPokemon, searchCondition);
+  console.log("Tu JSON filtrado es:");
+  console.log(filterJSON);
+  printPokemonCards(filterJSON);
+});
+
+document.getElementById("sortByButton").addEventListener("click", () => {
+  // let sortBy = prompt("Orden de pokemons:", "Orden Alfabético");
+  // let sortByJSON = window.data.sortData(dataPokemon, sortBy, sortOrder);
+  let flag = 1;
+  let sortByJSON = window.data.sortData(dataPokemon, "name", flag);
+  console.log("Tu JSON ordenado es:");
+  printPokemonCards(sortByJSON);
+});
