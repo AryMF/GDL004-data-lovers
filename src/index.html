@@ -8,18 +8,57 @@
     <link rel="stylesheet" href="style.css" />
     <script type="module" src="main.js"></script>
     <script type="module" src="data.js"></script>
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Ubuntu&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Rajdhani&display=swap" rel="stylesheet">
   </head>
   <body>
+    <div class="floatingMenuDIV">
+      <input type="checkbox" id="toggle" />
+          <label id="floatingMenu" class="floatingMenuClass floatingMenuClassNormal" for="toggle" tabindex="0">
+              <i class="fa fa-plus symbolFormat"></i>
+          </label>
+      <nav id="searchButton" class="floatingMenuElement" tabindex="0" aria-label="Búsqueda">
+        <i class="fa fa-search"></i>
+      </nav>
+      <nav id="filterButton" class="floatingMenuElement" tabindex="0" aria-label="Filtrado">
+        <i class="fa fa-filter"></i>
+      </nav>
+      <nav id="sortByButton" class="floatingMenuElement" tabindex="0" aria-label="Ordenar">
+        <i class="fa fa-sort-amount-desc"></i>
+      </nav>
+      <nav class="floatingMenuElement" tabindex="0">
+        <i class="fa fa-bar-chart"></i>
+      </nav>
+    </div>
+
     <div id="mainScreen" class="mainScreenClass">
-      <div class="header">
-        <button aria-label="Ordenar">Sort by</button>
-        <button id="filterButton" aria-label="Filtrado">Filter</button>
-        <button id="searchButton" aria-label="Búsqueda">Search</button>
+      <!-- Barra de menu superior -->
+      <header class="header">
+        <button style="background-color: transparent; border: 0;" tabindex="-1">
+          <i id="menuButton" class="fa fa-reorder" tabindex="1"></i>
+        </button>
+        <div style="flex: 1;">
+          <h1 class="titleText">
+              Pokedex
+          </h1>
+        </div>
+        <button style="background-color: transparent; border: 0;" tabindex="-1">
+            <i id="favoritesButton" class="fa fa-star" tabindex="0"></i>
+        </button>
+      </header>
+      <br><br><br><br><br>
+
+      <!-- Botones de filtrado -->
+      <div>
         <button id="resetButton" aria-label="Reset">Reset</button>
       </div>
-      <div id="pokemonContainer" class="pokemonContainerGrid" ></div>
+
+      <!-- Despliegue de pokemons -->
+      <main id="pokemonContainer" class="pokemonContainerGrid" ></main>
     </div>
+
+    
 
     <div id="promptContainer" class="promptContainerBackgroundClass">
       <!-- Prompt de búsqueda-->
@@ -29,8 +68,8 @@
         </div>
         <div class="centerElements">
           <div class="searchBarMargin">
-            <input id="searchPromptInput" class="searchPromptInputClass textFormat" type="text" placeholder="Bulbasaur or 1"></input>
-            <button id="searchPromptButton" class="searchPromptButtonClass"> search </button>
+            <input id="searchPromptInput" class="searchPromptInputClass" type="text" placeholder="Bulbasaur or 1"></input>
+            <button id="searchPromptButton" class="searchPromptButtonClass fa fa-search"> </button>
           </div>
         </div>
       </div>
@@ -51,7 +90,20 @@
         </div>
 
       </div>
-    </div>
+
+      <!-- Prompt de ordenado-->
+      <div id="sortByPrompt" class="promptSortByWindowClass">
+        <div>
+          <span class="buttonCloseClass" aria-label="Close" aria-hidden="true">&times;</span>
+          </br>
+          <h1>Sort by</h1>
+          </br>
+        </div>
+        <div id="sortByButtonsDiv">
+        </div>
+      </div>
+
+    </div> <!-- Cerrando promptContainer -->
 
   </body>
 </html>
