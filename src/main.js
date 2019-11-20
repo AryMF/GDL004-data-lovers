@@ -1,12 +1,16 @@
 const DATA_URL = "https://raw.githubusercontent.com/AryMF/GDL004-data-lovers/master/src/data/pokemon/pokemon.json";
-let dataPokemon = {};
+let dataPokemon = [];
 let filterJSON = [];
+let favoritesJSON = [];
 let promptContainerElement = document.getElementById("promptContainer");
 let searchByPromptElement = document.getElementById("searchByPrompt");
-let filterByPromptElement = document.getElementById("filterByPrompt");
 let searchPromptInputElement = document.getElementById("searchPromptInput");
-let sortByPromptElement = document.getElementById("sortByPrompt");
 
+let filterByPromptElement = document.getElementById("filterByPrompt");
+let typeButtonsDiv = document.getElementById("typeButtonsDiv");
+
+let sortByPromptElement = document.getElementById("sortByPrompt");
+let sortByButtons = document.getElementById("sortByButtonsDiv");
 
 let buttonCloseNode = document.getElementsByClassName("buttonCloseClass");
 let typeArray = ["Normal", "Fire", "Fighting", "Water", "Flying", "Grass", "Poison", "Electric", 
@@ -15,8 +19,6 @@ let typeArray = ["Normal", "Fire", "Fighting", "Water", "Flying", "Grass", "Pois
 const typeArrayColor = ["D2B48C", "ED602D", "9E201C", "0074D9", "15707C", "2ECC40", "A33EA1", "FFDC00", 
 "B28F35", "85144b", "7F7A33", "7FDBFF", "9AB223", "6F35FC", "55007F", "664A3D", "708090", "D685AD"];
 
-let typeButtonsDiv = document.getElementById("typeButtonsDiv");
-let sortByButtons = document.getElementById("sortByButtonsDiv");
 
 let sortByArray = [
     "A-Z",
@@ -137,13 +139,13 @@ toggleElement.addEventListener("change", () => {
 /*** Abrir menú con Enter ***/
 floatingMenuButton.addEventListener('keyup',function(event){
     if (event.key === "Enter") {
-        /*if(toggleElement.checked == true){
+        if(toggleElement.checked === false){
+            toggleElement.checked = true;
             openFloatingMenu();
-        }else {
+         }else {
+            toggleElement.checked = false;
             closeFloatingMenu();
         }
-        console.log("enter~");*/
-        // toggleElement.checked = true;
     }
 });
 
@@ -156,27 +158,30 @@ const openFloatingMenu = () => {
     });
 }
 
-const closeFloatingMenu = () => {
-    toggleElement.checked = false;
-    Array.from(floatingMenuElements).forEach(element => {
-        element.style.visibility = "hidden";
-    });
-    floatingMenuButton.classList.remove("floatingMenuClassSmall");
-    floatingMenuButton.classList.add("floatingMenuClassNormal");
-}
-
 /************************  Search popup  *********************************/
 document.getElementById("searchButton").addEventListener("click", () =>{
-    closeFloatingMenu();
-    /*** Regresar al principio de la pagina ***/
-    document.body.scrollTop = 0;
-    document.documentElement.scrollTop = 0;
-    /**************************************************/
+    searchPromptCreator();
+});
+
+document.getElementById("searchButton").addEventListener('keyup', (event) => {
+    if (event.key === "Enter") {
+        searchPromptCreator();
+    }
+});
+
+/**** Short cut ****/
+document.addEventListener('keyup', function (event) {
+    if (event.altKey && event.key === "x") {
+        searchPromptCreator();
+    }
+});
+
+const searchPromptCreator = () => {
+    closeFloatingMenu();    
     showPromptWindow(3);
     searchByPromptElement.style.WebkitAnimationPlayState = "running";
     document.getElementById("searchPromptInput").focus();
-});
-
+};
 document.getElementById("searchPromptButton").addEventListener("click", () => {
     if(searchPromptInputElement.value != ""){
         filterJSON = window.data.filteredByNameOrNumber(dataPokemon, searchPromptInputElement.value);
@@ -216,11 +221,24 @@ const searchByInput = () =>{
 
 /************************  Filter popup  *********************************/
 document.getElementById("filterButton").addEventListener("click", () => {
+    filterPromptCreator();
+});
+
+document.getElementById("filterButton").addEventListener('keyup', (event) => {
+    if (event.key === "Enter") {
+        filterPromptCreator();
+    }
+});
+
+/**** Short cut ****/
+document.addEventListener('keyup', function (event) {
+    if (event.altKey && event.key === "c") {
+        filterPromptCreator();
+    }
+});
+
+const filterPromptCreator = () => {
     closeFloatingMenu();
-    /*** Regresar al principio de la pagina ***/
-    document.body.scrollTop = 0;
-    document.documentElement.scrollTop = 0;
-    /**************************************************/
     for(let i=0; i<15; i++){
         let buttonElement = document.createElement("BUTTON");
         buttonElement.classList.add("filterByTypeButton");
@@ -233,50 +251,90 @@ document.getElementById("filterButton").addEventListener("click", () => {
         buttonElement.addEventListener("click", function() {
             filterJSON = window.data.filteredByType(dataPokemon, buttonElement.value);
             filterJSON == "" ? printPokemonCards(dataPokemon): printPokemonCards(filterJSON);
-            console.log(buttonElement.value +" : "+ filterJSON.length);
             hiddenPromptWindow();
         });
         buttonElement.addEventListener('keyup',function(e){
             if (e.keyCode === 13) {
                 filterJSON = window.data.filteredByType(dataPokemon, buttonElement.value);
                 filterJSON == "" ? printPokemonCards(dataPokemon): printPokemonCards(filterJSON);
-                console.log(buttonElement.value +" : "+ filterJSON.length);
                 hiddenPromptWindow();
             }
         });
         typeButtonsDiv.appendChild(buttonElement);
     }
-    //PENDIENTE: Regresar al principio de la pantalla.
     filterByPromptElement.style.WebkitAnimationPlayState = "running";
     showPromptWindow(2);
     document.getElementById("Normal").focus();
-});
+};
 
 /************************  Sort by popup  *********************************/
 
 document.getElementById("sortByButton").addEventListener("click", () => {
+    sortByPromptCreator();
+});
+
+document.getElementById("sortByButton").addEventListener('keyup', (event) => {
+    if (event.key === "Enter") {
+        sortByPromptCreator();
+    }
+});
+
+/**** Short cut ****/
+document.addEventListener('keyup', function (event) {
+    if (event.altKey && event.key === "v") {
+        sortByPromptCreator();
+    }
+});
+
+const sortByPromptCreator = () => {
+    closeFloatingMenu();
+    let sortByJSON;
     for (let i = 0; i < sortByArray.length; i++) {
-        console.log("ciclo de botenes");
         let buttonElement = document.createElement("BUTTON");
-        // buttonElement.classList.add("sortByTypeButton");
         buttonElement.classList.add("filterByTypeButton");
         buttonElement.value = sortByArray[i];
         buttonElement.innerHTML = sortByArray[i];
         buttonElement.style.backgroundColor = "#" + typeArrayColor[i];
         buttonElement.addEventListener("click", function() {
-            let sortByJSON = window.data.sortData(dataPokemon, sortByArray[i]);
-            sortByJSON == "" ? printPokemonCards(dataPokemon) : printPokemonCards(sortByJSON);
-            console.log(buttonElement.value + " : " + sortByJSON.length);
+            if(filterJSON != ""){
+                sortByJSON = window.data.sortData(filterJSON, sortByArray[i]);
+            } else {
+                sortByJSON = window.data.sortData(dataPokemon, sortByArray[i]);
+            }
+            // sortByJSON == "" ? printPokemonCards(dataPokemon) : printPokemonCards(sortByJSON);
+            printPokemonCards(sortByJSON);
             hiddenPromptWindow();
         });
         sortByButtons.appendChild(buttonElement);
     }
     sortByPromptElement.style.WebkitAnimationPlayState = "running";
     showPromptWindow(1);
+};
+
+/**************************** Reset *************************************/
+document.getElementById("resetButton").addEventListener("click", () => {
+    closeFloatingMenu();
+    filterJSON = [];
+    printPokemonCards(dataPokemon);
+    console.log("Reset");
+});
+
+/**** Short cut ****/
+document.addEventListener('keyup', function (event) {
+    if (event.altKey && event.key === "n") {
+        closeFloatingMenu();
+        filterJSON = [];
+        printPokemonCards(dataPokemon);
+        console.log("Reset");
+    }
 });
 
 /*************************  Show popup  *********************************/
 const showPromptWindow = (option) => {
+    /*** Regresar al principio de la pagina ***/
+    document.body.scrollTop = 0;
+    document.documentElement.scrollTop = 0;
+    /**************************************************/
     promptContainerElement.style.visibility = "visible";
 
     switch(option){
@@ -295,9 +353,15 @@ const showPromptWindow = (option) => {
 };
 
 /************************  Cerrar popup  *********************************/
-// promptContainerElement.addEventListener("click", () => {
-//     hiddenPromptWindow();
-// });
+promptContainerElement.addEventListener("click", () => {
+    hiddenPromptWindow();
+});
+
+promptContainerElement.addEventListener('keyup', (event) => {
+    if (event.key === "Escape") {
+        hiddenPromptWindow();
+    }
+});
 
 Array.from(buttonCloseNode).forEach((element) => {
     element.addEventListener("click", (i) => {
@@ -319,15 +383,76 @@ const hiddenPromptWindow = () => {
     searchByPromptElement.style.visibility = "hidden";
 };
 
-/**************************** Reset *************************************/
-document.getElementById("resetButton").addEventListener("click", () => {
-    printPokemonCards(dataPokemon);
-    filterJSON = [];
+/************************  Cerrar floating menu  ******************************/
+const closeFloatingMenu = () => {
+    toggleElement.checked = false;
+    Array.from(floatingMenuElements).forEach(element => {
+        element.style.visibility = "hidden";
+    });
+    floatingMenuButton.classList.remove("floatingMenuClassSmall");
+    floatingMenuButton.classList.add("floatingMenuClassNormal");
+}
+
+/************************ Favorites window ************************/
+
+document.getElementById("favoritesButton").addEventListener("click", () => {
+    /**Create */
+    console.log("Cookies ACTUAL: " + document.cookie);
+    let newFavorite = prompt("Nuevo favorito");
+    createFavoriteCookie(newFavorite);
+
+    /** Show */
+    favoritesJSON = [];
+    showFavorites();
+    printPokemonCards(favoritesJSON);
+
+    /*** Remove */
+    /*let removeFavorite = prompt("Remueve favorito");
+    deleteFavorite(removeFavorite);
+    console.log("After   remove: " + document.cookie);*/
 });
+
+const loadFavorites = () => {
+    let pokemonCookiesStr = document.cookie.substring(16, document.cookie.length);
+    let pokemonCookiesArray = pokemonCookiesStr.split(" ");
+    console.log("loadFavorites: " + pokemonCookiesArray);
+
+    return pokemonCookiesArray;    
+};
+
+const createFavoriteCookie = (pokemonId) => {
+    let pokemonCookiesArray = loadFavorites();
+    pokemonCookiesArray.push(pokemonId);
+    loadFavorites
+    document.cookie = "favoritePokemon=" + pokemonCookiesArray.join(" ");
+};
+
+const showFavorites = () =>{
+    let pokemonCookiesArray = loadFavorites();
+
+    dataPokemon.forEach((element) => {
+        pokemonCookiesArray.forEach((favoriteID) => {
+            if(parseInt(favoriteID, 10) === element.id){
+                favoritesJSON.push(element);
+            }
+        });
+    });
+};
+
+const deleteFavorite = (pokemonId) => {
+    let pokemonCookiesArray = loadFavorites();
+    let index = pokemonCookiesArray.indexOf(pokemonId);
+
+    index > -1 ? pokemonCookiesArray.splice(index, 1) : console.log("No existe ese id en favoritos");
+    document.cookie = "favoritePokemon=" + pokemonCookiesArray.join(" ");;
+    showFavorites();
+    printPokemonCards(favoritesJSON);
+};
 
 /******************** Short cut Event listener ********************/
 document.addEventListener('keyup', function (event) {
-    if (event.ctrlKey && event.key === "m") {
+    if (event.altKey && event.key === "z") {
         floatingMenuButton.focus();
     }
 });
+

@@ -57,8 +57,8 @@ body {
 }
 
 .floatingMenuClassSmall {
-    width: 4vw;
-    height: 8vh;
+    width: 3.5vw;
+    height: 7vh;
     color: black;
     animation: pop 0.3s linear 1;
 }
@@ -78,8 +78,8 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 6vw;
-    height: 12vh;
+    width: 5vw;
+    height: 10vh;
     margin: 0 0 3vh 0;
     background-color: cornflowerblue;
     border-radius: 100px;
@@ -188,7 +188,7 @@ body {
 .namePokemon{
     font-family: 'Ubuntu', sans-serif;
     font-weight: bold;
-    font-size: 3.5vmin;
+    font-size: 26px;
     text-align: center;
     margin: .5vh 0 1vh 0;
 }
@@ -387,13 +387,6 @@ h1 {
   -webkit-animation-duration: 0.4s;
   animation-name: animatetop;
   animation-duration: 4s;
-}
-h1 {
-  font-family: "Helvetica", sans-serif;
-  font-size: 2.5em;
-  font-weight: bold;
-  text-align: center;
-  margin: 3px;
 }
 
 /***** Ajustes web responsiva *****/

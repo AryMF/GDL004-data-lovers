@@ -21,21 +21,6 @@ window.data =  {
 
   filteredByType: function(data, condition){
     let filterJSON = [];
-
-    /*filterJSON = data.filter((array) =>{
-      
-      return array.type.map((element) => {
-        if(element.toUpperCase() == condition.toUpperCase()){
-          temporalARRAY.push(array);
-          console.log(array)
-          return array;
-        } else{
-          return false;
-        }
-      }
-
-    });*/
-
     data.forEach((element) => {
       element.type.forEach((type) => {
         if(type.toUpperCase() == condition.toUpperCase()){
@@ -52,37 +37,35 @@ window.data =  {
     let sortDataResult = [];
     switch(condition){
       case "A-Z":
-          sortDataResult = sortDataAZ(data);
+        sortDataResult = sortDataAZ(data);
       break;
       case "Z-A":
-          sortDataResult = sortDataZA(data);
+        sortDataResult = sortDataZA(data);
       break;
       case "Height + to -":
-          sortDataResult = sortDataHeightTallToShort(data);
+        sortDataResult = sortDataHeightTallToShort(data);
       break;
       case "Height - to +":
-          sortDataResult = sortDataHeightShortToTall(data);
+        sortDataResult = sortDataHeightShortToTall(data);
       break;
       case "Weight + to -":
-          sortDataResult = sortDataWeightHeavyToLight(data);
+        sortDataResult = sortDataWeightHeavyToLight(data);
       break;
       case "Weight - to +":
-          sortDataResult = sortDataWeightLightToHeavy (data);
+        sortDataResult = sortDataWeightLightToHeavy (data);
       break;
       case "Number":
-          sortDataResult = sortDataIdInverse(data);
+        sortDataResult = sortDataIdInverse(data);
       break;
       default:
         console.log("Error al recibir sorData condition");
     }
-
     return sortDataResult;
-  }    
-  
+  }   
 };
- /********FUNCIÓN AZ****************/
+
+/********FUNCIÓN AZ****************/
 const sortDataAZ = (data) => {
-    
   let sortedResultAZ = [];
   for (name in data) {
     if (data.hasOwnProperty(name)) {
@@ -90,160 +73,131 @@ const sortDataAZ = (data) => {
     }
   }
   sortedResultAZ
-    .sort(function(a, b) {
-      if (a.name < b.name) {
-        return -1;
-      } else if (a.name > b.name) {
-        return 1;
-      }
-      return 0;
-    })
-    .forEach(function(element) {
-      // console.log(element);
-      return element;
-    });
+  .sort(function(a, b) {
+    if (a.name < b.name) {
+    return -1;
+    } else if (a.name > b.name) {
+    return 1;
+    }
+    return 0;
+  }).forEach(function(element) {
+    return element;
+  });
 
   return sortedResultAZ;
 };
-  /************FUNCIÓN ZA************/
 
-  const sortDataZA = (data) => {
-    
-      let sortedResultZA = [];
-     
-     
-     for (name in data) {
-       if (data.hasOwnProperty(name)) {
-         sortedResultZA.push(data[name]);
-       }
-     }
-     sortedResultZA
-       .sort(function(a, b) {
-         if (a.name > b.name) {
-           return -1;
-         } else if (a.name < b.name) {
-           return 1;
-         }
-         return 0;
-       })
-       .forEach(function(element) {
-         
-         return element;
-       });
-     
-     return sortedResultZA;
- };
+/************FUNCIÓN ZA************/
+const sortDataZA = (data) => {
+  let sortedResultZA = [];
+  for (name in data) {
+    if (data.hasOwnProperty(name)) {
+      sortedResultZA.push(data[name]);
+    }
+  }
+  sortedResultZA.sort(function(a, b) {
+    if (a.name > b.name) {
+      return -1;
+    } else if (a.name < b.name) {
+      return 1;
+    }
+      return 0;
+  }).forEach(function(element) {
+    return element;
+  });
+  return sortedResultZA;
+};
  
-     /*********************FUNCIÓN PESO + A - ***********/
- 
-     const sortDataWeightHeavyToLight = (data) => {
-     let sortByWeightMtoL = [];
-     let weight;
-     
-     for (weight in data) {
-       if (data.hasOwnProperty(weight)) {
-         sortByWeightMtoL.push(data[weight]);
-       }
-     }
-     sortByWeightMtoL
-       .sort(function(a, b) {
-         if (a.weight > b.weight) {
-           return -1;
-         } else if (a.weight < b.weight) {
-           return 1;
-         }
-         return 0;
-       })
-       .forEach(function(element) {
-         
-         return element;
-       });
-     
-     return sortByWeightMtoL;
-  };
-  /*****************FUNCIÓN PESO - A + ******/
-  const sortDataWeightLightToHeavy = (data) => {
+/*********************FUNCIÓN PESO + A - ***********/
+const sortDataWeightHeavyToLight = (data) => {
+  let sortByWeightMtoL = [];
+  let weight;
+  for (weight in data) {
+    if (data.hasOwnProperty(weight)) {
+      sortByWeightMtoL.push(data[weight]);
+    }
+  }
+  sortByWeightMtoL.sort(function(a, b) {
+    if (a.weight > b.weight) {
+      return -1;
+    } else if (a.weight < b.weight) {
+      return 1;
+    }
+      return 0;
+  }).forEach(function(element) {
+    return element;
+  });
+  return sortByWeightMtoL;
+};
+
+/*****************FUNCIÓN PESO - A + ******/
+const sortDataWeightLightToHeavy = (data) => {
   let sortByWeightLtoM = [];
   let weight;
-  
   for (weight in data) {
     if (data.hasOwnProperty(weight)) {
       sortByWeightLtoM.push(data[weight]);
     }
   }
-  sortByWeightLtoM
-    .sort(function(a, b) {
-      if (a.weight < b.weight) {
-        return -1;
-      } else if (a.weight > b.weight) {
-        return 1;
-      }
+  sortByWeightLtoM.sort(function(a, b) {
+    if (a.weight < b.weight) {
+      return -1;
+    } else if (a.weight > b.weight) {
+      return 1;
+    }
       return 0;
-    })
-    .forEach(function(element) {
-    
-      return element;
-    });
-  
+  }).forEach(function(element) {
+    return element;
+  });
   return sortByWeightLtoM;
 };
-    /*************FUNCIÓN ALTURA - a +  ********/
-   const sortDataHeightShortToTall = (data) => {
-    let sortByHeightLtoM = [];
-    let height;
-    
-    for (height in data) {
-      if (data.hasOwnProperty(height)) {
-        sortByHeightLtoM.push(data[height]);
-      }
+
+/*************FUNCIÓN ALTURA - a +  ********/
+const sortDataHeightShortToTall = (data) => {
+  let sortByHeightLtoM = [];
+  let height;
+  for (height in data) {
+    if (data.hasOwnProperty(height)) {
+      sortByHeightLtoM.push(data[height]);
     }
-    sortByHeightLtoM
-      .sort(function(a, b) {
-        if (a.height < b.height) {
-          return -1;
-        } else if (a.height > b.height) {
-          return 1;
-        }
-        return 0;
-      })
-      .forEach(function(element) {
-       
-        return element;
-      });
-    
-    return sortByHeightLtoM;
+  }
+  sortByHeightLtoM.sort(function(a, b) {
+    if (a.height < b.height) {
+      return -1;
+    } else if (a.height > b.height) {
+      return 1;
+    }
+      return 0;
+  }).forEach(function(element) {
+    return element;
+  });
+  return sortByHeightLtoM;
 };
-    /*************FUNCIÓN ALTURA + A -*********/
-
- const sortDataHeightTallToShort = (data) => {
     
-    let sortByHeightMtoL = [];
-    let height;
-   
-    for (height in data) {
-      if (data.hasOwnProperty(height)) {
-        sortByHeightMtoL.push(data[height]);
-      }
+/*************FUNCIÓN ALTURA + A -*********/
+const sortDataHeightTallToShort = (data) => {
+  let sortByHeightMtoL = [];
+  let height;
+  for (height in data) {
+    if (data.hasOwnProperty(height)) {
+      sortByHeightMtoL.push(data[height]);
     }
-    sortByHeightMtoL.sort(function(a, b) {
-        if (a.height > b.height) {
-          return -1;
-        } else if (a.height < b.height) {
-          return 1;
-        }
-        return 0;
-      })
-      .forEach(function(element) {
-       
-        return element;
-      });
-    
-    return sortByHeightMtoL;
-  };
-    /*función INVERTIR tarjetas #151 a #1*/
-const sortDataIdInverse = (data) => {
+  }
+  sortByHeightMtoL.sort(function(a, b) {
+    if (a.height > b.height) {
+      return -1;
+    } else if (a.height < b.height) {
+      return 1;
+    }
+      return 0;
+  }).forEach(function(element) {
+    return element;
+  });
+  return sortByHeightMtoL;
+};
 
+/*función INVERTIR tarjetas #151 a #1*/
+const sortDataIdInverse = (data) => {
   const DataIDReverse = data.reverse();
-  
   return DataIDReverse;
 };

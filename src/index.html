@@ -13,6 +13,7 @@
     <link href="https://fonts.googleapis.com/css?family=Rajdhani&display=swap" rel="stylesheet">
   </head>
   <body>
+    <!-- Menú flotante -->
     <div class="floatingMenuDIV">
       <input type="checkbox" id="toggle" />
           <label id="floatingMenu" class="floatingMenuClass floatingMenuClassNormal" for="toggle" tabindex="0">
@@ -27,8 +28,11 @@
       <nav id="sortByButton" class="floatingMenuElement" tabindex="0" aria-label="Ordenar">
         <i class="fa fa-sort-amount-desc"></i>
       </nav>
-      <nav class="floatingMenuElement" tabindex="0">
+      <nav id="chartButton" class="floatingMenuElement" tabindex="0">
         <i class="fa fa-bar-chart"></i>
+      </nav>
+      <nav id="resetButton" class="floatingMenuElement" tabindex="0">
+        <i class="fa fa-refresh"></i>
       </nav>
     </div>
 
@@ -48,11 +52,6 @@
         </button>
       </header>
       <br><br><br><br><br>
-
-      <!-- Botones de filtrado -->
-      <div>
-        <button id="resetButton" aria-label="Reset">Reset</button>
-      </div>
 
       <!-- Despliegue de pokemons -->
       <main id="pokemonContainer" class="pokemonContainerGrid" ></main>
