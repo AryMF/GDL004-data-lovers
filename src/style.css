@@ -1,70 +1,544 @@
+body {
+  background-color: Gainsboro;
+}
+
 .mainScreenClass {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin: 0%;
-    padding: 0%;
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 0%;
+  padding: 0%;
+  /* visibility: hidden; */
 }
 
+/***** Menu flotante *****/
+.floatingMenuDIV {
+  position: fixed;
+  display: flex;
+  align-items: center;
+  flex-direction: column-reverse;
+  bottom: 0.5vh;
+  right: 0.5vw;
+  width: fit-content;
+  background-color: transparent;
+  z-index: 1;
+}
+
+#toggle {
+  display: none;
+}
+
+#toggle:checked ~ #floatingMenu {
+  transform: rotate(135deg);
+  box-shadow: 0 0 0 0 transparent;
+}
+
+.floatingMenuClass {
+  position: sticky;
+  position: -webkit-sticky;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 0 3vh 0;
+  background-color: cornflowerblue;
+  border-radius: 100px;
+  transition: all 0.5s ease-in-out;
+}
+
+.floatingMenuClassNormal {
+  width: 6vw;
+  height: 12vh;
+}
+
+.floatingMenuClassNormal i {
+  font-size: 60px;
+  color: white;
+}
+
+.floatingMenuClassSmall {
+  width: 3.5vw;
+  height: 7vh;
+  color: black;
+  animation: pop 0.3s linear 1;
+}
+
+.floatingMenuClassSmall i {
+  font-size: 30px;
+  color: black;
+}
+
+@keyframes pop {
+  50% {
+    transform: scale(1.1);
+  }
+}
+
+.floatingMenuElement {
+  position: sticky;
+  position: -webkit-sticky;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 5vw;
+  height: 10vh;
+  margin: 0 0 3vh 0;
+  background-color: cornflowerblue;
+  border-radius: 100px;
+  visibility: hidden;
+}
+
+.floatingMenuElement i {
+  font-size: 40px;
+  color: white;
+}
+
+.floatingMenuClassNormal:hover i,
+.floatingMenuElement:hover i {
+  color: black;
+}
+
+/***** Menu barra superior *****/
 .header {
-    display: flex;
-    justify-content: center;
-    width: 99vw;
-    height: fit-content;
-    margin-bottom: 10px;
-    background-color: red;
+  position: fixed;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  top: 0;
+  left: 0;
+  width: 99vw;
+  margin-bottom: 10px;
+  background-color: crimson;
+  z-index: 1;
 }
 
-.header button {
-    width: 30vw;
-    height: fit-content;
-    margin: 15px;
-    padding: 4px;
+#menuButton {
+  font-size: 40px;
+  color: black;
 }
 
-.pokemonContainerGrid{
-    display: flex;
-    flex-flow: row wrap;
-    background-color: transparent;
-    width: 99vw;
+#menuButton:hover,
+#menuButton:focus {
+  color: white;
+  cursor: pointer;
+}
+
+.titleText {
+  font-family: "Rajdhani", sans-serif;
+  font-size: 8vmin;
+  letter-spacing: 1vw;
+  font-weight: bold;
+  text-align: center;
+  padding: 0.8vh 0.5vw 0vh;
+}
+
+#favoritesButton {
+  font-size: 40px;
+  color: black;
+}
+
+#favoritesButton:hover,
+#favoritesButton:focus {
+  color: white;
+  cursor: pointer;
+}
+
+/***** Body pokemons *****/
+.pokemonContainerGrid {
+  position: absolute;
+  /* top: 10vh; */
+  top: 20vmin;
+  left: 0;
+  display: flex;
+  flex-flow: row wrap;
+  background-color: transparent;
+  width: 99vw;
 }
 
 .divContainerClass {
-    display: flex;
-    justify-content: center;
-    flex: 20%;
-    padding: 5px;
+  display: flex;
+  justify-content: center;
+  /*Seis columnas*/
+  flex: 15%;
+  padding: 5px;
+  cursor: pointer;
 }
 
+.divCardClass {
+  background-color: transparent;
+  position: relative;
+
+  /* height: 15em; */
+  padding: 0% 0% 10% 0%;
+
+  /* border-radius: 20px;
+  border: 5px solid white;
+  width: 10rem;
+  height: 15rem;
+  color: #ecf0f1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transform-style: preserve-3d;
+  cursor: pointer; */
+}
+
+.divPokemonCardFaceClass {
+  border-radius: 20px;
+  border: 5px solid white;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 10em;
+  height: 15em;
+  cursor: pointer;
+  backface-visibility: hidden;
+  transform-style: preserve-3d;
+  transition: transform 0.4s ease-in-out;
+}
+
+.divPokemonCardFaceClass--front {
+  background: #2c3e50;
+  transform: rotateY(0deg);
+}
+
+.divPokemonCardFaceClass--back {
+  background: #502c45;
+  transform: rotateY(-180deg);
+
+  position: absolute;
+  top: 0;
+  left: 0%;
+}
+
+.divCardClass:hover .divPokemonCardFaceClass--front {
+  transform: rotateY(-180deg);
+}
+
+.divCardClass:hover .divPokemonCardFaceClass--back {
+  transform: rotateY(0deg);
+}
+
+.imagePokemon {
+  margin: 20px 0 0 0;
+  width: 85%;
+}
+
+.numberPokemon {
+  font-family: "Rajdhani", sans-serif;
+  font-weight: normal;
+  text-align: center;
+  font-size: 2vmin;
+  background-color: rgb(53, 46, 46, 40%);
+  border-radius: 5px;
+  padding: 0.5vmin;
+  margin: 2vh 0 0 0;
+}
+
+.namePokemon {
+  font-family: "Ubuntu", sans-serif;
+  font-weight: bold;
+  font-size: 3.5vmin;
+  text-align: center;
+  margin: 0.5vh 0 1vh 0;
+}
+
+.typePokemon {
+  font-family: "Ubuntu", sans-serif;
+  font-weight: bold;
+  font-size: 3vmin;
+  color: #fff;
+  text-align: center;
+  text-transform: uppercase;
+  margin: 8vh 0 1vh 0;
+}
+
+/******************** Prompt Windows ******************************************/
+
+/*********** Contenedor Padre ************/
+.promptContainerBackgroundClass {
+  visibility: hidden;
+  position: fixed; /* Stay in place */
+  z-index: 5; /* Sit on top */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgba(47, 79, 79, 0.4); /* Black w/ opacity */
+}
+
+/********** Botón de cerrado para todos los prompt ***********/
+.buttonCloseClass {
+  color: white;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.buttonCloseClass:hover,
+.buttonCloseClass:focus {
+  color: #000;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+/*********** Prompt Search ************/
+/************ Ventana contenedora ************/
+.promptSearchWindowClass {
+  visibility: hidden;
+  position: fixed;
+  display: flex;
+  flex-direction: column;
+  width: 60%;
+  min-width: fit-content;
+  height: fit-content;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  padding: 0.5% 1% 0.5% 1%;
+  border: 1px solid #888;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  background-color: rgb(205, 92, 92, 90%);
+
+  -webkit-animation-name: animatetop;
+  -webkit-animation-duration: 0.4s;
+  animation-name: animatetop;
+  animation-duration: 5s;
+}
+
+.centerElements {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  background-color: transparent;
+}
+
+.searchBarMargin {
+  display: flex;
+  flex-direction: row;
+  float: left;
+  flex: 0.9;
+  background-color: FireBrick;
+  border: 5px solid FireBrick;
+  border-radius: 10px;
+}
+
+.searchPromptInputClass {
+  flex: 1;
+  color: black;
+  height: 7vh;
+  background-color: white;
+  font-size: 22px;
+  border: 1px;
+  border-radius: 10px;
+  margin: 0;
+
+  font-family: "Ubuntu", sans-serif;
+  font-weight: bold;
+  font-size: 3.5vmin;
+  text-align: center;
+}
+
+.searchPromptButtonClass {
+  flex: 0;
+  color: whitesmoke;
+  background-color: FireBrick;
+  font-size: 22px;
+  border: 1px;
+  border-radius: 5px;
+  margin: 0;
+}
+
+.searchPromptButtonClass:hover,
+.searchPromptButtonClass:focus {
+  color: black;
+  cursor: pointer;
+}
+
+/*********** Prompt Filter ************/
+/************ Ventana contenedora ************/
+.promptFilterWindowClass {
+  visibility: hidden;
+  position: fixed;
+  display: flex;
+  flex-direction: column;
+  width: 80vw;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+
+  padding: 0.5% 1% 0.5% 1%;
+  border: 1px solid #888;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  background-color: rgb(205, 92, 92, 90%);
+
+  -webkit-animation-name: animatetop;
+  -webkit-animation-duration: 0.4s;
+  animation-name: animatetop;
+  animation-duration: 4s;
+}
+
+h1 {
+  font-family: "Helvetica", sans-serif;
+  font-size: 2.5em;
+  font-weight: bold;
+  text-align: center;
+  margin: 3px;
+}
+
+/************ Animación de ventana prompt ************/
+@-webkit-keyframes animatetop {
+  from {
+    top: -300px;
+  }
+  to {
+    top: 50%;
+  }
+}
+
+@keyframes animatetop {
+  from {
+    top: -300px;
+  }
+  to {
+    top: 50%;
+  }
+}
+
+/************ Botones filtrado por tipo ***************/
+.filterByTypeButton {
+  color: #fff;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 45px;
+  margin: 0.5em;
+  max-width: 160px;
+  position: relative;
+  text-transform: uppercase;
+  width: 100%;
+
+  border: 0 solid;
+  border-radius: 10px;
+  text-shadow: none;
+  transition: all 1250ms cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+.filterByTypeButton:hover,
+.filterByTypeButton:focus {
+  box-shadow: inset 0 0 20px rgba(255, 255, 255, 1),
+    0 0 20px rgba(255, 255, 255, 0.7);
+  cursor: pointer;
+}
+
+/*********** Prompt Sort By ************/
+/************ Ventana contenedora ************/
+.promptSortByWindowClass {
+  visibility: hidden;
+  position: fixed;
+  display: flex;
+  flex-direction: column;
+  width: 60%;
+  min-width: fit-content;
+  height: 50%;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  padding: 0.5% 1% 0.5% 1%;
+  border: 1px solid #888;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  background-color: rgb(205, 92, 92, 90%);
+  -webkit-animation-name: animatetop;
+  -webkit-animation-duration: 0.4s;
+  animation-name: animatetop;
+  animation-duration: 4s;
+}
+
+/***** Ajustes web responsiva *****/
 @media screen and (max-width: 768px) {
-    .divContainerClass {
-        flex: 33.33%;
-    }
+  .namePokemon {
+    font-size: 3vmin;
+  }
 }
 
 @media screen and (max-width: 500px) {
-    .divContainerClass {
-        flex: 100%;
-    }
-}
-
-.divPokemonCardClass{
-    border-radius: 10%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: fit-content;
+  .divContainerClass {
+    flex: 100%;
+  }
+  .divCardClass {
+    width: 100%;
+  }
+  .divPokemonCardClass {
+    background-color: red;
+    width: 80%;
     height: fit-content;
-}
+  }
+  .menuButton {
+    width: 16vw;
+    height: 12vh;
+  }
+  .titleText {
+    font-size: 14vmin;
+  }
 
-.TextFormat {
-    font-family: 'Helvetica',sans-serif;
-    font-size: 18px;
-    font-weight: bold;
-    text-align: center;
-    margin: 18px;
-}
+  .favoritesButton {
+    width: 16vw;
+    height: 12vh;
+  }
 
-.imagePokemon{
-    margin: 25px;
+  .numberPokemon {
+    font-size: 5vmin;
+  }
+
+  .namePokemon {
+    font-size: 10vmin;
+  }
+
+  .floatingMenuDIV {
+    bottom: 0.5vh;
+    right: 2vw;
+    width: fit-content;
+  }
+
+  .floatingMenu {
+    width: 18vw;
+    height: 10vh;
+    margin: 0 0 3vh 0;
+  }
+
+  .floatingMenuElement {
+    width: 18vw;
+    height: 10vh;
+    margin: 0 0 3vh 0;
+  }
+
+  .promptFilterWindowClass {
+    width: 80vw;
+    left: 14%;
+    top: 5%;
+    transform: translate(-7%, 0%);
+    height: 90vh;
+    overflow: scroll;
+  }
+
+  @-webkit-keyframes animatetop {
+    from {
+      top: -300px;
+    }
+    to {
+      top: 5%;
+    }
+  }
+
+  @keyframes animatetop {
+    from {
+      top: -300px;
+    }
+    to {
+      top: 5%;
+    }
+  }
 }
