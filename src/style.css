@@ -148,60 +148,115 @@ body {
 }
 
 /***** Body pokemons *****/
-.pokemonContainerGrid{
-    position: absolute;
-    /* top: 10vh; */
-    top: 15vmin;
-    left: 0;
-    display: flex;
-    flex-flow: row wrap;
-    background-color: transparent;
-    width: 99vw;
+.pokemonContainerGrid {
+  position: absolute;
+  /* top: 10vh; */
+  top: 20vmin;
+  left: 0;
+  display: flex;
+  flex-flow: row wrap;
+  background-color: transparent;
+  width: 99vw;
 }
 
 .divContainerClass {
-    display: flex;
-    justify-content: center;
-    /*Seis columnas*/
-    flex: 15%;
-    padding: 5px;
+  display: flex;
+  justify-content: center;
+  /*Seis columnas*/
+  flex: 15%;
+  padding: 5px;
+  cursor: pointer;
 }
 
-.divPokemonCardClass{
-    border-radius: 20px;
-    border: 5px solid white;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 10em;
-    height: 15em;
-    cursor: pointer;
+.divCardClass {
+  background-color: transparent;
+  position: relative;
+
+  /* height: 15em; */
+  padding: 0% 0% 10% 0%;
+
+  /* border-radius: 20px;
+  border: 5px solid white;
+  width: 10rem;
+  height: 15rem;
+  color: #ecf0f1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transform-style: preserve-3d;
+  cursor: pointer; */
 }
 
-.imagePokemon{
-    margin: 20px 0 0 0;
-    width: 85%;
+.divPokemonCardFaceClass {
+  border-radius: 20px;
+  border: 5px solid white;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 10em;
+  height: 15em;
+  cursor: pointer;
+  backface-visibility: hidden;
+  transform-style: preserve-3d;
+  transition: transform 0.4s ease-in-out;
 }
 
-.numberPokemon{
-    font-family: 'Rajdhani', sans-serif;
-    font-weight: normal;
-    text-align: center;
-    font-size: 2vmin ;
-    background-color: rgb(53, 46, 46, 40%);
-    border-radius: 5px;
-    padding: .5vmin;
-    margin: 2vh 0 0 0;
+.divPokemonCardFaceClass--front {
+  background: #2c3e50;
+  transform: rotateY(0deg);
 }
 
-.namePokemon{
-    font-family: 'Ubuntu', sans-serif;
-    font-weight: bold;
-    font-size: 26px;
-    text-align: center;
-    margin: .5vh 0 1vh 0;
+.divPokemonCardFaceClass--back {
+  background: #502c45;
+  transform: rotateY(-180deg);
+
+  position: absolute;
+  top: 0;
+  left: 0%;
 }
 
+.divCardClass:hover .divPokemonCardFaceClass--front {
+  transform: rotateY(-180deg);
+}
+
+.divCardClass:hover .divPokemonCardFaceClass--back {
+  transform: rotateY(0deg);
+}
+
+.imagePokemon {
+  margin: 20px 0 0 0;
+  width: 85%;
+}
+
+.numberPokemon {
+  font-family: "Rajdhani", sans-serif;
+  font-weight: normal;
+  text-align: center;
+  font-size: 2vmin;
+  background-color: rgb(53, 46, 46, 40%);
+  border-radius: 5px;
+  padding: 0.5vmin;
+  margin: 2vh 0 0 0;
+}
+
+.namePokemon {
+  font-family: "Ubuntu", sans-serif;
+  font-weight: bold;
+  font-size: 3.5vmin;
+  text-align: center;
+  margin: 0.5vh 0 1vh 0;
+}
+
+.typePokemon {
+  font-family: "Ubuntu", sans-serif;
+  font-weight: bold;
+  font-size: 3vmin;
+  color: #fff;
+  text-align: center;
+  text-transform: uppercase;
+  margin: 8vh 0 1vh 0;
+}
 /***** Ajustes web responsiva: Main window*****/
 @media screen and (max-width: 768px) {
     .namePokemon{
@@ -256,3 +311,4 @@ body {
         font-size: 10vmin;
     }
 }
+

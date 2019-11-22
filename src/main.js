@@ -1,3 +1,4 @@
+
 const DATA_URL = "https://raw.githubusercontent.com/AryMF/GDL004-data-lovers/master/src/data/pokemon/pokemon.json";
 let dataPokemon = [];
 let filterJSON = [];
@@ -44,6 +45,39 @@ let sortByArrayColor = [
     "7AC74C",
     "A33EA1"
 ];
+  
+  
+let sortByArray = [
+  "A-Z",
+  "Z-A",
+  "Height - to +",
+  "Height + to -",
+  "Weight - to +",
+  "Weight + to -",
+  "Number - to +",
+  "Number + to -"
+];
+
+let sortArrayConditions = [
+  "name",
+  "name",
+  "height",
+  "height",
+  "weight",
+  "weight",
+  "id",
+  "id"
+];
+
+let sortByArrayColor = [
+  "A8A77A",
+  "EE8130",
+  "C22E28",
+  "6390F0",
+  "A98FF3",
+  "7AC74C",
+  "A33EA1"
+];
 
 /******************** Llamada de datos ********************/
 
@@ -69,66 +103,95 @@ window.addEventListener("load", main);
 
 /********** Impresión en pantalla de Pokemon cards **********/
 
-const printPokemonCards = (dataArray) => {
-    let divContainer;
-    let divPokemonCard;
-    let pokemonNumber;
-    let pokemonImage;
-    let pokemonName;
-    let randomColor;
-    let i;
+const printPokemonCards = dataArray => {
+  let divContainer;
+  let divCard;
+  let divPokemonCard;
+  let divBackPokemonCard;
+  let pokemonNumber;
+  let pokemonImage;
+  let pokemonName;
+  let pokemonType;
+  let i;
 
-    pokemonContainerElement.innerHTML = "";
+  document.getElementById("pokemonContainer").innerHTML = "";
 
-    dataArray.forEach(element => {
-        divContainer = document.createElement("DIV");
-        divContainer.classList.add("divContainerClass");
-        pokemonContainerElement.appendChild(divContainer);
+  dataArray.forEach(element => {
+    divContainer = document.createElement("DIV");
 
-        divPokemonCard = document.createElement("DIV");
-        for(i=0; i < typeArray.length;i++){
-            if(element.type[0] == typeArray[i]){
-                break;
-            }
-        }
-        divPokemonCard.setAttribute("style", "background-color: #" + typeArrayColor[i]);
-        divPokemonCard.tabIndex = 0;
-        divPokemonCard.addEventListener("click", function() {
-            // alert("Hola yo soy " + element.name);
-            characterWindowPrint(element.name.toUpperCase());
-        });
-        divPokemonCard.addEventListener('keyup',function(e){
-            if (e.keyCode === 13) {
-                // alert("Hola yo soy " + element.name);
-                characterWindowPrint(element.name.toUpperCase());
-            }
-        });
-        divPokemonCard.classList.add("divPokemonCardClass");
-        divContainer.appendChild(divPokemonCard);
+    divContainer.classList.add("divContainerClass");
+    document.getElementById("pokemonContainer").appendChild(divContainer);
 
-        pokemonImage = document.createElement("IMG");
-        pokemonImage.classList.add("imagePokemon");
-        pokemonImage.setAttribute("id", element.id);
-        pokemonImage.setAttribute("src", element.img);
-        pokemonImage.setAttribute("alt", element.name);
-        divPokemonCard.appendChild(pokemonImage);
+    divCard = document.createElement("div");
+    divCard.classList.add("divCardClass");
+    divContainer.appendChild(divCard);
 
-        pokemonNumber = document.createElement("P");
-        pokemonNumber.innerHTML = "#" + element.num;
-        pokemonNumber.classList.add("numberPokemon");
-        divPokemonCard.appendChild(pokemonNumber);
+    divPokemonCard = document.createElement("DIV");
+  
+    for (i = 0; i < typeArray.length; i++) {
+      if (element.type[0] == typeArray[i]) {
+        break;
+      }
+    }
+    divPokemonCard.setAttribute(
+      "style",
+      "background-color: #" + typeArrayColor[i]
+    );
+    divPokemonCard.tabIndex = 0;
 
-        pokemonName = document.createElement("P");
-        if(element.name == "Nidoran ♀ (Female)" || element.name == "Nidoran ♂ (Male)"){
-            pokemonName.innerHTML = element.name.substring(0,9);
-        }else{
-            pokemonName.innerHTML = element.name;
-        }
-        pokemonName.classList.add("namePokemon");
-        divPokemonCard.appendChild(pokemonName);
-
+    divPokemonCard.addEventListener("keyup", function(e) {
+      if (e.keyCode === 13) {
+        alert("Hola yo soy " + element.name);
+      }
     });
+    divPokemonCard.classList.add("divPokemonCardFaceClass");
+    divPokemonCard.classList.add("divPokemonCardFaceClass--front");
+    divCard.appendChild(divPokemonCard);
+    divBackPokemonCard = document.createElement("div");
+    divBackPokemonCard.classList.add("divPokemonCardFaceClass");
+    divBackPokemonCard.classList.add("divPokemonCardFaceClass--back");
+    divCard.appendChild(divBackPokemonCard);
+
+    pokemonType = document.createElement("P");
+    pokemonType.innerHTML = element.type;
+    pokemonType.classList.add("typePokemon");
+    divBackPokemonCard.appendChild(pokemonType);
+
+    divBackPokemonCard.addEventListener("click", function() {
+      alert("Hola yo soy " + element.name);
+    });
+
+    divBackPokemonCard.setAttribute(
+      "style",
+      "background-color: #" + typeArrayColor[i]
+    );
+
+    pokemonImage = document.createElement("IMG");
+    pokemonImage.classList.add("imagePokemon");
+    pokemonImage.setAttribute("id", element.id);
+    pokemonImage.setAttribute("src", element.img);
+    pokemonImage.setAttribute("alt", element.name);
+    divPokemonCard.appendChild(pokemonImage);
+
+    pokemonNumber = document.createElement("P");
+    pokemonNumber.innerHTML = "#" + element.num;
+    pokemonNumber.classList.add("numberPokemon");
+    divPokemonCard.appendChild(pokemonNumber);
+
+    pokemonName = document.createElement("P");
+    if (
+      element.name == "Nidoran ♀ (Female)" ||
+      element.name == "Nidoran ♂ (Male)"
+    ) {
+      pokemonName.innerHTML = element.name.substring(0, 9);
+    } else {
+      pokemonName.innerHTML = element.name;
+    }
+    pokemonName.classList.add("namePokemon");
+    divPokemonCard.appendChild(pokemonName);
+  });
 };
+
 
 /*********************** Floating menu ***********************/
 let toggleElement = document.getElementById("toggle");
@@ -274,66 +337,88 @@ const filterPromptCreator = () => {
 };
 
 /************************  Sort by popup  *********************************/
-
 document.getElementById("sortByButton").addEventListener("click", () => {
-    sortByPromptCreator();
+  sortByPromptCreator();
 });
 
-document.getElementById("sortByButton").addEventListener('keyup', (event) => {
-    if (event.key === "Enter") {
-        sortByPromptCreator();
-    }
+document.getElementById("sortByButton").addEventListener("keyup", event => {
+  if (event.key === "Enter") {
+    sortByPromptCreator();
+  }
 });
 
 /**** Short cut ****/
-document.addEventListener('keyup', function (event) {
-    if (event.altKey && event.key === "v") {
-        sortByPromptCreator();
-    }
+document.addEventListener("keyup", function(event) {
+  if (event.altKey && event.key === "v") {
+    sortByPromptCreator();
+  }
 });
 
 const sortByPromptCreator = () => {
-    closeFloatingMenu();
-    let sortByJSON;
-    for (let i = 0; i < sortByArray.length; i++) {
-        let buttonElement = document.createElement("BUTTON");
-        buttonElement.classList.add("filterByTypeButton");
-        buttonElement.value = sortByArray[i];
-        buttonElement.innerHTML = sortByArray[i];
-        buttonElement.style.backgroundColor = "#" + typeArrayColor[i];
-        
-        buttonElement.addEventListener("click", function() {
-            if(filterJSON != ""){
-                sortByJSON = window.data.sortData(filterJSON, sortByArray[i]);
-            } else {
-                sortByJSON = window.data.sortData(dataPokemon, sortByArray[i]);
-            }
-            // sortByJSON == "" ? printPokemonCards(dataPokemon) : printPokemonCards(sortByJSON);
-            printPokemonCards(sortByJSON);
-            hiddenPromptWindow();
-        });
+  let sortByJSON;
+  let buttonIsPair;
 
-        /*buttonElement.addEventListener("click", function() {
-            if (filterJSON != "") {
-              sortByJSON = window.data.sortDataResultAsc(
-                filterJSON,
-                "height"
-              );
-            } else {
-              sortByJSON = window.data.sortDataResultAsc(
-                dataPokemon,
-                "height"
-              );
-            }
-            // sortByJSON == "" ? printPokemonCards(dataPokemon) : printPokemonCards(sortByJSON);
-            printPokemonCards(sortByJSON);
-            hiddenPromptWindow();
-        });*/
-        sortByButtons.appendChild(buttonElement);
-    }
-    sortByPromptElement.style.WebkitAnimationPlayState = "running";
-    showPromptWindow(1);
+  for (let i = 0; i < sortByArray.length; i++) {
+    buttonIsPair = i % 2;
+    let buttonElement = document.createElement("BUTTON");
+    buttonElement.classList.add("filterByTypeButton");
+    buttonElement.value = sortByArray[i];
+    buttonElement.innerHTML = sortByArray[i];
+    buttonElement.style.backgroundColor = "#" + typeArrayColor[i];
+    buttonElement.addEventListener("click", function() {
+      if (filterJSON != "") {
+        if (i == 0 || i == 2 || i == 4 || i == 6) {
+          sortByJSON = window.data.sortDataResultDesc(
+            filterJSON,
+            sortArrayConditions[i]
+          );
+        } else {
+          sortByJSON = window.data.sortDataResultAsc(
+            filterJSON,
+            sortArrayConditions[i]
+          );
+        }
+      } else {
+        if (i == 0 || i == 2 || i == 4 || i == 6) {
+          sortByJSON = window.data.sortDataResultDesc(
+            dataPokemon,
+            sortArrayConditions[i]
+          );
+        } else {
+          sortByJSON = window.data.sortDataResultAsc(
+            dataPokemon,
+            sortArrayConditions[i]
+          );
+        }
+      }
+      // sortByJSON == "" ? printPokemonCards(dataPokemon) : printPokemonCards(sortByJSON);
+      printPokemonCards(sortByJSON);
+      hiddenPromptWindow();
+    });
+    sortByButtons.appendChild(buttonElement);
+  }
+  sortByPromptElement.style.WebkitAnimationPlayState = "running";
+  showPromptWindow(1);
 };
+
+/*********************Home button*********************/
+/*let checkedHomeButtonElement = document.getElementById("checkedHomeButton");
+// let homeButton = document.getElementById("homeButton");
+
+checkedHomeButtonElement.addEventListener("change", () => {
+  if (checkedHomeButtonElement.checked == true) {
+    printPokemonCards(dataPokemon);
+  } else {
+    closeFloatingMenu();
+  }
+});
+*/
+document.getElementById("homeButton").addEventListener("click", () => {
+  printPokemonCards(dataPokemon);
+  filterJSON = [];
+  console.log("Reset");
+});
+
 
 /**************************** Reset *************************************/
 document.getElementById("resetButton").addEventListener("click", () => {
@@ -738,5 +823,6 @@ document.addEventListener('keyup',            function (event) {
         floatingMenuButton.focus();
     }
 });
+
 
 
