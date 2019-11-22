@@ -1,0 +1,283 @@
+/*********** Prompt Character page ************/
+/************ Ventana contenedora ************/
+.promptCharacterWindowClass {
+    visibility: hidden;
+    position: fixed;
+    display: flex;
+    flex-direction: column;
+    width: 85%;
+    min-width: fit-content;
+    height: 75%;
+    /* height: fit-content; */
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -42%);
+    /* padding: 0.5% 1% 0.5% 1%; */
+    border: 10px solid white;
+    border-radius: 35px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    background-color: whitesmoke;
+    -webkit-animation-name: animatetopCharacterWindow;
+    -webkit-animation-duration: 0.4s;
+    animation-name: animatetopCharacterWindow;
+    animation-duration: 4s;
+}
+.characterImageDIV{
+    position: relative;
+    top: -50px;
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    height: 30px;
+}
+
+.characterImageClass {
+    position: absolute;
+    bottom: -30px;
+    width: 250px;
+    height: auto;
+}
+
+/********** Botón pokeball **********/
+.popoverTextFormat {
+    display: inline-block;
+    font-family: 'Helvetica',sans-serif;
+    font-size: 18px;
+    font-weight: bold;
+    text-align: center;
+    width: max-content;
+}
+.divCatchIt{
+    display: flex;
+    position: relative;
+    top: -40px;
+    width: fit-content;
+    /* background-color: cornflowerblue; */
+}
+
+.divPokeballImage {
+    width: max-content;
+    text-align: center;
+    visibility: hidden;
+}
+
+.divPokeballImage .tooltiptextPokeball {
+    background-color: white;
+    color: black;
+    border-color: #1A1423;
+    border-width: 5px;
+    border-style: solid;
+
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px;
+    position: absolute;
+    bottom: 110%;
+    left: 50%;
+    transform: translate(-50%);
+    visibility: hidden;
+    opacity: 0;
+}
+
+.divPokeballImage .tooltiptextPokeball::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+
+    margin-left: -10px;
+    border-width: 10px;
+
+    border-style: solid;
+    border-color: #1A1423 transparent transparent transparent;
+}
+
+.divPokeballImage:hover .tooltiptextPokeball {
+    visibility: visible;
+    opacity: 1;
+    transition: opacity 2s;
+}
+
+.pokeballImage{
+    width: 25%;
+    align-items: center;
+    animation: tilt 6s infinite;
+    cursor: pointer;
+}
+
+.pokeballImage:hover{
+    animation: tilt 1s infinite;
+}
+
+.pokeballImage:hover path:nth-child(6){
+    animation: redFillAnimation 1s infinite;
+}
+
+.onClickImage {
+    width: 25%;
+}
+
+.onClickImage path:nth-child(6){
+    fill: green;
+}
+
+.onClickShrink {
+    animation: shrink 1s;
+}
+
+/* divImageFav */
+.divFavImage {
+    position: absolute;
+    width: max-content;
+    text-align: center;
+    visibility: hidden;
+}
+
+.starFavImage{
+    width: 25%;
+    align-items: center;
+    animation: pop 0.3s linear 1;
+    cursor: pointer;
+}
+
+@keyframes tilt {
+    0 { transform: translate(0, 0) rotate(0); }
+    25% { transform: translate(-8px, 0) rotate(-18deg); }
+    33% { transform: translate(8px, 0) rotate(18deg); }
+    50% { transform: translate(-8px, 0) rotate(-12deg); }
+    60% { transform: translate(8px, 0) rotate(18deg); }
+    100% { transform: translate(0, 0) rotate(0); }
+}
+
+@keyframes redFillAnimation{
+    from {
+        fill: white;
+    }
+    to{
+        fill: red;
+    }
+}
+
+@keyframes shrink{
+    from {
+        transform: scale(1);
+    }
+    to{
+        transform: scale(0);
+    }
+}
+
+@keyframes pop{
+    50%  {transform: scale(1.2);}
+}
+/*************************************/
+#characterDynamicContent{
+    display: flex;
+    flex-direction: column;
+    overflow: scroll;
+}
+
+.columnAlignmentClass{
+    display: flex;
+    flex-flow: column wrap;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 15px;
+    padding: 10px 0px;
+    background-color: whitesmoke;
+}
+
+.rowAlignmentClass{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.characterTitleNumberClass{ /*especial por el fondo*/
+    font-family: 'Rajdhani', sans-serif;
+    font-style: normal;
+    font-variant: normal;
+    font-size: 2.5vmin;
+    color: rgb(58, 57, 57);
+    padding: 3px;  
+    width: fit-content;
+    background-color: hsl(0, 0%, 0%, 30%);
+    border-radius: 10px;
+}
+
+.textFormat{
+    /* font-family: Verdana, Geneva, Tahoma, sans-serif, sans-serif; */
+    font-family: 'Rajdhani', sans-serif;
+    font-style: normal;
+    font-variant: normal;
+    text-align: center;    
+}
+
+.textFormatBig {
+    font-family: 'Rajdhani', sans-serif;
+    font-style: normal;
+    font-variant: normal;
+    text-align: center; 
+    font-size: 7vmin;
+    color: DarkSlateGrey;
+ 
+}
+
+.textFormatMedium{
+    font-family: 'Rajdhani', sans-serif;
+    font-style: normal;
+    font-variant: normal;
+    text-align: center; 
+    font-size: 5vmin;
+    color: rgb(68, 67, 67);
+}
+
+.textFormatSmall{
+    font-family: 'Rajdhani', sans-serif;
+    font-style: normal;
+    font-variant: normal;
+    text-align: center; 
+    font-size: 2.5vmin;
+    color: rgb(68, 67, 67);
+}
+
+.rightBorderClass{
+    border-width: 5px;
+    border-color: DimGrey;
+    border-right: dotted;
+}
+
+.bottomBorderClass{
+    border-width: 5px;
+    border-color: DimGrey;
+    border-bottom: dotted;
+}
+
+/************ Animación de ventana prompt ************/
+@-webkit-keyframes animatetopCharacterWindow {
+    from {top:-300px;}
+    to {top:50%;}
+}
+
+@keyframes animatetopCharacterWindow {
+    from {top:-300px;}
+    to {top:50%;}
+}
+
+/************ Favorite window empty Psyduck ************/
+.favoritesWindowEmptyClass{
+    position: absolute;
+    left: 50%;
+    top: 50px;
+    transform: translate(-50%, 0%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    height: 150px;
+}
+
+.favoritesWindowImageClass{
+    height: 300%;
+    margin: 10px;
+}

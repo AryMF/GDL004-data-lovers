@@ -62,6 +62,7 @@ window.data =  {
     }
     return sortDataResult;
   }   
+
 };
 
 /********FUNCIÓN AZ****************/
@@ -109,18 +110,19 @@ const sortDataZA = (data) => {
 };
  
 /*********************FUNCIÓN PESO + A - ***********/
-const sortDataWeightHeavyToLight = (data) => {
+const sortDataWeightHeavyToLight = (data ) => {
   let sortByWeightMtoL = [];
-  let weight;
-  for (weight in data) {
-    if (data.hasOwnProperty(weight)) {
-      sortByWeightMtoL.push(data[weight]);
+  let x= "weight";
+  // x= condition;
+  for (x in data) {
+    if (data.hasOwnProperty(x)) {
+      sortByWeightMtoL.push(data[x]);
     }
   }
   sortByWeightMtoL.sort(function(a, b) {
-    if (a.weight > b.weight) {
+    if (a.x > b.x) {
       return -1;
-    } else if (a.weight < b.weight) {
+    } else if (a.x < b.x) {
       return 1;
     }
       return 0;
@@ -196,8 +198,9 @@ const sortDataHeightTallToShort = (data) => {
   return sortByHeightMtoL;
 };
 
+
 /*función INVERTIR tarjetas #151 a #1*/
 const sortDataIdInverse = (data) => {
-  const DataIDReverse = data.reverse();
+  const DataIDReverse = temporal.reverse();
   return DataIDReverse;
 };

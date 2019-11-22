@@ -1,22 +1,28 @@
 const DATA_URL = "https://raw.githubusercontent.com/AryMF/GDL004-data-lovers/master/src/data/pokemon/pokemon.json";
 let dataPokemon = [];
 let filterJSON = [];
-let favoritesJSON = [];
+
+/***********Main window *********************/
+let pokemonContainerElement = document.getElementById("pokemonContainer");
+/***********Popup windows (Search, FilterBy, SortBy) *********************/
 let promptContainerElement = document.getElementById("promptContainer");
 let searchByPromptElement = document.getElementById("searchByPrompt");
 let searchPromptInputElement = document.getElementById("searchPromptInput");
-
 let filterByPromptElement = document.getElementById("filterByPrompt");
 let typeButtonsDiv = document.getElementById("typeButtonsDiv");
-
 let sortByPromptElement = document.getElementById("sortByPrompt");
 let sortByButtons = document.getElementById("sortByButtonsDiv");
-
 let buttonCloseNode = document.getElementsByClassName("buttonCloseClass");
-let typeArray = ["Normal", "Fire", "Fighting", "Water", "Flying", "Grass", "Poison", "Electric", 
+/***********Popup windows Character *********************/
+let characterWindowElement = document.getElementById("characterWindow");
+let characterDynamicDiv = document.getElementById("characterDynamicContent");
+let characterTitleName = document.createElement("P");
+
+
+let typeArray = ["Normal", "Fire", "Fighting", "Water", "Flying", "Grass", "Poison", "Electric",
 "Ground", "Psychic", "Rock", "Ice", "Bug", "Dragon", "Ghost", "Dark", "Steel", "Fairy"];
 
-const typeArrayColor = ["D2B48C", "ED602D", "9E201C", "0074D9", "15707C", "2ECC40", "A33EA1", "FFDC00", 
+const typeArrayColor = ["D2B48C", "ED602D", "9E201C", "0074D9", "15707C", "2ECC40", "A33EA1", "FFDC00",
 "B28F35", "85144b", "7F7A33", "7FDBFF", "9AB223", "6F35FC", "55007F", "664A3D", "708090", "D685AD"];
 
 
@@ -72,16 +78,14 @@ const printPokemonCards = (dataArray) => {
     let randomColor;
     let i;
 
-    document.getElementById("pokemonContainer").innerHTML = "";
+    pokemonContainerElement.innerHTML = "";
 
     dataArray.forEach(element => {
         divContainer = document.createElement("DIV");
         divContainer.classList.add("divContainerClass");
-        document.getElementById("pokemonContainer").appendChild(divContainer);
+        pokemonContainerElement.appendChild(divContainer);
 
         divPokemonCard = document.createElement("DIV");
-        // randomColor = "background-color: #" + Math.floor(Math.random()*16777215).toString(16) + ";";
-        // divPokemonCard.setAttribute("style", randomColor);
         for(i=0; i < typeArray.length;i++){
             if(element.type[0] == typeArray[i]){
                 break;
@@ -90,11 +94,13 @@ const printPokemonCards = (dataArray) => {
         divPokemonCard.setAttribute("style", "background-color: #" + typeArrayColor[i]);
         divPokemonCard.tabIndex = 0;
         divPokemonCard.addEventListener("click", function() {
-            alert("Hola yo soy " + element.name);
+            // alert("Hola yo soy " + element.name);
+            characterWindowPrint(element.name.toUpperCase());
         });
         divPokemonCard.addEventListener('keyup',function(e){
             if (e.keyCode === 13) {
-                alert("Hola yo soy " + element.name);
+                // alert("Hola yo soy " + element.name);
+                characterWindowPrint(element.name.toUpperCase());
             }
         });
         divPokemonCard.classList.add("divPokemonCardClass");
@@ -117,7 +123,7 @@ const printPokemonCards = (dataArray) => {
             pokemonName.innerHTML = element.name.substring(0,9);
         }else{
             pokemonName.innerHTML = element.name;
-        }        
+        }
         pokemonName.classList.add("namePokemon");
         divPokemonCard.appendChild(pokemonName);
 
@@ -125,7 +131,7 @@ const printPokemonCards = (dataArray) => {
 };
 
 /*********************** Floating menu ***********************/
-let toggleElement = document.getElementById("toggle"); 
+let toggleElement = document.getElementById("toggle");
 let floatingMenuButton = document.getElementById("floatingMenu");
 let floatingMenuElements = document.getElementsByClassName("floatingMenuElement");
 
@@ -177,7 +183,7 @@ document.addEventListener('keyup', function (event) {
 });
 
 const searchPromptCreator = () => {
-    closeFloatingMenu();    
+    closeFloatingMenu();
     showPromptWindow(3);
     searchByPromptElement.style.WebkitAnimationPlayState = "running";
     document.getElementById("searchPromptInput").focus();
@@ -295,6 +301,7 @@ const sortByPromptCreator = () => {
         buttonElement.value = sortByArray[i];
         buttonElement.innerHTML = sortByArray[i];
         buttonElement.style.backgroundColor = "#" + typeArrayColor[i];
+        
         buttonElement.addEventListener("click", function() {
             if(filterJSON != ""){
                 sortByJSON = window.data.sortData(filterJSON, sortByArray[i]);
@@ -305,6 +312,23 @@ const sortByPromptCreator = () => {
             printPokemonCards(sortByJSON);
             hiddenPromptWindow();
         });
+
+        /*buttonElement.addEventListener("click", function() {
+            if (filterJSON != "") {
+              sortByJSON = window.data.sortDataResultAsc(
+                filterJSON,
+                "height"
+              );
+            } else {
+              sortByJSON = window.data.sortDataResultAsc(
+                dataPokemon,
+                "height"
+              );
+            }
+            // sortByJSON == "" ? printPokemonCards(dataPokemon) : printPokemonCards(sortByJSON);
+            printPokemonCards(sortByJSON);
+            hiddenPromptWindow();
+        });*/
         sortByButtons.appendChild(buttonElement);
     }
     sortByPromptElement.style.WebkitAnimationPlayState = "running";
@@ -316,7 +340,6 @@ document.getElementById("resetButton").addEventListener("click", () => {
     closeFloatingMenu();
     filterJSON = [];
     printPokemonCards(dataPokemon);
-    console.log("Reset");
 });
 
 /**** Short cut ****/
@@ -325,7 +348,6 @@ document.addEventListener('keyup', function (event) {
         closeFloatingMenu();
         filterJSON = [];
         printPokemonCards(dataPokemon);
-        console.log("Reset");
     }
 });
 
@@ -347,14 +369,20 @@ const showPromptWindow = (option) => {
         case 3:
             searchByPromptElement.style.visibility = "visible";
         break;
+        case 4:
+            characterWindowElement.style.visibility = "visible";
+        break;
         default:
         break;
     }
 };
 
 /************************  Cerrar popup  *********************************/
-promptContainerElement.addEventListener("click", () => {
-    hiddenPromptWindow();
+
+promptContainerElement.addEventListener("click", (element) => {
+    if(element.target.id === "promptContainer"){
+        hiddenPromptWindow();
+    }
 });
 
 promptContainerElement.addEventListener('keyup', (event) => {
@@ -367,7 +395,7 @@ Array.from(buttonCloseNode).forEach((element) => {
     element.addEventListener("click", (i) => {
         typeButtonsDiv.innerHTML = "";
         hiddenPromptWindow();
-        if (document.getElementById("pokemonContainer").innerHTML == ""){
+        if (pokemonContainerElement.innerHTML == ""){
             printPokemonCards(dataPokemon);
         }
     });
@@ -381,6 +409,10 @@ const hiddenPromptWindow = () => {
     sortByButtons.innerHTML = "";
     filterByPromptElement.style.visibility = "hidden";
     searchByPromptElement.style.visibility = "hidden";
+    characterWindowElement.style.visibility = "hidden";
+    characterDynamicDiv.innerHTML = "";
+    elementDivPokeballImage.style.visibility = "hidden";
+    elementDivFavImage.style.visibility = "hidden";
 };
 
 /************************  Cerrar floating menu  ******************************/
@@ -394,49 +426,21 @@ const closeFloatingMenu = () => {
 }
 
 /************************ Favorites window ************************/
-
+/** Show favorites*/
 document.getElementById("favoritesButton").addEventListener("click", () => {
-    /**Create */
-    console.log("Cookies ACTUAL: " + document.cookie);
-    let newFavorite = prompt("Nuevo favorito");
-    createFavoriteCookie(newFavorite);
-
-    /** Show */
-    favoritesJSON = [];
     showFavorites();
-    printPokemonCards(favoritesJSON);
-
-    /*** Remove */
-    /*let removeFavorite = prompt("Remueve favorito");
-    deleteFavorite(removeFavorite);
-    console.log("After   remove: " + document.cookie);*/
 });
 
 const loadFavorites = () => {
     let pokemonCookiesStr = document.cookie.substring(16, document.cookie.length);
     let pokemonCookiesArray = pokemonCookiesStr.split(" ");
-    console.log("loadFavorites: " + pokemonCookiesArray);
-
-    return pokemonCookiesArray;    
+    return pokemonCookiesArray;
 };
 
 const createFavoriteCookie = (pokemonId) => {
     let pokemonCookiesArray = loadFavorites();
     pokemonCookiesArray.push(pokemonId);
-    loadFavorites
-    document.cookie = "favoritePokemon=" + pokemonCookiesArray.join(" ");
-};
-
-const showFavorites = () =>{
-    let pokemonCookiesArray = loadFavorites();
-
-    dataPokemon.forEach((element) => {
-        pokemonCookiesArray.forEach((favoriteID) => {
-            if(parseInt(favoriteID, 10) === element.id){
-                favoritesJSON.push(element);
-            }
-        });
-    });
+    document.cookie = "favoritePokemon=" + pokemonCookiesArray.join(" ");    
 };
 
 const deleteFavorite = (pokemonId) => {
@@ -445,14 +449,294 @@ const deleteFavorite = (pokemonId) => {
 
     index > -1 ? pokemonCookiesArray.splice(index, 1) : console.log("No existe ese id en favoritos");
     document.cookie = "favoritePokemon=" + pokemonCookiesArray.join(" ");;
-    showFavorites();
-    printPokemonCards(favoritesJSON);
 };
 
+const showFavorites = () =>{
+    let pokemonCookiesArray = loadFavorites();
+    console.log("Favoritos: ");
+    console.log(pokemonCookiesArray);
+    let favoritesJSON = [];
+    dataPokemon.forEach((element) => {
+        pokemonCookiesArray.forEach((favoriteID) => {
+            if(favoriteID === element.name.toUpperCase()){
+                favoritesJSON.push(element);
+            }
+        });
+    });
+
+    if(favoritesJSON != ""){
+        printPokemonCards(favoritesJSON);
+    }else{
+        pokemonContainerElement.innerHTML = "";
+        let favoritesWindowEmpty = document.createElement("DIV");
+        favoritesWindowEmpty.classList.add("favoritesWindowEmptyClass");
+        pokemonContainerElement.appendChild(favoritesWindowEmpty);
+
+        let favoritesWindowTitle = document.createElement("P");
+        favoritesWindowTitle.classList.add("textFormatBig");
+        favoritesWindowTitle.innerHTML = "You haven't catch any pokemon yet!";
+        favoritesWindowEmpty.appendChild(favoritesWindowTitle);
+        
+        let favoritesWindowImage = document.createElement("IMG");
+        favoritesWindowImage.classList.add("favoritesWindowImageClass");
+        favoritesWindowImage.setAttribute("src", "image/psyduck.png");
+        favoritesWindowImage.setAttribute("alt", "Image: Favorites is empty");
+        favoritesWindowEmpty.appendChild(favoritesWindowImage);
+        
+    }
+    
+};
+
+/******************** Character window ********************/
+let elementDivPokeballImage = document.getElementById("divPokeballImage");
+let elementPokeballImage = document.getElementById("pokeballImage");
+let elementDivFavImage = document.getElementById("divFavImage");
+let elementStarFavImage = document.getElementById("starFavImage");
+
+let characterImageElement = document.getElementById("characterImage");
+
+const characterWindowPrint = (pokemonName) =>{
+    //Preparar data del pokemon elegido
+    let searchPokemon = window.data.filteredByNameOrNumber(dataPokemon, pokemonName);
+    let characterData = searchPokemon[0];
+    let pokemonCookiesArray = loadFavorites();
+
+    // Configuración de botón de favoritos
+    console.log("Cookies array:");
+    console.log(pokemonCookiesArray);
+
+    if(pokemonCookiesArray.indexOf(pokemonName) != -1){
+        catchItAnimation(1, 0); /*el pokemon esta en favoritos*/
+    }else {
+        catchItAnimation(2, 0);
+    }
+
+    // Color de ventana
+    let i=0;
+    for(i; i < typeArray.length;i++){
+        if(characterData.type[0] == typeArray[i]){
+            break;
+        }
+    }
+    //characterWindowElement.setAttribute("style", "background-color: #" + typeArrayColor[i]);
+    characterWindowElement.setAttribute("style", "border-color: #" + typeArrayColor[i]);
+
+    //Carga la imagen del pokemon 
+    characterImageElement.setAttribute("src", characterData.img); // Si la comentas sale la imagen linda
+
+    // characterDynamicDiv
+/****************************************************************************************/
+    let characterTitle = document.createElement("DIV");
+    characterTitle.classList.add("columnAlignmentClass");
+    characterDynamicDiv.appendChild(characterTitle);
+        // characterTitleName -- Global
+        characterTitleName.classList.add("textFormatBig");
+        characterTitleName.setAttribute("style", "color: #" + typeArrayColor[i]);
+        characterTitleName.innerHTML = characterData.name;
+        characterTitle.appendChild(characterTitleName);
+        let characterTitleNumber = document.createElement("P");
+        characterTitleNumber.innerHTML = characterData.num;
+        characterTitleNumber.classList.add("characterTitleNumberClass");
+        characterTitle.appendChild(characterTitleNumber);
+
+/****************************************************************************************/
+    let characterGeneralData = document.createElement("DIV");
+    characterGeneralData.classList.add("rowAlignmentClass");
+    characterGeneralData.classList.add("bottomBorderClass");
+    characterGeneralData.setAttribute("style", "border-color: #" + typeArrayColor[i]);
+    characterDynamicDiv.appendChild(characterGeneralData);
+
+        let characterTypeDiv = document.createElement("DIV");
+        characterTypeDiv.classList.add("columnAlignmentClass");
+        characterGeneralData.appendChild(characterTypeDiv);
+
+            let characterTypeNumber = document.createElement("P");
+            characterTypeNumber.innerHTML = characterData.type.join(" ");
+            characterTypeNumber.classList.add("textFormatMedium");
+            characterTypeDiv.appendChild(characterTypeNumber);
+            
+            let characterTypeTitle = document.createElement("P");
+            characterTypeTitle.innerHTML = "Type";
+            characterTypeTitle.classList.add("textFormatSmall");
+            characterTypeDiv.appendChild(characterTypeTitle);
+
+        let characterWeightDiv = document.createElement("DIV");
+        characterWeightDiv.classList.add("columnAlignmentClass");
+        characterGeneralData.appendChild(characterWeightDiv);
+
+            let characterWeightNumber = document.createElement("P");
+            characterWeightNumber.innerHTML = characterData.weight;
+            characterWeightNumber.classList.add("textFormatMedium");
+            characterWeightDiv.appendChild(characterWeightNumber);
+
+            let characterWeightTitle = document.createElement("P");
+            characterWeightTitle.innerHTML = "Weight";
+            characterWeightTitle.classList.add("textFormatSmall");
+            characterWeightDiv.appendChild(characterWeightTitle);
+
+        let characterHeightDiv = document.createElement("DIV");
+        characterHeightDiv.classList.add("columnAlignmentClass");
+        characterGeneralData.appendChild(characterHeightDiv);
+
+            let characterHeightNumber = document.createElement("P");
+            characterHeightNumber.innerHTML = characterData.height;
+            characterHeightNumber.classList.add("textFormatMedium");
+            characterHeightDiv.appendChild(characterHeightNumber);
+
+            let characterHeightTitle = document.createElement("P");
+            characterHeightTitle.innerHTML = "Height";
+            characterHeightTitle.classList.add("textFormatSmall");
+            characterHeightDiv.appendChild(characterHeightTitle);
+
+/****************************************************************************************/
+    let characterCandyData = document.createElement("DIV");
+    characterCandyData.classList.add("rowAlignmentClass");
+    characterCandyData.classList.add("bottomBorderClass");
+    characterCandyData.setAttribute("style", "border-color: #" + typeArrayColor[i]);
+    characterDynamicDiv.appendChild(characterCandyData);
+
+        let characterCandyDiv = document.createElement("DIV");
+        characterCandyDiv.classList.add("columnAlignmentClass");
+        characterCandyDiv.classList.add("rightBorderClass");
+        characterCandyDiv.setAttribute("style", "border-color: #" + typeArrayColor[i]);
+        characterCandyData.appendChild(characterCandyDiv);
+
+            let characterCandyType = document.createElement("P");
+            characterCandyType.innerHTML = characterData.candy;
+            characterCandyType.classList.add("textFormatMedium");
+            characterCandyDiv.appendChild(characterCandyType);
+
+            let characterCandyTitle = document.createElement("P");
+            characterCandyTitle.innerHTML = "Candy";
+            characterCandyTitle.classList.add("textFormatSmall");
+            characterCandyDiv.appendChild(characterCandyTitle);
+
+        let characterCandyCountDiv = document.createElement("DIV");
+        characterCandyCountDiv.classList.add("columnAlignmentClass");
+        characterCandyData.appendChild(characterCandyCountDiv);
+
+            let characterCandyCountNumber = document.createElement("P");
+            characterCandyCountNumber.innerHTML = characterData.candy_count;
+            characterCandyCountNumber.classList.add("textFormatMedium");
+            characterCandyCountDiv.appendChild(characterCandyCountNumber);
+
+            let characterCandyCountTitle = document.createElement("P");
+            characterCandyCountTitle.innerHTML = "Candy Count";
+            characterCandyCountTitle.classList.add("textFormatSmall");
+            characterCandyCountDiv.appendChild(characterCandyCountTitle);
+
+/****************************************************************************************/
+    let characterAdditionalData = document.createElement("DIV");
+    characterAdditionalData.classList.add("rowAlignmentClass");
+    characterDynamicDiv.appendChild(characterAdditionalData);
+
+        let additionalDataAuxiliarDiv = document.createElement("DIV");
+        additionalDataAuxiliarDiv.classList.add("columnAlignmentClass");
+        characterAdditionalData.appendChild(additionalDataAuxiliarDiv);
+
+            let characterWeaknessDiv = document.createElement("DIV");
+            characterWeaknessDiv.classList.add("columnAlignmentClass");
+            additionalDataAuxiliarDiv.appendChild(characterWeaknessDiv);
+
+                let characterWeaknessTitle = document.createElement("P");
+                characterWeaknessTitle.innerHTML = "Weakness";
+                characterWeaknessTitle.classList.add("textFormatSmall");
+                characterWeaknessDiv.appendChild(characterWeaknessTitle);
+
+                let characterWeaknessType = document.createElement("DIV");
+                characterWeaknessDiv.appendChild(characterWeaknessType);
+                        /*** Aquí va un ciclo farol */
+                    let characterWeaknessTypeName = document.createElement("P");
+                    characterWeaknessTypeName.innerHTML = characterData.weaknesses.join(" ");
+                    characterWeaknessTypeName.classList.add("textFormatMedium");
+                    characterWeaknessType.appendChild(characterWeaknessTypeName);
+                    let characterWeaknessTypeLogo = document.createElement("IMG");
+                    characterWeaknessType.appendChild(characterWeaknessTypeLogo);
+
+            let characterInfoDiv = document.createElement("DIV");
+            characterInfoDiv.classList.add("columnAlignmentClass");
+            additionalDataAuxiliarDiv.appendChild(characterInfoDiv);
+
+
+                let characterInfoTitle = document.createElement("P");
+                characterInfoTitle.innerHTML = "Info";
+                characterInfoTitle.classList.add("textFormatSmall");
+                characterInfoDiv.appendChild(characterInfoTitle);
+
+                let characterInfoBox = document.createElement("P");
+                characterInfoBox.innerHTML = "place-holder text";
+                characterInfoBox.classList.add("textFormatMedium");
+                characterInfoDiv.appendChild(characterInfoBox);
+
+
+        let characterEvolutionDiv = document.createElement("DIV");
+        characterEvolutionDiv.classList.add("columnAlignmentClass");
+        characterAdditionalData.appendChild(characterEvolutionDiv);
+
+
+            let characterEvolutionTitle = document.createElement("P");
+            characterEvolutionTitle.innerHTML = "Evolution";
+            characterEvolutionTitle.classList.add("textFormatSmall");
+            characterEvolutionDiv.appendChild(characterEvolutionTitle);
+
+            let characterEvolutionBox = document.createElement("P");
+            characterEvolutionBox.innerHTML = "place-holder text";
+            characterEvolutionBox.classList.add("textFormatMedium");
+            characterEvolutionDiv.appendChild(characterEvolutionBox);
+/****************************************************************************************/
+    showPromptWindow(4);
+};
+
+
+const catchItAnimation = (status, animation) => {
+    let shrinkAnimationDelay = 0;
+    let showElementDelay = 0;
+    /* Define si hace la animacion */
+    if(animation === 1){
+        shrinkAnimationDelay = 300;
+        showElementDelay = 1000;
+    }
+
+    if(status === 1){
+        elementPokeballImage.classList.remove("pokeballImage");
+        elementPokeballImage.classList.add("onClickImage");
+        
+        setTimeout(() => {
+            elementPokeballImage.classList.add("onClickShrink");
+        }, shrinkAnimationDelay);
+        setTimeout(() => {
+            elementDivPokeballImage.style.visibility = "hidden";
+            elementDivFavImage.style.visibility = "visible";
+            elementStarFavImage.classList.add("starFavImage");
+        }, showElementDelay);
+    } else {
+        elementPokeballImage.classList.add("pokeballImage");
+        elementPokeballImage.classList.remove("onClickImage");
+        elementPokeballImage.classList.remove("onClickShrink");
+        elementDivPokeballImage.style.visibility = "visible";
+        elementDivFavImage.style.visibility = "hidden";
+        elementStarFavImage.classList.remove("starFavImage");
+    }
+};
+
+ elementPokeballImage.addEventListener("click", () => {
+    catchItAnimation(1, 1);
+    /**Create cookie*/
+        createFavoriteCookie(characterTitleName.innerHTML.toUpperCase()); //Descomentar cuando funcione
+        // createFavoriteCookie(num.toString(10));  Descomentar para prueba Cookies
+ });
+ elementStarFavImage.addEventListener("click", () => {
+    catchItAnimation(2, 1);
+    /*** Remove cookie */
+        deleteFavorite(characterTitleName.innerHTML.toUpperCase()); //Descomentar cuando funcione
+        // deleteFavorite(num.toString(10)); Descomentar para prueba Cookies
+ });
+
 /******************** Short cut Event listener ********************/
-document.addEventListener('keyup', function (event) {
+document.addEventListener('keyup',            function (event) {
     if (event.altKey && event.key === "z") {
         floatingMenuButton.focus();
     }
 });
+
 
