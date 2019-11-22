@@ -2,10 +2,11 @@
 <html lang="es">
   <head>
     <meta charset="UTF-8">
-    <title>Data Lovers Pokemon</title>
+    <title>Pokédex</title>
+    <!-- <link rel="icon" type="image/png"href="image/PokeIcon.png/> -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="style.css"/>
     <script type="module" src="main.js"></script>
     <script type="module" src="data.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -28,44 +29,34 @@
       <nav id="sortByButton" class="floatingMenuElement" tabindex="0" aria-label="Ordenar">
         <i class="fa fa-sort-amount-desc"></i>
       </nav>
-      <nav id="chartButton" class="floatingMenuElement" tabindex="0">
-        <i class="fa fa-bar-chart"></i>
-      </nav>
       <nav id="resetButton" class="floatingMenuElement" tabindex="0">
         <i class="fa fa-refresh"></i>
       </nav>
     </div>
-
+    <!-- Main screen -->
     <div id="mainScreen" class="mainScreenClass">
       <!-- Barra de menu superior -->
       <header class="header">
-        
-          <button id="menuButton" style="background-color: transparent; border: 0;"  class="homeButtonClass" tabindex="-1">
-            <i  class="fa fa-reorder" tabindex="1"></i>
-          </button>
-        <div style="flex: 1;">
-          <h1 class="titleText">
+        <button class="topMenuButtonContainer"tabindex="-1">
+          <i id="menuButton" class="fa fa-reorder" tabindex="0"></i>
+        </button>
+        <div>
+          <div class="titleText">
               Pokedex
-          </h1>
+          </div>
         </div>
-        <input type="checkbox" id="checkedHomeButton" />
-          <button style="background-color: transparent; border: 0;" tabindex="-1" for="checkedHomeButton">
-            <i id="homeButton" class="fa fa-home" tabindex="0"></i>
-          </button> 
-  
-     
-        <button style="background-color: transparent; border: 0;" tabindex="-1">
+        <button class="topMenuButtonContainer" tabindex="-1">
             <i id="favoritesButton" class="fa fa-star" tabindex="0"></i>
         </button>
+        <button class="topMenuButtonContainer" tabindex="-1">
+            <i id="chartButton" class="fa fa-bar-chart"></i>
+        </button>
       </header>
-      <br><br><br><br><br>
 
       <!-- Despliegue de pokemons -->
       <main id="pokemonContainer" class="pokemonContainerGrid" ></main>
     </div>
-
-    
-
+    <!-- Prompt container -->
     <div id="promptContainer" class="promptContainerBackgroundClass">
       <!-- Prompt de búsqueda-->
       <div id="searchByPrompt" class="promptSearchWindowClass">
@@ -88,8 +79,6 @@
           <h1>Filtrar por</h1>
           </br>
         </div>
-        <div class="flyout-debug" id="flyout-debug"></div>
-
         <div id="typeButtonsDiv">
           <!--Lista-->
         </div>
@@ -111,14 +100,53 @@
         </div>
       </div>
 
-    </div> <!-- Cerrando promptContainer -->
 
+      <!-- Pantalla de personaje -->
+      <div id="characterWindow" class="promptCharacterWindowClass">
+          <!-- Botón de cerrado -->
+          <div style="background-color: transparent; padding-right: 20px;">
+              <span class="buttonCloseClass" style="color: black;" aria-label="Close" aria-hidden="true">&times;</span>
+          </div>
+          <!-- Botón animado pokeball -->
+          <div id="divCatchIt" class="divCatchIt">
+            <div id="divPokeballImage" class="divPokeballImage">
+                  <span class="tooltiptextPokeball popoverTextFormat">Catch it!</span>
+                  <svg id="pokeballImage" class="pokeballImage" viewBox="0 0 322 322" xmlns="http://www.w3.org/2000/svg">
+                      <g clip-path="pokeball">
+                      <!-- Relleno rojo 1-->
+                      <path d="M160.63 9.44882C140.777 9.44875 121.118 13.3591 102.776 20.9567C84.4334 28.5543 67.7673 39.6902 53.7287 53.7287C39.6902 67.7673 28.5543 84.4334 20.9567 102.776C13.3591 121.118 9.44875 140.777 9.44882 160.63H311.812C311.812 140.777 307.902 121.118 300.304 102.776C292.707 84.4334 281.571 67.7673 267.532 53.7287C253.494 39.6902 236.827 28.5543 218.485 20.9567C200.143 13.3591 180.484 9.44875 160.63 9.44882V9.44882Z" fill="#800000"/>
+                      <!-- Border superior 2-->
+                      <path fill-rule="evenodd" clip-rule="evenodd" d="M99.1598 12.2271C118.648 4.1547 139.536 -7.53392e-05 160.63 1.02462e-09C181.725 -7.53392e-05 202.613 4.1547 222.101 12.2271C241.59 20.2995 259.298 32.1315 274.214 47.0474C289.129 61.9633 300.961 79.6712 309.034 99.1598C317.106 118.648 321.261 139.536 321.261 160.63C321.261 165.849 317.031 170.079 311.812 170.079H9.44882C4.23039 170.079 1.90745e-05 165.849 1.02461e-09 160.63C-7.53392e-05 139.536 4.15471 118.648 12.2271 99.1598C20.2995 79.6712 32.1315 61.9633 47.0474 47.0474C61.9634 32.1315 79.6712 20.2995 99.1598 12.2271ZM160.63 18.8976C142.018 18.8976 123.587 22.5636 106.392 29.6863C89.1957 36.809 73.5712 47.2489 60.4101 60.41C47.2489 73.5712 36.809 89.1957 29.6863 106.392C23.7715 120.671 20.2404 135.802 19.2129 151.182H302.048C301.02 135.802 297.489 120.671 291.575 106.392C284.452 89.1957 274.012 73.5712 260.851 60.41C247.69 47.2489 232.065 36.809 214.869 29.6863C197.674 22.5636 179.243 18.8976 160.63 18.8976Z" fill="black"/>
+                      <!-- Relleno blanco 3-->
+                      <path d="M160.63 311.812C180.484 311.812 200.143 307.902 218.485 300.304C236.827 292.707 253.494 281.571 267.532 267.532C281.571 253.494 292.707 236.827 300.304 218.485C307.902 200.143 311.812 180.484 311.812 160.631H9.44882C9.44875 180.484 13.3591 200.143 20.9567 218.485C28.5543 236.827 39.6902 253.494 53.7287 267.532C67.7673 281.571 84.4334 292.707 102.776 300.304C121.118 307.902 140.777 311.812 160.63 311.812V311.812Z" fill="white"/>
+                      <!-- Borde inferior 4-->
+                      <path fill-rule="evenodd" clip-rule="evenodd" d="M1.00976e-09 160.63C1.80232e-05 155.412 4.23039 151.182 9.44882 151.182H311.812C317.03 151.182 321.261 155.412 321.261 160.63C321.261 181.725 317.106 202.613 309.034 222.101C300.961 241.59 289.129 259.298 274.213 274.214C259.298 289.129 241.59 300.961 222.101 309.034C202.613 317.106 181.725 321.261 160.63 321.261C139.536 321.261 118.648 317.106 99.1598 309.034C79.6712 300.961 61.9634 289.129 47.0474 274.214C32.1315 259.298 20.2995 241.59 12.2271 222.101C4.15471 202.613 -7.47911e-05 181.725 1.00976e-09 160.63ZM19.2129 170.079C20.2404 185.459 23.7715 200.59 29.6863 214.869C36.809 232.065 47.2489 247.69 60.4101 260.851C73.5712 274.012 89.1957 284.452 106.392 291.575C123.587 298.697 142.018 302.363 160.63 302.363C179.243 302.363 197.674 298.697 214.869 291.575C232.065 284.452 247.69 274.012 260.851 260.851C274.012 247.69 284.452 232.065 291.575 214.869C297.489 200.59 301.02 185.459 302.048 170.079H19.2129Z" fill="black"/>
+                      <!-- Centro negro 5-->
+                      <path d="M160.63 217.323C191.941 217.323 217.323 191.941 217.323 160.63C217.323 129.32 191.941 103.938 160.63 103.938C129.32 103.938 103.938 129.32 103.938 160.63C103.938 191.941 129.32 217.323 160.63 217.323Z" fill="black"/>
+                      <!-- Centro blanco 6-->
+                      <path d="M160.63 198.426C181.504 198.426 198.426 181.504 198.426 160.63C198.426 139.757 181.504 122.835 160.63 122.835C139.757 122.835 122.835 139.757 122.835 160.63C122.835 181.504 139.757 198.426 160.63 198.426Z" fill="white"/>
+                      </g>
+                      <defs>
+                      <clipPath id="clip0">
+                      <rect width="321.261" height="321.261" fill="white"/>
+                      </clipPath>
+                      </defs>
+                  </svg>
+            </div>
+            <div id="divFavImage" class="divFavImage">
+              <svg id="starFavImage" viewBox="0 0 308 293" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M145.432 5.23722C149.319 -1.22099 158.681 -1.22101 162.568 5.2372L207.773 80.3517C209.169 82.6718 211.446 84.3265 214.084 84.9375L299.492 104.718C306.835 106.419 309.728 115.323 304.787 121.015L247.318 187.219C245.543 189.264 244.673 191.941 244.907 194.639L252.487 281.979C253.138 289.488 245.564 294.991 238.623 292.051L157.901 257.853C155.408 256.796 152.592 256.796 150.099 257.853L69.3767 292.051C62.4363 294.991 54.8615 289.488 55.5132 281.979L63.0931 194.639C63.3272 191.941 62.4573 189.264 60.6822 187.219L3.21311 121.015C-1.72797 115.323 1.16533 106.419 8.50846 104.718L93.9156 84.9375C96.5536 84.3265 98.8311 82.6718 100.227 80.3517L145.432 5.23722Z" fill="#D4AF37"/>
+                  <path fill-rule="evenodd" clip-rule="evenodd" d="M154 29.7871L117.364 90.6644C113.175 97.6247 106.342 102.589 98.4281 104.422L29.2091 120.453L75.7856 174.108C81.1108 180.243 83.7206 188.275 83.0182 196.368L76.875 267.153L142.297 239.437C149.777 236.268 158.223 236.268 165.703 239.437L231.125 267.153L224.982 196.368C224.279 188.275 226.889 180.243 232.214 174.108L278.791 120.453L209.572 104.422C201.658 102.589 194.825 97.6247 190.636 90.6644L154 29.7871ZM162.568 5.2372C158.681 -1.221 149.319 -1.22099 145.432 5.23722L100.227 80.3517C98.8311 82.6718 96.5536 84.3265 93.9156 84.9375L8.50846 104.718C1.16533 106.419 -1.72797 115.323 3.21311 121.015L60.6822 187.219C62.4573 189.264 63.3272 191.941 63.0931 194.639L55.5132 281.979C54.8615 289.488 62.4363 294.991 69.3767 292.051L150.099 257.853C152.592 256.796 155.408 256.796 157.901 257.853L238.623 292.051C245.564 294.991 253.138 289.488 252.487 281.979L244.907 194.639C244.673 191.941 245.543 189.264 247.318 187.219L304.787 121.015C309.728 115.323 306.835 106.419 299.492 104.718L214.084 84.9375C211.446 84.3265 209.169 82.6718 207.773 80.3517L162.568 5.2372Z" fill="black"/>
+              </svg>
+            </div>
+          </div>
+          <div class="characterImageDIV">
+              <img id="characterImage" class="characterImageClass" src="image/imagePlaceholder.png"></img>
+          </div>
+          <!-- Contenido dinámico -->
+          <div id="characterDynamicContent"></div>
+      </div> <!-- Cierra "Pantalla de personaje" -->
+    </div> <!-- Cierra promptContainer -->
   </body>
 </html>
 
-
-
-
-
-
-  

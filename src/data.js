@@ -6,15 +6,13 @@
 //   return 'example';
 // };
 
-window.data = {
-  filteredByNameOrNumber: function(data, condition) {
+
+window.data =  {
+  filteredByNameOrNumber: function(data, condition){
     let filterJSON = [];
-    filterJSON = data.filter(array => {
-      if (
-        ("name" in array &&
-          array.name.toUpperCase().match(condition) == condition) ||
-        ("id" in array && array.id == condition)
-      ) {
+    filterJSON = data.filter((array) => {
+      if(("name" in array && array.name.toUpperCase().match(condition) == condition) || ("id" in array && array.id == condition)){
+
         return true;
       } else {
         return false;
@@ -22,20 +20,22 @@ window.data = {
     });
     return filterJSON;
   },
-
-  filteredByType: function(data, condition) {
+  
+   filteredByType: function(data, condition){
     let filterJSON = [];
-    data.forEach(element => {
-      element.type.forEach(type => {
-        if (type.toUpperCase() == condition.toUpperCase()) {
+    data.forEach((element) => {
+      element.type.forEach((type) => {
+        if(type.toUpperCase() == condition.toUpperCase()){
           filterJSON.push(element);
-        } else {
+        } else{
           return false;
         }
       });
     });
     return filterJSON;
   },
+
+ 
 
   sortDataResultAsc: function(data, condition) {
     let sortedResultAsc = [];
