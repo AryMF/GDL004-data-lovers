@@ -37,17 +37,17 @@ let typeArray = [
 const typeArrayColor = [
   "D2B48C",
   "ED602D",
-  "9E201C",
-  "0074D9",
+  "D2691E",
+  "00BFFF",
   "15707C",
-  "2ECC40",
-  "A33EA1",
+  "9ACD32",
+  "9400D3",
   "FFDC00",
-  "B28F35",
-  "85144b",
+  "B8860B",
+  "A52A2A",
   "7F7A33",
-  "7FDBFF",
-  "9AB223",
+  "ADD8E6",
+  "6B8E23",
   "6F35FC",
   "55007F",
   "664A3D",
@@ -58,12 +58,25 @@ const typeArrayColor = [
 let sortByArray = [
   "A-Z",
   "Z-A",
-  "Height + to -",
   "Height - to +",
-  "Weight + to -",
+  "Height + to -",
   "Weight - to +",
-  "Number"
+  "Weight + to -",
+  "Number - to +",
+  "Number + to -"
 ];
+
+let sortArrayConditions = [
+  "name",
+  "name",
+  "height",
+  "height",
+  "weight",
+  "weight",
+  "id",
+  "id"
+];
+
 let sortByArrayColor = [
   "A8A77A",
   "EE8130",
@@ -314,7 +327,7 @@ const searchByInput = () => {
 };
 
 /************************  Filter popup  *********************************/
-document.getElementById("filterButton").addEventListener("click", () => {
+document.getElementById("filterButton").addEventListener("click", evt => {
   filterPromptCreator();
 });
 
@@ -389,7 +402,10 @@ document.addEventListener("keyup", function(event) {
 
 const sortByPromptCreator = () => {
   let sortByJSON;
+  let buttonIsPair;
+
   for (let i = 0; i < sortByArray.length; i++) {
+    buttonIsPair = i % 2;
     let buttonElement = document.createElement("BUTTON");
     buttonElement.classList.add("filterByTypeButton");
     buttonElement.value = sortByArray[i];
@@ -397,9 +413,29 @@ const sortByPromptCreator = () => {
     buttonElement.style.backgroundColor = "#" + typeArrayColor[i];
     buttonElement.addEventListener("click", function() {
       if (filterJSON != "") {
-        sortByJSON = window.data.sortData(filterJSON, sortByArray[i]);
+        if (i == 0 || i == 2 || i == 4 || i == 6) {
+          sortByJSON = window.data.sortDataResultDesc(
+            filterJSON,
+            sortArrayConditions[i]
+          );
+        } else {
+          sortByJSON = window.data.sortDataResultAsc(
+            filterJSON,
+            sortArrayConditions[i]
+          );
+        }
       } else {
-        sortByJSON = window.data.sortData(dataPokemon, sortByArray[i]);
+        if (i == 0 || i == 2 || i == 4 || i == 6) {
+          sortByJSON = window.data.sortDataResultDesc(
+            dataPokemon,
+            sortArrayConditions[i]
+          );
+        } else {
+          sortByJSON = window.data.sortDataResultAsc(
+            dataPokemon,
+            sortArrayConditions[i]
+          );
+        }
       }
       // sortByJSON == "" ? printPokemonCards(dataPokemon) : printPokemonCards(sortByJSON);
       printPokemonCards(sortByJSON);
@@ -451,8 +487,10 @@ const showPromptWindow = option => {
 };
 
 /************************  Cerrar popup  *********************************/
-promptContainerElement.addEventListener("click", () => {
-  hiddenPromptWindow();
+promptContainerElement.addEventListener("click", element => {
+  if (element.target.id === "promptContainer") {
+    hiddenPromptWindow();
+  }
 });
 
 promptContainerElement.addEventListener("keyup", event => {
@@ -486,4 +524,21 @@ document.addEventListener("keyup", function(event) {
   if (event.altKey && event.key === "z") {
     floatingMenuButton.focus();
   }
+});
+/*********************Home button*********************/
+/*let checkedHomeButtonElement = document.getElementById("checkedHomeButton");
+// let homeButton = document.getElementById("homeButton");
+
+checkedHomeButtonElement.addEventListener("change", () => {
+  if (checkedHomeButtonElement.checked == true) {
+    printPokemonCards(dataPokemon);
+  } else {
+    closeFloatingMenu();
+  }
+});
+*/
+document.getElementById("homeButton").addEventListener("click", () => {
+  printPokemonCards(dataPokemon);
+  filterJSON = [];
+  console.log("Reset");
 });

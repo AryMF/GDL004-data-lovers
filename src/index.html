@@ -39,14 +39,21 @@
     <div id="mainScreen" class="mainScreenClass">
       <!-- Barra de menu superior -->
       <header class="header">
-        <button style="background-color: transparent; border: 0;" tabindex="-1">
-          <i id="menuButton" class="fa fa-reorder" tabindex="1"></i>
-        </button>
+        
+          <button id="menuButton" style="background-color: transparent; border: 0;"  class="homeButtonClass" tabindex="-1">
+            <i  class="fa fa-reorder" tabindex="1"></i>
+          </button>
         <div style="flex: 1;">
           <h1 class="titleText">
               Pokedex
           </h1>
         </div>
+        <input type="checkbox" id="checkedHomeButton" />
+          <button style="background-color: transparent; border: 0;" tabindex="-1" for="checkedHomeButton">
+            <i id="homeButton" class="fa fa-home" tabindex="0"></i>
+          </button> 
+  
+     
         <button style="background-color: transparent; border: 0;" tabindex="-1">
             <i id="favoritesButton" class="fa fa-star" tabindex="0"></i>
         </button>
@@ -81,6 +88,8 @@
           <h1>Filtrar por</h1>
           </br>
         </div>
+        <div class="flyout-debug" id="flyout-debug"></div>
+
         <div id="typeButtonsDiv">
           <!--Lista-->
         </div>
@@ -106,3 +115,10 @@
 
   </body>
 </html>
+
+
+
+
+
+
+  

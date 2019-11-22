@@ -132,6 +132,16 @@ body {
   padding: 0.8vh 0.5vw 0vh;
 }
 
+#homeButton {
+  font-size: 40px;
+  color: #000;
+}
+#homeButton:hover,
+#menuButton:focus {
+  color: #fff;
+  cursor: pointer;
+}
+
 #favoritesButton {
   font-size: 40px;
   color: black;
@@ -267,6 +277,7 @@ body {
   height: 100%; /* Full height */
   overflow: auto; /* Enable scroll if needed */
   background-color: rgba(47, 79, 79, 0.4); /* Black w/ opacity */
+  pointer-events: all;
 }
 
 /********** Botón de cerrado para todos los prompt ***********/
@@ -379,6 +390,7 @@ body {
   -webkit-animation-duration: 0.4s;
   animation-name: animatetop;
   animation-duration: 4s;
+  cursor: pointer;
 }
 
 h1 {
