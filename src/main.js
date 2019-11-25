@@ -412,6 +412,8 @@ document.getElementById("searchPromptButton").addEventListener("click", () => {
 document.getElementById("searchPromptInput").addEventListener("input", () => {
     searchPromptInputElement.value = searchPromptInputElement.value.replace(" ", "");
     searchPromptInputElement.value = searchPromptInputElement.value.toUpperCase();
+    /*** Regresar al principio de la pagina ***/
+    document.documentElement.scrollTop = 0;
     if(searchPromptInputElement.value != ""){
         filterJSON = window.data.filteredByNameOrNumber(dataPokemon, searchPromptInputElement.value);
         printPokemonCards(filterJSON);
@@ -427,6 +429,8 @@ document.getElementById("searchPromptInput").addEventListener("keyup", (event)  
 });
 
 const searchByInput = () =>{
+    /*** Regresar al principio de la pagina ***/
+    document.documentElement.scrollTop = 0;
     if(searchPromptInputElement.value != ""){
         filterJSON = window.data.filteredByNameOrNumber(dataPokemon, searchPromptInputElement.value);
         filterJSON == "" ? printPokemonCards(dataPokemon): printPokemonCards(filterJSON);
@@ -466,12 +470,16 @@ const filterPromptCreator = () => {
         buttonElement.tabIndex = 0;
         buttonElement.focus();
         buttonElement.addEventListener("click", function() {
+            /*** Regresar al principio de la pagina ***/
+            document.documentElement.scrollTop = 0;
             filterJSON = window.data.filteredByType(dataPokemon, buttonElement.value);
             filterJSON == "" ? printPokemonCards(dataPokemon): printPokemonCards(filterJSON);
             hiddenPromptWindow();
         });
         buttonElement.addEventListener('keyup',function(e){
             if (e.keyCode === 13) {
+                /*** Regresar al principio de la pagina ***/
+                document.documentElement.scrollTop = 0;
                 filterJSON = window.data.filteredByType(dataPokemon, buttonElement.value);
                 filterJSON == "" ? printPokemonCards(dataPokemon): printPokemonCards(filterJSON);
                 hiddenPromptWindow();
@@ -504,45 +512,43 @@ document.addEventListener("keyup", function(event) {
 
 const sortByPromptCreator = () => {
   let sortByJSON;
-  let buttonIsPair;
-
+  closeFloatingMenu();
   for (let i = 0; i < sortByOptions.length; i++) {
-    buttonIsPair = i % 2;
     let buttonElement = document.createElement("BUTTON");
     buttonElement.classList.add("filterByTypeButton");
-    // buttonElement.value = sortByArray[i];
-    // buttonElement.innerHTML = sortByArray[i];
-    buttonElement.value = sortByOptions[i].buttonText;
+    buttonElement.id =  sortByOptions[i].buttonText;
     buttonElement.innerHTML = sortByOptions[i].buttonText;
     buttonElement.style.backgroundColor = typeArray[i].color;
+    buttonElement.tabIndex = 0;
+    buttonElement.focus();
     buttonElement.addEventListener("click", function() {
-      if (filterJSON != "") {
+        /*** Regresar al principio de la pagina ***/
+        document.documentElement.scrollTop = 0;
+        if (filterJSON != "") {
         if (i == 0 || i == 2 || i == 4 || i == 6) {
-          sortByJSON = window.data.sortDataResultDesc(
+            sortByJSON = window.data.sortDataResultDesc(
             filterJSON,
-            // sortArrayConditions[i]
             sortByOptions[i].buttonArgument
-          );
+            );
         } else {
-          sortByJSON = window.data.sortDataResultAsc(
+            sortByJSON = window.data.sortDataResultAsc(
             filterJSON,
             sortByOptions[i].buttonArgument
-          );
+            );
         }
-      } else {
-        if (i == 0 || i == 2 || i == 4 || i == 6) {
-          sortByJSON = window.data.sortDataResultDesc(
-            dataPokemon,
-            sortByOptions[i].buttonArgument
-          );
         } else {
-          sortByJSON = window.data.sortDataResultAsc(
+        if (i == 0 || i == 2 || i == 4 || i == 6) {
+            sortByJSON = window.data.sortDataResultDesc(
             dataPokemon,
             sortByOptions[i].buttonArgument
-          );
+            );
+        } else {
+            sortByJSON = window.data.sortDataResultAsc(
+            dataPokemon,
+            sortByOptions[i].buttonArgument
+            );
         }
       }
-      // sortByJSON == "" ? printPokemonCards(dataPokemon) : printPokemonCards(sortByJSON);
       printPokemonCards(sortByJSON);
       hiddenPromptWindow();
     });
@@ -550,6 +556,7 @@ const sortByPromptCreator = () => {
   }
   sortByPromptElement.style.WebkitAnimationPlayState = "running";
   showPromptWindow(1);
+  document.getElementById("A-Z").focus();
 };
 
 /*********************Home button*********************/
@@ -572,12 +579,7 @@ checkedHomeButtonElement.addEventListener("change", () => {
 
 /*************************  Modal manager  *********************************/
 const showPromptWindow = (option) => {
-    /*** Regresar al principio de la pagina ***/
-    document.body.scrollTop = 0;
-    document.documentElement.scrollTop = 0;
-    /**************************************************/
     promptContainerElement.style.visibility = "visible";
-
     switch(option){
         case 1:
             sortByPromptElement.style.visibility = "visible";

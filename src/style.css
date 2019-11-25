@@ -248,6 +248,14 @@ body {
     text-transform: uppercase;
 }
 /***** Ajustes web responsiva: Main window*****/
+@media(hover: hover) and (pointer: fine) {
+    #menuButton:hover, #favoritesButton:hover, 
+#chartButton:hover{
+    color: white;
+    cursor: pointer;
+}
+}
+
 @media screen and (max-width: 768px) {
     .namePokemon{
         font-size: 3vmin;
