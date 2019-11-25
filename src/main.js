@@ -636,6 +636,8 @@ const hiddenPromptWindow = () => {
 
 /************************ Favorites window ************************/
 /** Show favorites*/
+
+
 document.getElementById("favoritesButton").addEventListener("click", () => {
     showFavorites();
 });
