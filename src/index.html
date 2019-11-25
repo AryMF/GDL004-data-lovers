@@ -14,8 +14,43 @@
     <link href="https://fonts.googleapis.com/css?family=Rajdhani&display=swap" rel="stylesheet">
   </head>
   <body>
+    <!-- Animación de intro -->
+    <div id="divLoading" class="divLoadingClass"> 
+        <div id="divLoadingImage" class="divLoadingImage">
+            <svg id="loadingImage" class="loadingImage" viewBox="0 0 322 322" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M160.63 0C120.374 0.0170458 81.5783 15.0126 51.8588 42.0428C22.1393 69.073 3.64266 106.186 0 146.095H101.987C105.244 133.059 112.784 121.48 123.409 113.2C134.035 104.919 147.136 100.412 160.63 100.395C174.127 100.408 187.233 104.913 197.862 113.194C208.492 121.475 216.035 133.056 219.292 146.095H321.2C317.558 106.196 299.07 69.0918 269.363 42.0631C239.656 15.0343 200.876 0.0320331 160.63 0V0ZM0.0625102 175.165C3.70419 215.064 22.1919 252.168 51.8982 279.196C81.6045 306.225 120.385 321.227 160.63 321.26C200.886 321.243 239.682 306.247 269.401 279.217C299.121 252.187 317.617 215.075 321.26 175.165H219.277C216.021 188.202 208.48 199.782 197.854 208.063C187.227 216.344 174.125 220.851 160.63 220.868C147.133 220.854 134.027 216.348 123.398 208.067C112.769 199.786 105.227 188.205 101.97 175.165H0.0625102Z" fill="#333333"/>
+                <path d="M160.63 200.788C182.909 200.788 200.97 182.808 200.97 160.63C200.97 138.452 182.909 120.473 160.63 120.473C138.351 120.473 120.29 138.452 120.29 160.63C120.29 182.808 138.351 200.788 160.63 200.788Z" fill="#333333"/>
+            </svg>
+            <span class="tooltiptextLoading popoverTextFormat">Loading</span>
+        </div>
+        <div id="divLedImage" class="divLedImage">
+            <svg id="ledImage" class="ledImage" viewBox="0 0 322 322" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <!-- Fondo negro -->
+                <path d="M160.63 321.26C249.343 321.26 321.26 249.343 321.26 160.63C321.26 71.9165 249.343 1.52588e-05 160.63 1.52588e-05C71.9165 1.52588e-05 3.8147e-06 71.9165 3.8147e-06 160.63C3.8147e-06 249.343 71.9165 321.26 160.63 321.26Z" fill="#1A1A1A"/>
+                <!-- Led -->
+                <path d="M160.291 302.088C238.567 302.088 302.023 238.632 302.023 160.356C302.023 82.0791 238.567 18.6234 160.291 18.6234C82.0143 18.6234 18.5586 82.0791 18.5586 160.356C18.5586 238.632 82.0143 302.088 160.291 302.088Z" fill="#009D9D"/>
+                <!--Sombra -->
+                <path d="M224.93 66.447C207.067 66.8922 188.279 71.6449 169.969 80.3502C151.659 89.0555 134.301 101.488 119.19 116.72C96.3719 139.746 79.8146 168.013 72.2526 196.852C64.6905 225.692 66.576 253.379 77.5978 275.34C101.802 293.027 130.991 302.583 160.969 302.636C179.581 302.636 198.012 298.97 215.208 291.848C232.403 284.725 248.028 274.285 261.189 261.124C274.35 247.963 284.79 232.338 291.913 215.143C299.035 197.947 302.701 179.517 302.701 160.904C302.645 132.148 293.843 104.09 277.465 80.4548C262.787 70.7732 244.726 65.9575 224.93 66.447V66.447Z" fill="#008F8F"/>
+                <!-- Brillo grande -->
+                <path d="M140.738 117.94C161.612 117.94 178.534 101.019 178.534 80.1449C178.534 59.2712 161.612 42.3496 140.738 42.3496C119.865 42.3496 102.943 59.2712 102.943 80.1449C102.943 101.019 119.865 117.94 140.738 117.94Z" fill="white"/>
+                <!-- Brillo chico -->
+                <path d="M214.552 75.7355C222.901 75.7355 229.67 68.9669 229.67 60.6174C229.67 52.2679 222.901 45.4993 214.552 45.4993C206.202 45.4993 199.434 52.2679 199.434 60.6174C199.434 68.9669 206.202 75.7355 214.552 75.7355Z" fill="white"/>
+            </svg>
+        </div>
+    </div>
+    
+    <div id="ripple-wrap" class="ripple-wrap"><div id="ripple" class="ripple" onclick="prueba()"></div></div>
+
+    <audio id="soundControl" controls style="visibility: hidden;">
+        <source src="audio/pokedexSound.ogg" type="audio/ogg">
+        <source src="audio/pokedexSound.mp3" type="audio/mpeg">
+      Your browser does not support the audio element.
+    </audio>
+
+
+
     <!-- Menú flotante -->
-    <div class="floatingMenuDIV">
+    <div id="floatingMenuDIV" class="floatingMenuDIV">
       <input type="checkbox" id="toggle" />
           <label id="floatingMenu" class="floatingMenuClass floatingMenuClassNormal" for="toggle" tabindex="0">
               <i class="fa fa-plus symbolFormat"></i>
@@ -37,7 +72,7 @@
     <div id="mainScreen" class="mainScreenClass">
       <!-- Barra de menu superior -->
       <header class="header">
-        <button class="topMenuButtonContainer"tabindex="-1">
+        <button class="topMenuButtonContainer" tabindex="-1">
           <i id="menuButton" class="fa fa-reorder" tabindex="0"></i>
         </button>
         <div>

@@ -20,63 +20,114 @@ let characterDynamicDiv = document.getElementById("characterDynamicContent");
 let characterTitleName = document.createElement("P");
 
 
-let typeArray = ["Normal", "Fire", "Fighting", "Water", "Flying", "Grass", "Poison", "Electric",
-"Ground", "Psychic", "Rock", "Ice", "Bug", "Dragon", "Ghost", "Dark", "Steel", "Fairy"];
-
-const typeArrayColor = ["D2B48C", "ED602D", "9E201C", "0074D9", "15707C", "2ECC40", "A33EA1", "FFDC00",
-"B28F35", "85144b", "7F7A33", "7FDBFF", "9AB223", "6F35FC", "55007F", "664A3D", "708090", "D685AD"];
-
-
-let sortByArray = [
-    "A-Z",
-    "Z-A",
-    "Height + to -",
-    "Height - to +",
-    "Weight + to -",
-    "Weight - to +",
-    "Number"
+const typeArray = [
+    {
+        type: "Normal",
+        color: "#D2B48C",
+    },
+    {
+        type: "Fire",
+        color: "#ED602D",
+    },
+    {
+        type: "Fighting",
+        color: "#9E201C",
+    },
+    {
+        type: "Water",
+        color: "#0074D9",
+    },
+    {
+        type: "Flying",
+        color: "#15707C",
+    },
+    {
+        type: "Grass",
+        color: "#2ECC40",
+    },
+    {
+        type: "Poison",
+        color: "#A33EA1",
+    },
+    {
+        type: "Electric",
+        color: "#FFDC00",
+    },
+    {
+        type: "Ground",
+        color: "#B28F35",
+    },
+    {
+        type: "Psychic",
+        color: "#85144b",
+    },
+    {
+        type: "Rock",
+        color: "#7F7A33",
+    },
+    {
+        type: "Ice",
+        color: "#7FDBFF",
+    },
+    {
+        type: "Bug",
+        color: "#9AB223",
+    },
+    {
+        type: "Dragon",
+        color: "#6F35FC",
+    },
+    {
+        type: "Ghost",
+        color: "#55007F",
+    },
+    {
+        type: "Dark",
+        color: "#664A3D",
+    },
+    {
+        type: "Steel",
+        color: "#708090",
+    },
+    {
+        type: "Fairy",
+        color: "#D685AD",
+    } 
 ];
-let sortByArrayColor = [
-    "A8A77A",
-    "EE8130",
-    "C22E28",
-    "6390F0",
-    "A98FF3",
-    "7AC74C",
-    "A33EA1"
-];
-  
-  
-let sortByArray = [
-  "A-Z",
-  "Z-A",
-  "Height - to +",
-  "Height + to -",
-  "Weight - to +",
-  "Weight + to -",
-  "Number - to +",
-  "Number + to -"
-];
 
-let sortArrayConditions = [
-  "name",
-  "name",
-  "height",
-  "height",
-  "weight",
-  "weight",
-  "id",
-  "id"
-];
-
-let sortByArrayColor = [
-  "A8A77A",
-  "EE8130",
-  "C22E28",
-  "6390F0",
-  "A98FF3",
-  "7AC74C",
-  "A33EA1"
+const sortByOptions = [
+    {
+        buttonText: "A-Z",
+        buttonArgument : "name"
+    },
+    {
+        buttonText: "Z-A",
+        buttonArgument : "name"
+    },
+    {
+        buttonText: "Height - to +",
+        buttonArgument : "height"
+    },
+    {
+        buttonText: "Height + to -",
+        buttonArgument : "height"
+    },
+    {
+        buttonText: "Weight - to +",
+        buttonArgument : "weight"
+    },
+    {
+        buttonText: "Weight + to -",
+        buttonArgument : "weight"
+    },
+    {
+        buttonText: "Number - to +",
+        buttonArgument : "id"
+    },
+    {
+        buttonText: "Number + to -",
+        buttonArgument : "id"
+    },
 ];
 
 /******************** Llamada de datos ********************/
@@ -91,16 +142,75 @@ const main = ()  =>{
     getData()
         .then(dataJSON => {
             dataPokemon = dataJSON.pokemon;
-            printPokemonCards(dataPokemon);
+            printPokemonCards(dataPokemon); /**Comentar para animación intro */
         })
         .catch(error => {
             console.error("Error al cargar JSON por fetch");
-            console.log(error);
+            console.error(error);
         });
 };
 
 window.addEventListener("load", main);
 
+/********** Animación de intro ******************************/
+/*
+let loadingImageDiv = document.getElementById("divLoading");
+let mainScreenDiv = document.getElementById("mainScreen");
+let floatingMenu = document.getElementById("floatingMenuDIV");
+
+let loadingImage = document.getElementById("loadingImage");
+let divLoadingImage = document.getElementById("divLoadingImage");
+
+let ledImage = document.getElementById("ledImage");
+let divLedImage = document.getElementById("divLedImage");
+
+let ripple_wrap = document.getElementById('ripple-wrap');
+let rippler = document.getElementById('ripple');
+let finish = false;
+let soundControl = document.getElementById("soundControl");
+
+loadingImage.addEventListener("click", () => {
+    let time = 1;
+    let i = 1;
+    let intervalTime = 600;
+    let interval = setInterval(() => {
+        if(i < 5){
+            time = time - 0.2;
+            loadingImage.style.webkitAnimation ="loading " + time + "s  linear 0s infinite";
+        } else{
+            loadingImage.style.WebkitAnimationPlayState = "paused";
+            divLoadingImage.style.visibility = "hidden";
+            divLedImage.style.visibility = "visible";
+            ledImage.style.webkitAnimation = "light .5s linear 2";
+            soundControl.play();
+            clearInterval(interval);
+            let intervalTwo = setInterval(() => {
+                if(i == 6){
+                    divLedImage.style.visibility = "hidden";
+                    ripple_wrap.classList.add('goripple');
+                    rippler.style.WebkitAnimationPlayState = "running";
+                    rippler.style.animationPlayState = "running";
+                    setTimeout(function() {
+                        loadingImageDiv.style.visibility = "hidden";
+                        mainScreenDiv.style.visibility = "visible"; //Cambiar por pantalla main
+                        floatingMenu.style.visibility = "visible";
+                        printPokemonCards(dataPokemon);
+                    },1000);
+                    clearInterval(intervalTwo);
+                }
+            }, 1500);
+        }
+        i++;
+    }, intervalTime);
+    
+    
+});
+
+rippler.addEventListener("animationend", function(e){
+    ripple_wrap.classList.remove('goripple');
+        
+});
+*/
 /********** Impresión en pantalla de Pokemon cards **********/
 
 const printPokemonCards = dataArray => {
@@ -112,85 +222,90 @@ const printPokemonCards = dataArray => {
   let pokemonImage;
   let pokemonName;
   let pokemonType;
-  let i;
+  let i; // TODO: use descriptive variable
+  let typeImagesSRC = "image/typesWhite/";
+  let typeImageExtension = ".svg";
 
-  document.getElementById("pokemonContainer").innerHTML = "";
+  pokemonContainerElement.innerHTML = "";
 
-  dataArray.forEach(element => {
-    divContainer = document.createElement("DIV");
+    dataArray.forEach(element => {
+        divContainer = document.createElement("DIV");
+        divContainer.classList.add("divContainerClass");
+        pokemonContainerElement.appendChild(divContainer);
 
-    divContainer.classList.add("divContainerClass");
-    document.getElementById("pokemonContainer").appendChild(divContainer);
+        divCard = document.createElement("div");
+        divCard.classList.add("divCardClass");
+        divContainer.appendChild(divCard);
 
-    divCard = document.createElement("div");
-    divCard.classList.add("divCardClass");
-    divContainer.appendChild(divCard);
+        divPokemonCard = document.createElement("DIV");    
+        for (i = 0; i < typeArray.length; i++) {
+            if (element.type[0] == typeArray[i].type) {
+                break;
+            }
+        }
+        divPokemonCard.setAttribute("style", "background-color: " + typeArray[i].color);
+        divPokemonCard.tabIndex = 0;        
+        divPokemonCard.classList.add("divPokemonCardFaceClass");
+        divPokemonCard.classList.add("divPokemonCardFaceClass--front");
+        divCard.appendChild(divPokemonCard);
 
-    divPokemonCard = document.createElement("DIV");
-  
-    for (i = 0; i < typeArray.length; i++) {
-      if (element.type[0] == typeArray[i]) {
-        break;
-      }
-    }
-    divPokemonCard.setAttribute(
-      "style",
-      "background-color: #" + typeArrayColor[i]
-    );
-    divPokemonCard.tabIndex = 0;
+        divBackPokemonCard = document.createElement("div");
+        divBackPokemonCard.setAttribute("style", "background-color: " + typeArray[i].color);
+        divBackPokemonCard.classList.add("divPokemonCardFaceClass");
+        divBackPokemonCard.classList.add("divPokemonCardFaceClass--back");
+        divCard.appendChild(divBackPokemonCard);
 
-    divPokemonCard.addEventListener("keyup", function(e) {
-      if (e.keyCode === 13) {
-        alert("Hola yo soy " + element.name);
-      }
-    });
-    divPokemonCard.classList.add("divPokemonCardFaceClass");
-    divPokemonCard.classList.add("divPokemonCardFaceClass--front");
-    divCard.appendChild(divPokemonCard);
-    divBackPokemonCard = document.createElement("div");
-    divBackPokemonCard.classList.add("divPokemonCardFaceClass");
-    divBackPokemonCard.classList.add("divPokemonCardFaceClass--back");
-    divCard.appendChild(divBackPokemonCard);
+        element.type.forEach((element) => {
+            let pokemonTypeImg = document.createElement("IMG");
+            pokemonTypeImg.setAttribute("src", typeImagesSRC + element + typeImageExtension);
+            pokemonTypeImg.classList.add("typePokemonIMG");
+            divBackPokemonCard.appendChild(pokemonTypeImg);
 
-    pokemonType = document.createElement("P");
-    pokemonType.innerHTML = element.type;
-    pokemonType.classList.add("typePokemon");
-    divBackPokemonCard.appendChild(pokemonType);
+            pokemonType = document.createElement("P");
+            pokemonType.innerHTML = element;
+            pokemonType.classList.add("typePokemon");
+            divBackPokemonCard.appendChild(pokemonType);
+        });
 
-    divBackPokemonCard.addEventListener("click", function() {
-      alert("Hola yo soy " + element.name);
-    });
+        divBackPokemonCard.addEventListener("click", function() {
+            // alert("Hola yo soy " + element.name);
+            characterWindowPrint(element.name.toUpperCase());
+        });
 
-    divBackPokemonCard.setAttribute(
-      "style",
-      "background-color: #" + typeArrayColor[i]
-    );
+        divPokemonCard.addEventListener("keyup", function(e) {
+            if (e.keyCode === 13) {
+                // alert("Hola yo soy " + element.name);
+                characterWindowPrint(element.name.toUpperCase());
+            }
+        });
+        
+        pokemonImage = document.createElement("IMG");
+        pokemonImage.classList.add("imagePokemon");
+        pokemonImage.setAttribute("id", element.id);
+        pokemonImage.setAttribute("src", element.img);
+        pokemonImage.setAttribute("alt", element.name);
+        divPokemonCard.appendChild(pokemonImage);
 
-    pokemonImage = document.createElement("IMG");
-    pokemonImage.classList.add("imagePokemon");
-    pokemonImage.setAttribute("id", element.id);
-    pokemonImage.setAttribute("src", element.img);
-    pokemonImage.setAttribute("alt", element.name);
-    divPokemonCard.appendChild(pokemonImage);
+        pokemonNumber = document.createElement("P");
+        pokemonNumber.innerHTML = "#" + element.num;
+        pokemonNumber.classList.add("numberPokemon");
+        divPokemonCard.appendChild(pokemonNumber);
 
-    pokemonNumber = document.createElement("P");
-    pokemonNumber.innerHTML = "#" + element.num;
-    pokemonNumber.classList.add("numberPokemon");
-    divPokemonCard.appendChild(pokemonNumber);
-
-    pokemonName = document.createElement("P");
-    if (
-      element.name == "Nidoran ♀ (Female)" ||
-      element.name == "Nidoran ♂ (Male)"
-    ) {
-      pokemonName.innerHTML = element.name.substring(0, 9);
-    } else {
-      pokemonName.innerHTML = element.name;
-    }
-    pokemonName.classList.add("namePokemon");
-    divPokemonCard.appendChild(pokemonName);
+        pokemonName = document.createElement("P");
+        if (
+        element.name == "Nidoran ♀ (Female)" ||
+        element.name == "Nidoran ♂ (Male)"
+        ) {
+        pokemonName.innerHTML = element.name.substring(0, 9);
+        } else {
+        pokemonName.innerHTML = element.name;
+        }
+        pokemonName.classList.add("namePokemon");
+        divPokemonCard.appendChild(pokemonName);
   });
 };
+
+/******************** Short cut Event listener ********************/
 
 
 /*********************** Floating menu ***********************/
@@ -227,7 +342,40 @@ const openFloatingMenu = () => {
     });
 }
 
-/************************  Search popup  *********************************/
+/** short cut to focus */
+document.addEventListener('keyup',            function (event) {
+    if (event.altKey && event.key === "z") {
+        floatingMenuButton.focus();
+    }
+});
+
+/************************  Close floating menu  ******************************/
+const closeFloatingMenu = () => {
+    toggleElement.checked = false;
+    Array.from(floatingMenuElements).forEach(element => {
+        element.style.visibility = "hidden";
+    });
+    floatingMenuButton.classList.remove("floatingMenuClassSmall");
+    floatingMenuButton.classList.add("floatingMenuClassNormal");
+}
+
+/**************************** Reset function *************************************/
+document.getElementById("resetButton").addEventListener("click", () => {
+    closeFloatingMenu();
+    filterJSON = [];
+    printPokemonCards(dataPokemon);
+});
+
+/**** Reset with short cut ****/
+document.addEventListener('keyup', function (event) {
+    if (event.altKey && event.key === "r") {
+        closeFloatingMenu();
+        filterJSON = [];
+        printPokemonCards(dataPokemon);
+    }
+});
+
+/************************  Search modal  *********************************/
 document.getElementById("searchButton").addEventListener("click", () =>{
     searchPromptCreator();
 });
@@ -288,7 +436,7 @@ const searchByInput = () =>{
     }
 };
 
-/************************  Filter popup  *********************************/
+/************************  Filter modal  *********************************/
 document.getElementById("filterButton").addEventListener("click", () => {
     filterPromptCreator();
 });
@@ -311,10 +459,10 @@ const filterPromptCreator = () => {
     for(let i=0; i<15; i++){
         let buttonElement = document.createElement("BUTTON");
         buttonElement.classList.add("filterByTypeButton");
-        buttonElement.value = typeArray[i];
-        buttonElement.innerHTML = typeArray[i];
-        buttonElement.id =  typeArray[i];
-        buttonElement.style.backgroundColor = "#" + typeArrayColor[i];
+        buttonElement.value = typeArray[i].type;
+        buttonElement.innerHTML = typeArray[i].type;
+        buttonElement.id =  typeArray[i].type;
+        buttonElement.style.backgroundColor = typeArray[i].color;
         buttonElement.tabIndex = 0;
         buttonElement.focus();
         buttonElement.addEventListener("click", function() {
@@ -336,7 +484,7 @@ const filterPromptCreator = () => {
     document.getElementById("Normal").focus();
 };
 
-/************************  Sort by popup  *********************************/
+/************************  Sort by modal  *********************************/
 document.getElementById("sortByButton").addEventListener("click", () => {
   sortByPromptCreator();
 });
@@ -358,36 +506,39 @@ const sortByPromptCreator = () => {
   let sortByJSON;
   let buttonIsPair;
 
-  for (let i = 0; i < sortByArray.length; i++) {
+  for (let i = 0; i < sortByOptions.length; i++) {
     buttonIsPair = i % 2;
     let buttonElement = document.createElement("BUTTON");
     buttonElement.classList.add("filterByTypeButton");
-    buttonElement.value = sortByArray[i];
-    buttonElement.innerHTML = sortByArray[i];
-    buttonElement.style.backgroundColor = "#" + typeArrayColor[i];
+    // buttonElement.value = sortByArray[i];
+    // buttonElement.innerHTML = sortByArray[i];
+    buttonElement.value = sortByOptions[i].buttonText;
+    buttonElement.innerHTML = sortByOptions[i].buttonText;
+    buttonElement.style.backgroundColor = typeArray[i].color;
     buttonElement.addEventListener("click", function() {
       if (filterJSON != "") {
         if (i == 0 || i == 2 || i == 4 || i == 6) {
           sortByJSON = window.data.sortDataResultDesc(
             filterJSON,
-            sortArrayConditions[i]
+            // sortArrayConditions[i]
+            sortByOptions[i].buttonArgument
           );
         } else {
           sortByJSON = window.data.sortDataResultAsc(
             filterJSON,
-            sortArrayConditions[i]
+            sortByOptions[i].buttonArgument
           );
         }
       } else {
         if (i == 0 || i == 2 || i == 4 || i == 6) {
           sortByJSON = window.data.sortDataResultDesc(
             dataPokemon,
-            sortArrayConditions[i]
+            sortByOptions[i].buttonArgument
           );
         } else {
           sortByJSON = window.data.sortDataResultAsc(
             dataPokemon,
-            sortArrayConditions[i]
+            sortByOptions[i].buttonArgument
           );
         }
       }
@@ -413,30 +564,13 @@ checkedHomeButtonElement.addEventListener("change", () => {
   }
 });
 */
-document.getElementById("homeButton").addEventListener("click", () => {
+/*document.getElementById("homeButton").addEventListener("click", () => {
   printPokemonCards(dataPokemon);
   filterJSON = [];
   console.log("Reset");
-});
+});*/
 
-
-/**************************** Reset *************************************/
-document.getElementById("resetButton").addEventListener("click", () => {
-    closeFloatingMenu();
-    filterJSON = [];
-    printPokemonCards(dataPokemon);
-});
-
-/**** Short cut ****/
-document.addEventListener('keyup', function (event) {
-    if (event.altKey && event.key === "n") {
-        closeFloatingMenu();
-        filterJSON = [];
-        printPokemonCards(dataPokemon);
-    }
-});
-
-/*************************  Show popup  *********************************/
+/*************************  Modal manager  *********************************/
 const showPromptWindow = (option) => {
     /*** Regresar al principio de la pagina ***/
     document.body.scrollTop = 0;
@@ -462,7 +596,7 @@ const showPromptWindow = (option) => {
     }
 };
 
-/************************  Cerrar popup  *********************************/
+/************************  Close modal  *********************************/
 
 promptContainerElement.addEventListener("click", (element) => {
     if(element.target.id === "promptContainer"){
@@ -500,16 +634,6 @@ const hiddenPromptWindow = () => {
     elementDivFavImage.style.visibility = "hidden";
 };
 
-/************************  Cerrar floating menu  ******************************/
-const closeFloatingMenu = () => {
-    toggleElement.checked = false;
-    Array.from(floatingMenuElements).forEach(element => {
-        element.style.visibility = "hidden";
-    });
-    floatingMenuButton.classList.remove("floatingMenuClassSmall");
-    floatingMenuButton.classList.add("floatingMenuClassNormal");
-}
-
 /************************ Favorites window ************************/
 /** Show favorites*/
 document.getElementById("favoritesButton").addEventListener("click", () => {
@@ -525,21 +649,19 @@ const loadFavorites = () => {
 const createFavoriteCookie = (pokemonId) => {
     let pokemonCookiesArray = loadFavorites();
     pokemonCookiesArray.push(pokemonId);
-    document.cookie = "favoritePokemon=" + pokemonCookiesArray.join(" ");    
+    document.cookie = "favoritePokemon=" + pokemonCookiesArray.join(" ") + "; expires =Mo, 18 Jan 2038 12:00:00 UTC";    
 };
 
 const deleteFavorite = (pokemonId) => {
     let pokemonCookiesArray = loadFavorites();
     let index = pokemonCookiesArray.indexOf(pokemonId);
 
-    index > -1 ? pokemonCookiesArray.splice(index, 1) : console.log("No existe ese id en favoritos");
+    index > -1 ? pokemonCookiesArray.splice(index, 1) : console.error("No existe ese id en favoritos");
     document.cookie = "favoritePokemon=" + pokemonCookiesArray.join(" ");;
 };
 
 const showFavorites = () =>{
     let pokemonCookiesArray = loadFavorites();
-    console.log("Favoritos: ");
-    console.log(pokemonCookiesArray);
     let favoritesJSON = [];
     dataPokemon.forEach((element) => {
         pokemonCookiesArray.forEach((favoriteID) => {
@@ -587,9 +709,6 @@ const characterWindowPrint = (pokemonName) =>{
     let pokemonCookiesArray = loadFavorites();
 
     // Configuración de botón de favoritos
-    console.log("Cookies array:");
-    console.log(pokemonCookiesArray);
-
     if(pokemonCookiesArray.indexOf(pokemonName) != -1){
         catchItAnimation(1, 0); /*el pokemon esta en favoritos*/
     }else {
@@ -599,24 +718,27 @@ const characterWindowPrint = (pokemonName) =>{
     // Color de ventana
     let i=0;
     for(i; i < typeArray.length;i++){
-        if(characterData.type[0] == typeArray[i]){
+        if(characterData.type[0] == typeArray[i].type){
             break;
         }
     }
-    //characterWindowElement.setAttribute("style", "background-color: #" + typeArrayColor[i]);
-    characterWindowElement.setAttribute("style", "border-color: #" + typeArrayColor[i]);
+    //characterWindowElement.setAttribute("style", "background-color: " + typeArray[i].color);
+    characterWindowElement.setAttribute("style", "border-color: " + typeArray[i].color);
 
     //Carga la imagen del pokemon 
-    characterImageElement.setAttribute("src", characterData.img); // Si la comentas sale la imagen linda
-
+    let cuteImageSRC = "https://pokeres.bastionbot.org/images/pokemon/";
+    let cuteImageExt = ".png";
+    characterImageElement.setAttribute("src", cuteImageSRC + characterData.id + cuteImageExt); // Si la comentas sale la imagen linda
     // characterDynamicDiv
 /****************************************************************************************/
     let characterTitle = document.createElement("DIV");
+    /*let templateString = `<div class="columnAlignmentClass" style="color:#${typeArray[i].color}"></div>`;
+    mimimi.innerHTML = templateString;*/
     characterTitle.classList.add("columnAlignmentClass");
     characterDynamicDiv.appendChild(characterTitle);
         // characterTitleName -- Global
         characterTitleName.classList.add("textFormatBig");
-        characterTitleName.setAttribute("style", "color: #" + typeArrayColor[i]);
+        characterTitleName.setAttribute("style", "color: " + typeArray[i].color);
         characterTitleName.innerHTML = characterData.name;
         characterTitle.appendChild(characterTitleName);
         let characterTitleNumber = document.createElement("P");
@@ -628,7 +750,7 @@ const characterWindowPrint = (pokemonName) =>{
     let characterGeneralData = document.createElement("DIV");
     characterGeneralData.classList.add("rowAlignmentClass");
     characterGeneralData.classList.add("bottomBorderClass");
-    characterGeneralData.setAttribute("style", "border-color: #" + typeArrayColor[i]);
+    characterGeneralData.setAttribute("style", "border-color: " + typeArray[i].color);
     characterDynamicDiv.appendChild(characterGeneralData);
 
         let characterTypeDiv = document.createElement("DIV");
@@ -677,13 +799,13 @@ const characterWindowPrint = (pokemonName) =>{
     let characterCandyData = document.createElement("DIV");
     characterCandyData.classList.add("rowAlignmentClass");
     characterCandyData.classList.add("bottomBorderClass");
-    characterCandyData.setAttribute("style", "border-color: #" + typeArrayColor[i]);
+    characterCandyData.setAttribute("style", "border-color: " + typeArray[i].color);
     characterDynamicDiv.appendChild(characterCandyData);
 
         let characterCandyDiv = document.createElement("DIV");
         characterCandyDiv.classList.add("columnAlignmentClass");
         characterCandyDiv.classList.add("rightBorderClass");
-        characterCandyDiv.setAttribute("style", "border-color: #" + typeArrayColor[i]);
+        characterCandyDiv.setAttribute("style", "border-color: " + typeArray[i].color);
         characterCandyData.appendChild(characterCandyDiv);
 
             let characterCandyType = document.createElement("P");
@@ -699,9 +821,12 @@ const characterWindowPrint = (pokemonName) =>{
         let characterCandyCountDiv = document.createElement("DIV");
         characterCandyCountDiv.classList.add("columnAlignmentClass");
         characterCandyData.appendChild(characterCandyCountDiv);
-
             let characterCandyCountNumber = document.createElement("P");
-            characterCandyCountNumber.innerHTML = characterData.candy_count;
+            if ("candy_count" in characterData){
+                characterCandyCountNumber.innerHTML = characterData.candy_count;
+            }else{
+                characterCandyCountNumber.innerHTML = " - ";
+            }
             characterCandyCountNumber.classList.add("textFormatMedium");
             characterCandyCountDiv.appendChild(characterCandyCountNumber);
 
@@ -711,36 +836,46 @@ const characterWindowPrint = (pokemonName) =>{
             characterCandyCountDiv.appendChild(characterCandyCountTitle);
 
 /****************************************************************************************/
-    let characterAdditionalData = document.createElement("DIV");
-    characterAdditionalData.classList.add("rowAlignmentClass");
-    characterDynamicDiv.appendChild(characterAdditionalData);
-
-        let additionalDataAuxiliarDiv = document.createElement("DIV");
-        additionalDataAuxiliarDiv.classList.add("columnAlignmentClass");
-        characterAdditionalData.appendChild(additionalDataAuxiliarDiv);
+    let additionalDataAuxiliarDiv = document.createElement("DIV");
+    additionalDataAuxiliarDiv.classList.add("columnAlignmentClass");
+    characterDynamicDiv.appendChild(additionalDataAuxiliarDiv);
 
             let characterWeaknessDiv = document.createElement("DIV");
             characterWeaknessDiv.classList.add("columnAlignmentClass");
             additionalDataAuxiliarDiv.appendChild(characterWeaknessDiv);
 
-                let characterWeaknessTitle = document.createElement("P");
-                characterWeaknessTitle.innerHTML = "Weakness";
-                characterWeaknessTitle.classList.add("textFormatSmall");
-                characterWeaknessDiv.appendChild(characterWeaknessTitle);
+            let characterWeaknessTitle = document.createElement("P");
+            characterWeaknessTitle.innerHTML = "Weakness";
+            characterWeaknessTitle.classList.add("textFormatSmall");
+            characterWeaknessDiv.appendChild(characterWeaknessTitle);
 
-                let characterWeaknessType = document.createElement("DIV");
-                characterWeaknessDiv.appendChild(characterWeaknessType);
-                        /*** Aquí va un ciclo farol */
-                    let characterWeaknessTypeName = document.createElement("P");
-                    characterWeaknessTypeName.innerHTML = characterData.weaknesses.join(" ");
-                    characterWeaknessTypeName.classList.add("textFormatMedium");
-                    characterWeaknessType.appendChild(characterWeaknessTypeName);
-                    let characterWeaknessTypeLogo = document.createElement("IMG");
-                    characterWeaknessType.appendChild(characterWeaknessTypeLogo);
+            let characterWeaknessType = document.createElement("DIV");
+            characterWeaknessType.classList.add("rowAlignmentClass");
+            characterWeaknessDiv.appendChild(characterWeaknessType);
+            characterData.weaknesses.forEach((element) => {
+            let characterWeaknessTypeContainer = document.createElement("DIV");
+            characterWeaknessTypeContainer.classList.add("characterWeaknessTypeContainer");
+            characterWeaknessType.appendChild(characterWeaknessTypeContainer);
+
+            let characterWeaknessTypeLogo = document.createElement("IMG");
+            characterWeaknessTypeLogo.setAttribute("src", "image/types/" + element + ".svg");
+            characterWeaknessTypeLogo.classList.add("weaknessImgClass");
+            characterWeaknessTypeContainer.appendChild(characterWeaknessTypeLogo);
+
+            let characterWeaknessTypeName = document.createElement("P");
+            characterWeaknessTypeName.innerHTML = element;
+            characterWeaknessTypeName.classList.add("weaknessTextFormat");
+            characterWeaknessTypeContainer.appendChild(characterWeaknessTypeName);
+
+            });
+
+    let characterAdditionalData = document.createElement("DIV");
+    characterAdditionalData.classList.add("rowAlignmentClass");
+    characterDynamicDiv.appendChild(characterAdditionalData);
 
             let characterInfoDiv = document.createElement("DIV");
             characterInfoDiv.classList.add("columnAlignmentClass");
-            additionalDataAuxiliarDiv.appendChild(characterInfoDiv);
+            characterAdditionalData.appendChild(characterInfoDiv);
 
 
                 let characterInfoTitle = document.createElement("P");
@@ -754,20 +889,77 @@ const characterWindowPrint = (pokemonName) =>{
                 characterInfoDiv.appendChild(characterInfoBox);
 
 
-        let characterEvolutionDiv = document.createElement("DIV");
-        characterEvolutionDiv.classList.add("columnAlignmentClass");
-        characterAdditionalData.appendChild(characterEvolutionDiv);
+            let characterEvolutionDiv = document.createElement("DIV");
+            characterEvolutionDiv.classList.add("columnAlignmentClass");
+            characterAdditionalData.appendChild(characterEvolutionDiv);
 
 
-            let characterEvolutionTitle = document.createElement("P");
-            characterEvolutionTitle.innerHTML = "Evolution";
-            characterEvolutionTitle.classList.add("textFormatSmall");
-            characterEvolutionDiv.appendChild(characterEvolutionTitle);
+                let characterEvolutionTitle = document.createElement("P");
+                characterEvolutionTitle.innerHTML = "Evolution path";
+                characterEvolutionTitle.classList.add("textFormatSmall");
+                characterEvolutionDiv.appendChild(characterEvolutionTitle);
+                
+                let characterEvolutionPathContainer = document.createElement("DIV");
+                characterEvolutionPathContainer.classList.add("rowAlignmentClass");
+                characterEvolutionDiv.appendChild(characterEvolutionPathContainer);
+                    
+                /*** Evolution path ******/
+                /** Concatenar arreglos de prev_evolution, pokemon actual y next_evolution */
+                let evolutionPathArray = [];
 
-            let characterEvolutionBox = document.createElement("P");
-            characterEvolutionBox.innerHTML = "place-holder text";
-            characterEvolutionBox.classList.add("textFormatMedium");
-            characterEvolutionDiv.appendChild(characterEvolutionBox);
+                if("prev_evolution" in characterData){
+                    evolutionPathArray = evolutionPathArray.concat(characterData.prev_evolution
+                        .map((elementArray) => {
+                        let found = dataPokemon.filter((element) => {
+                            return element.name === elementArray.name;
+                        });
+                        return { "name": elementArray.name, "img": found ? found[0].img : ''};
+                    }));
+                }
+                
+                evolutionPathArray = evolutionPathArray.concat([{
+                    "name": characterData.name,
+                    "img": characterData.img
+                }]);
+
+                if("next_evolution" in characterData){
+                    evolutionPathArray = evolutionPathArray.concat(characterData.next_evolution
+                        .map((elementArray) => {
+                        let found = dataPokemon.filter((element) => {
+                            return element.name === elementArray.name;
+                        });
+                        return { "name": elementArray.name, "img": found ? found[0].img : ''};
+                    }));
+                }          
+                console.log("Result:", evolutionPathArray);
+                    
+                    for (let j=0 ; j < evolutionPathArray.length; j++) {
+                        let characterEvolutionBox = document.createElement("DIV");
+                        characterEvolutionBox.classList.add("columnAlignmentClass");
+                        characterEvolutionPathContainer.appendChild(characterEvolutionBox);
+
+                            let characterEvolutionIMG = document.createElement("IMG");
+                            characterEvolutionIMG.setAttribute("src", evolutionPathArray[j].img);
+                            characterEvolutionIMG.classList.add("weaknessImgClass");
+                            characterEvolutionBox.appendChild(characterEvolutionIMG);
+                            
+                            let characterEvolutionName = document.createElement("P");
+                            characterEvolutionName.innerHTML = evolutionPathArray[j].name;
+                            characterEvolutionName.classList.add("textFormatSmall");
+                            characterEvolutionBox.appendChild(characterEvolutionName);
+                        if (j < evolutionPathArray.length -1){
+                            let characterEvolutionArrowBox = document.createElement("DIV");
+                            characterEvolutionArrowBox.classList.add("columnAlignmentClass");
+                            characterEvolutionArrowBox.classList.add("evolutionPathArrow");
+                            characterEvolutionPathContainer.appendChild(characterEvolutionArrowBox);
+
+                            let characterEvolutionArrow = document.createElement("P");
+                            characterEvolutionArrow.innerHTML = "=>";
+                            characterEvolutionArrow.classList.add("textFormatSmall");
+                            characterEvolutionArrowBox.appendChild(characterEvolutionArrow);
+                        }
+                    }
+            
 /****************************************************************************************/
     showPromptWindow(4);
 };
@@ -816,13 +1008,6 @@ const catchItAnimation = (status, animation) => {
         deleteFavorite(characterTitleName.innerHTML.toUpperCase()); //Descomentar cuando funcione
         // deleteFavorite(num.toString(10)); Descomentar para prueba Cookies
  });
-
-/******************** Short cut Event listener ********************/
-document.addEventListener('keyup',            function (event) {
-    if (event.altKey && event.key === "z") {
-        floatingMenuButton.focus();
-    }
-});
 
 
 

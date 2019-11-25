@@ -1,0 +1,252 @@
+/**Animación pokeball con popover**/
+.divLoadingClass{
+    display: flex;
+    position: fixed;
+    border: none;
+    left: 0;
+    top: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: tomato;
+    visibility: hidden; /*Comentar para activar animación intro */
+}
+
+.divLoadingImage{
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%,-50%);
+
+    display: flex;
+    align-items: center;
+    flex-flow: column wrap;
+
+    width: fit-content;
+    height: fit-content;
+    background-color: transparent;
+}
+
+.loadingImage{
+    width: 8vw;
+    height: auto;
+    cursor: pointer;
+    animation: loading 1s  linear 0s infinite;
+}
+
+@keyframes loading{
+    0% {
+      transform: rotate(0deg);
+    }
+    100%{
+      transform: rotate(360deg);
+    }
+}
+
+.popoverTextFormat {
+    display: inline-block;
+    font-family: 'Helvetica',sans-serif;
+    font-size: 18px;
+    font-weight: bold;
+    text-align: center;
+    width: max-content;
+}
+
+.divLoadingImage .tooltiptextLoading {
+
+    background-color: white;
+    color: black;
+    border-color: #1A1423;
+    border-width: 5px;
+    border-style: solid;
+
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px;
+    position: absolute;
+    z-index: 1;
+    bottom: 110%;
+    left: 50%;
+    transform: translate(-50%);
+    visibility: hidden;
+    opacity: 0;
+}
+
+.divLoadingImage:hover .tooltiptextLoading {
+    visibility: visible;
+    opacity: 1;
+    transition: opacity 2s;
+}
+
+.divLoadingImage .tooltiptextLoading::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+
+    margin-left: -10px;
+    border-width: 10px;
+
+    border-style: solid;
+    border-color: #1A1423 transparent transparent transparent;
+}
+
+/**Animacion led pokedex**/
+.divLedImage {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%,-50%);
+
+    display: flex;
+    align-items: center;
+    flex-flow: column wrap;
+
+    width: fit-content;
+    height: fit-content;
+    border-radius: 50%;
+    background-color: transparent;
+    z-index: 3;
+    visibility: hidden;
+}
+
+.ledImage{
+    width: 8vw;
+    height: auto;
+    cursor: pointer;
+}
+
+@keyframes light{
+    0%{
+        filter: none;
+    }
+    25%{
+        filter: drop-shadow(0 0 50px #00a2a2ff);
+    }
+    50%{
+        filter: drop-shadow(0 0 50px #00a2a2ff);
+    }
+    100%{
+        filter: none;
+    }
+}
+
+/**Nueva "pantalla"**/
+.divNewText{
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%,-50%);
+
+    display: flex;
+    align-items: center;
+    flex-flow: column wrap;
+
+    width: fit-content;
+    height: fit-content;
+    background-color: transparent;
+    visibility: hidden;
+}
+
+.newText{
+    display: inline-block;
+    font-family: 'Helvetica',sans-serif;
+    font-size: 100px;
+    color: white;
+    font: larger;
+    text-align: center;
+    width: max-content;
+}
+
+/**Animación de transición**/
+.ripple-wrap {
+    display: none;
+    overflow: hidden;
+    position: fixed;
+    font-size: 0;
+    z-index: 1000;
+    top: 0; left: 0; right: 0; bottom: 0;
+  }
+
+@-webkit-keyframes RIPPLER {
+    0%   { border-width: 0; }
+    40% {
+        height: 0;
+        width: 0;
+        border-width: 1500px;
+        margin-top: 0px;
+        margin-left:0px;
+        border-color: red;
+    }
+    41% {
+        height: 0;
+        width: 0;
+        border-width: 1500px;
+        margin-top: 0px;
+        margin-left:0px;
+        border-color: red;
+    }
+    100% {
+        border-width: 1500px;
+        height: 2000px;
+        width: 2000px;
+        margin-top: 0px;
+        margin-left:-00px;
+        border-color: tomato;
+    }
+}
+@keyframes RIPPLER {
+    0%   { border-width: 0; }
+    40% {
+        height: 0;
+        width: 0;
+        border-width: 1500px;
+        margin-top: 0px;
+        margin-left:0px;
+        border-color: red;
+    }
+    41% {
+        height: 0;
+        width: 0;
+        border-width: 1500px;
+        margin-top: 0px;
+        margin-left:0px;
+        border-color: red;
+    }
+    100% {
+        border-width: 1500px;
+        height: 2000px;
+        width: 2000px;
+        margin-top: 0px;
+        margin-left:-00px;
+        border-color: tomato;
+    }
+}
+
+.ripple {
+    display: block;
+    height: 10px;
+    width: 10px;
+    border-width: 0px;
+    border-style: solid;
+    border-color: red;
+    border-radius: 100%;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%,-50%);
+    -webkit-animation: none;
+    animation: none;
+}
+
+.ripple-wrap.goripple {
+    display: block;
+}
+
+.ripple-wrap.goripple .ripple {
+    -webkit-animation-name: RIPPLER;
+    -webkit-animation-duration: 1.5s;
+    -webkit-animation-fill-mode: forwards;
+    animation-name: RIPPLER;
+    animation-duration: 1.5s;
+    animation-fill-mode: forwards;
+}

@@ -1,4 +1,5 @@
 @import "reset.css";
+@import "introPage.css";
 @import "prompt.css";
 @import "styleCharacterWindow.css";
 
@@ -13,7 +14,7 @@ body {
     align-items: center;
     margin: 0%;
     padding: 0%;
-    /* visibility: hidden; */
+    /* visibility: hidden; /*Descomentar para activar animación intro*/
 }
 
 /***** Menu barra superior *****/
@@ -27,7 +28,6 @@ body {
     left: 0;
     width: 99vw;
     height: 10vh;
-    /* margin-bottom: 0px; */
     background-color: crimson;
     z-index: 1;
 }
@@ -75,6 +75,7 @@ body {
     width: fit-content;
     background-color: transparent;
     z-index: 1;
+    /*visibility: hidden; /*Descomentar para activar animación intro*/
 }
 
 #toggle {
@@ -99,8 +100,8 @@ body {
 }
 
 .floatingMenuClassNormal {
-    width: 6vw;
-    height: 12vh;
+    width: 90px;
+    height: 90px;
 }
 
 .floatingMenuClassNormal i{
@@ -109,8 +110,8 @@ body {
 }
 
 .floatingMenuClassSmall {
-    width: 3.5vw;
-    height: 7vh;
+    width: 45px;
+    height: 45px;
     color: black;
     animation: pop 0.3s linear 1;
 }
@@ -130,8 +131,8 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 5vw;
-    height: 10vh;
+    width: 90px;
+    height: 90px;
     margin: 0 0 3vh 0;
     background-color: cornflowerblue;
     border-radius: 100px;
@@ -139,7 +140,7 @@ body {
 }
 
 .floatingMenuElement i{
-    font-size: 40px;
+    font-size: 50px;
     color: white;
 }
 
@@ -149,113 +150,102 @@ body {
 
 /***** Body pokemons *****/
 .pokemonContainerGrid {
-  position: absolute;
-  /* top: 10vh; */
-  top: 20vmin;
-  left: 0;
-  display: flex;
-  flex-flow: row wrap;
-  background-color: transparent;
-  width: 99vw;
+    position: absolute;
+    top: 20vmin;
+    left: 0;
+    display: flex;
+    flex-flow: row wrap;
+    background-color: transparent;
+    width: 99vw;
 }
 
 .divContainerClass {
-  display: flex;
-  justify-content: center;
-  /*Seis columnas*/
-  flex: 15%;
-  padding: 5px;
-  cursor: pointer;
+    display: flex;
+    justify-content: center;
+    /*Seis columnas*/
+    flex: 15%;
+    padding: 5px;
 }
 
 .divCardClass {
-  background-color: transparent;
-  position: relative;
-
-  /* height: 15em; */
-  padding: 0% 0% 10% 0%;
-
-  /* border-radius: 20px;
-  border: 5px solid white;
-  width: 10rem;
-  height: 15rem;
-  color: #ecf0f1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  transform-style: preserve-3d;
-  cursor: pointer; */
+    background-color: transparent;
+    position: relative;
+    padding: 0% 0% 10% 0%;
 }
 
 .divPokemonCardFaceClass {
-  border-radius: 20px;
-  border: 5px solid white;
+    border-radius: 20px;
+    border: 5px solid white;
 
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 10em;
-  height: 15em;
-  cursor: pointer;
-  backface-visibility: hidden;
-  transform-style: preserve-3d;
-  transition: transform 0.4s ease-in-out;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 180px;
+    height: 280px;
+    backface-visibility: hidden;
+    transform-style: preserve-3d;
+    transition: transform 0.4s ease-in-out;
 }
 
 .divPokemonCardFaceClass--front {
-  background: #2c3e50;
-  transform: rotateY(0deg);
+    background: #2c3e50;
+    transform: rotateY(0deg);
 }
 
 .divPokemonCardFaceClass--back {
-  background: #502c45;
-  transform: rotateY(-180deg);
-
-  position: absolute;
-  top: 0;
-  left: 0%;
+    justify-content: center;
+    position: absolute;
+    top: 0;
+    left: 0%;
+    background: #502c45;
+    transform: rotateY(-180deg);
+    cursor: pointer;
 }
 
 .divCardClass:hover .divPokemonCardFaceClass--front {
-  transform: rotateY(-180deg);
+    transform: rotateY(-180deg);
 }
 
 .divCardClass:hover .divPokemonCardFaceClass--back {
-  transform: rotateY(0deg);
+    transform: rotateY(0deg);
 }
 
 .imagePokemon {
-  margin: 20px 0 0 0;
-  width: 85%;
+    margin: 20px 0 0 0;
+    width: 85%;
 }
 
 .numberPokemon {
-  font-family: "Rajdhani", sans-serif;
-  font-weight: normal;
-  text-align: center;
-  font-size: 2vmin;
-  background-color: rgb(53, 46, 46, 40%);
-  border-radius: 5px;
-  padding: 0.5vmin;
-  margin: 2vh 0 0 0;
+    font-family: "Rajdhani", sans-serif;
+    font-weight: normal;
+    text-align: center;
+    font-size: 2vmin;
+    background-color: rgb(53, 46, 46, 40%);
+    border-radius: 5px;
+    padding: 0.5vmin;
+    margin: 2vh 0 0 0;
 }
 
 .namePokemon {
-  font-family: "Ubuntu", sans-serif;
-  font-weight: bold;
-  font-size: 3.5vmin;
-  text-align: center;
-  margin: 0.5vh 0 1vh 0;
+    font-family: "Ubuntu", sans-serif;
+    font-weight: bold;
+    font-size: 28px;
+    text-align: center;
+    margin: 0.5vh 0 1vh 0;
+}
+
+.typePokemonIMG{
+    height: 60px;
+    margin: 20px 0px 6px;
 }
 
 .typePokemon {
-  font-family: "Ubuntu", sans-serif;
-  font-weight: bold;
-  font-size: 3vmin;
-  color: #fff;
-  text-align: center;
-  text-transform: uppercase;
-  margin: 8vh 0 1vh 0;
+    font-family: "Ubuntu", sans-serif;
+    font-weight: bold;
+    font-size: 3vmin;
+    color: #fff;
+    text-align: center;
+    text-transform: uppercase;
 }
 /***** Ajustes web responsiva: Main window*****/
 @media screen and (max-width: 768px) {
@@ -279,19 +269,32 @@ body {
         height: 10vh;
         margin: 0 0 3vh 0;
     }
+    .floatingMenuClassNormal {
+        width: 60px;
+        height: 60px;
+    }
+    
+    .floatingMenuClassNormal i{
+        font-size: 50px;
+        color: white;
+    }    
+    .floatingMenuClassSmall {
+        width: 40px;
+        height: 40px;
+        color: black;
+        animation: pop 0.3s linear 1;
+    }    
     .floatingMenuElement{
         width: 60px;
         height: 60px;
         margin: 0 0 3vh 0;
     }
+    .floatingMenuElement i{
+        font-size: 35px;
+    }
 
     .divContainerClass {
         flex: 100%;
-    }
-    .divPokemonCardClass{
-        background-color: red;
-        width: 80%;
-        height: fit-content;
     }
     .menuButton{
         width: 16vw;
