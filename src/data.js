@@ -26,8 +26,6 @@ window.data =  {
     return filterJSON;
   },
 
- 
-
   sortDataResultAsc: function(data, condition) {
     let sortedResultAsc = [];
     let x = condition;
@@ -76,5 +74,3 @@ window.data =  {
     return sortedResultAsc;
   }
 };
-
-// module.exports = data;

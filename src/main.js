@@ -702,7 +702,7 @@ let elementPokeballImage = document.getElementById("pokeballImage");
 let elementDivFavImage = document.getElementById("divFavImage");
 let elementStarFavImage = document.getElementById("starFavImage");
 
-let characterImageElement = document.getElementById("characterImage");
+let characterImageElement = document.getElementById("characterImage"); //ojo
 
 const characterWindowPrint = (pokemonName) =>{
     //Preparar data del pokemon elegido
