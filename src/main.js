@@ -17,8 +17,7 @@ let buttonCloseNode = document.getElementsByClassName("buttonCloseClass");
 /***********Popup windows Character *********************/
 let characterWindowElement = document.getElementById("characterWindow");
 let characterDynamicDiv = document.getElementById("characterDynamicContent");
-let characterTitleName = document.createElement("P");
-
+let characterTitleName = "";
 
 const typeArray = [
     {
@@ -248,6 +247,29 @@ const printPokemonCards = dataArray => {
         divPokemonCard.classList.add("divPokemonCardFaceClass");
         divPokemonCard.classList.add("divPokemonCardFaceClass--front");
         divCard.appendChild(divPokemonCard);
+       
+        pokemonImage = document.createElement("IMG");
+        pokemonImage.classList.add("imagePokemon");
+        pokemonImage.setAttribute("src", element.img);
+        pokemonImage.setAttribute("alt", element.name);
+        divPokemonCard.appendChild(pokemonImage);
+
+        pokemonNumber = document.createElement("P");
+        pokemonNumber.innerHTML = "#" + element.num;
+        pokemonNumber.classList.add("numberPokemon");
+        divPokemonCard.appendChild(pokemonNumber);
+
+        pokemonName = document.createElement("P");
+        if (
+        element.name == "Nidoran ♀ (Female)" ||
+        element.name == "Nidoran ♂ (Male)"
+        ) {
+        pokemonName.innerHTML = element.name.substring(0, 9);
+        } else {
+        pokemonName.innerHTML = element.name;
+        }
+        pokemonName.classList.add("namePokemon");
+        divPokemonCard.appendChild(pokemonName);
 
         divBackPokemonCard = document.createElement("div");
         divBackPokemonCard.setAttribute("style", "background-color: " + typeArray[i].color);
@@ -278,30 +300,6 @@ const printPokemonCards = dataArray => {
                 characterWindowPrint(element.name.toUpperCase());
             }
         });
-        
-        pokemonImage = document.createElement("IMG");
-        pokemonImage.classList.add("imagePokemon");
-        pokemonImage.setAttribute("id", element.id);
-        pokemonImage.setAttribute("src", element.img);
-        pokemonImage.setAttribute("alt", element.name);
-        divPokemonCard.appendChild(pokemonImage);
-
-        pokemonNumber = document.createElement("P");
-        pokemonNumber.innerHTML = "#" + element.num;
-        pokemonNumber.classList.add("numberPokemon");
-        divPokemonCard.appendChild(pokemonNumber);
-
-        pokemonName = document.createElement("P");
-        if (
-        element.name == "Nidoran ♀ (Female)" ||
-        element.name == "Nidoran ♂ (Male)"
-        ) {
-        pokemonName.innerHTML = element.name.substring(0, 9);
-        } else {
-        pokemonName.innerHTML = element.name;
-        }
-        pokemonName.classList.add("namePokemon");
-        divPokemonCard.appendChild(pokemonName);
   });
 };
 
@@ -648,18 +646,19 @@ const loadFavorites = () => {
     return pokemonCookiesArray;
 };
 
-const createFavoriteCookie = (pokemonId) => {
+const createFavoriteCookie = (pokemonName) => {
     let pokemonCookiesArray = loadFavorites();
-    pokemonCookiesArray.push(pokemonId);
-    document.cookie = "favoritePokemon=" + pokemonCookiesArray.join(" ") + "; expires =Mo, 18 Jan 2038 12:00:00 UTC";    
+    pokemonCookiesArray.push(pokemonName);
+    document.cookie = "favoritePokemon=" + pokemonCookiesArray.join(" ") + "; expires =Mo, 18 Jan 2038 12:00:00 UTC";
+    console.log("createFavorite: " + document.cookie);
 };
 
-const deleteFavorite = (pokemonId) => {
+const deleteFavorite = (pokemonName) => {
     let pokemonCookiesArray = loadFavorites();
-    let index = pokemonCookiesArray.indexOf(pokemonId);
+    let index = pokemonCookiesArray.indexOf(pokemonName);
 
     index > -1 ? pokemonCookiesArray.splice(index, 1) : console.error("No existe ese id en favoritos");
-    document.cookie = "favoritePokemon=" + pokemonCookiesArray.join(" ");;
+    document.cookie = "favoritePokemon=" + pokemonCookiesArray.join(" ");
 };
 
 const showFavorites = () =>{
@@ -702,9 +701,15 @@ let elementPokeballImage = document.getElementById("pokeballImage");
 let elementDivFavImage = document.getElementById("divFavImage");
 let elementStarFavImage = document.getElementById("starFavImage");
 
-let characterImageElement = document.getElementById("characterImage"); //ojo
+let characterImageElement = document.getElementById("characterImage");
 
 const characterWindowPrint = (pokemonName) =>{
+    characterTitleName = ""; //Asegurar que este vació
+    let evolutionPathArrowTemplate = `<div class="columnAlignmentClass evolutionPathArrow">
+        <p class="textFormatSmall">=&gt;</p>
+        </div>`; //Template necesario
+    let evolutionPathIndex = 0; // Variable necesaria 
+
     //Preparar data del pokemon elegido
     let searchPokemon = window.data.filteredByNameOrNumber(dataPokemon, pokemonName);
     let characterData = searchPokemon[0];
@@ -718,250 +723,137 @@ const characterWindowPrint = (pokemonName) =>{
     }
 
     // Color de ventana
-    let i=0;
-    for(i; i < typeArray.length;i++){
+    let colorByType;
+    for(let i = 0 ; i < typeArray.length;i++){
         if(characterData.type[0] == typeArray[i].type){
+            colorByType = typeArray[i].color;
             break;
         }
     }
-    //characterWindowElement.setAttribute("style", "background-color: " + typeArray[i].color);
-    characterWindowElement.setAttribute("style", "border-color: " + typeArray[i].color);
+
+    /*** Evolution path ******/
+    /** Concatenar arreglos de prev_evolution, pokemon actual y next_evolution */
+    let evolutionPathArray = [];
+
+    if("prev_evolution" in characterData){
+        evolutionPathArray = evolutionPathArray.concat(characterData.prev_evolution
+            .map((elementArray) => {
+            let found = dataPokemon.filter((element) => {
+                return element.name === elementArray.name;
+            });
+            return { "name": elementArray.name, "img": found ? found[0].img : ''};
+        }));
+    }
+    
+    evolutionPathArray = evolutionPathArray.concat([{
+        "name": characterData.name,
+        "img": characterData.img
+    }]);
+
+    if("next_evolution" in characterData){
+        evolutionPathArray = evolutionPathArray.concat(characterData.next_evolution
+            .map((elementArray) => {
+            let found = dataPokemon.filter((element) => {
+                return element.name === elementArray.name;
+            });
+            return { "name": elementArray.name, "img": found ? found[0].img : ''};
+        }));
+    }          
+    /***** Fin de concatenación */
+    
+
+    characterWindowElement.setAttribute("style", "border-color: " + colorByType);
 
     //Carga la imagen del pokemon 
     let cuteImageSRC = "https://pokeres.bastionbot.org/images/pokemon/";
     let cuteImageExt = ".png";
     characterImageElement.setAttribute("src", cuteImageSRC + characterData.id + cuteImageExt); // Si la comentas sale la imagen linda
-    // characterDynamicDiv
+
+// characterDynamicDiv
 /****************************************************************************************/
-    let characterTitle = document.createElement("DIV");
-    /*let templateString = `<div class="columnAlignmentClass" style="color:#${typeArray[i].color}"></div>`;
-    mimimi.innerHTML = templateString;*/
-    characterTitle.classList.add("columnAlignmentClass");
-    characterDynamicDiv.appendChild(characterTitle);
-        // characterTitleName -- Global
-        characterTitleName.classList.add("textFormatBig");
-        characterTitleName.setAttribute("style", "color: " + typeArray[i].color);
-        characterTitleName.innerHTML = characterData.name;
-        characterTitle.appendChild(characterTitleName);
-        let characterTitleNumber = document.createElement("P");
-        characterTitleNumber.innerHTML = characterData.num;
-        characterTitleNumber.classList.add("characterTitleNumberClass");
-        characterTitle.appendChild(characterTitleNumber);
-
-/****************************************************************************************/
-    let characterGeneralData = document.createElement("DIV");
-    characterGeneralData.classList.add("rowAlignmentClass");
-    characterGeneralData.classList.add("bottomBorderClass");
-    characterGeneralData.setAttribute("style", "border-color: " + typeArray[i].color);
-    characterDynamicDiv.appendChild(characterGeneralData);
-
-        let characterTypeDiv = document.createElement("DIV");
-        characterTypeDiv.classList.add("columnAlignmentClass");
-        characterGeneralData.appendChild(characterTypeDiv);
-
-            let characterTypeNumber = document.createElement("P");
-            characterTypeNumber.innerHTML = characterData.type.join(" ");
-            characterTypeNumber.classList.add("textFormatMedium");
-            characterTypeDiv.appendChild(characterTypeNumber);
-            
-            let characterTypeTitle = document.createElement("P");
-            characterTypeTitle.innerHTML = "Type";
-            characterTypeTitle.classList.add("textFormatSmall");
-            characterTypeDiv.appendChild(characterTypeTitle);
-
-        let characterWeightDiv = document.createElement("DIV");
-        characterWeightDiv.classList.add("columnAlignmentClass");
-        characterGeneralData.appendChild(characterWeightDiv);
-
-            let characterWeightNumber = document.createElement("P");
-            characterWeightNumber.innerHTML = characterData.weight;
-            characterWeightNumber.classList.add("textFormatMedium");
-            characterWeightDiv.appendChild(characterWeightNumber);
-
-            let characterWeightTitle = document.createElement("P");
-            characterWeightTitle.innerHTML = "Weight";
-            characterWeightTitle.classList.add("textFormatSmall");
-            characterWeightDiv.appendChild(characterWeightTitle);
-
-        let characterHeightDiv = document.createElement("DIV");
-        characterHeightDiv.classList.add("columnAlignmentClass");
-        characterGeneralData.appendChild(characterHeightDiv);
-
-            let characterHeightNumber = document.createElement("P");
-            characterHeightNumber.innerHTML = characterData.height;
-            characterHeightNumber.classList.add("textFormatMedium");
-            characterHeightDiv.appendChild(characterHeightNumber);
-
-            let characterHeightTitle = document.createElement("P");
-            characterHeightTitle.innerHTML = "Height";
-            characterHeightTitle.classList.add("textFormatSmall");
-            characterHeightDiv.appendChild(characterHeightTitle);
-
-/****************************************************************************************/
-    let characterCandyData = document.createElement("DIV");
-    characterCandyData.classList.add("rowAlignmentClass");
-    characterCandyData.classList.add("bottomBorderClass");
-    characterCandyData.setAttribute("style", "border-color: " + typeArray[i].color);
-    characterDynamicDiv.appendChild(characterCandyData);
-
-        let characterCandyDiv = document.createElement("DIV");
-        characterCandyDiv.classList.add("columnAlignmentClass");
-        characterCandyDiv.classList.add("rightBorderClass");
-        characterCandyDiv.setAttribute("style", "border-color: " + typeArray[i].color);
-        characterCandyData.appendChild(characterCandyDiv);
-
-            let characterCandyType = document.createElement("P");
-            characterCandyType.innerHTML = characterData.candy;
-            characterCandyType.classList.add("textFormatMedium");
-            characterCandyDiv.appendChild(characterCandyType);
-
-            let characterCandyTitle = document.createElement("P");
-            characterCandyTitle.innerHTML = "Candy";
-            characterCandyTitle.classList.add("textFormatSmall");
-            characterCandyDiv.appendChild(characterCandyTitle);
-
-        let characterCandyCountDiv = document.createElement("DIV");
-        characterCandyCountDiv.classList.add("columnAlignmentClass");
-        characterCandyData.appendChild(characterCandyCountDiv);
-            let characterCandyCountNumber = document.createElement("P");
-            if ("candy_count" in characterData){
-                characterCandyCountNumber.innerHTML = characterData.candy_count;
-            }else{
-                characterCandyCountNumber.innerHTML = " - ";
+const characterWindowTemplate  = `
+    <!-- Contenido dinámico -->
+    <!-- **************************************************************************************** -->
+    <div class="columnAlignmentClass">
+        <p id="characterPokemonName" class="textFormatBig" style= ${"color:" + colorByType}> ${characterData.name}</p>
+        <p class="characterTitleNumberClass">${characterData.num}</p>
+    </div>
+    <!-- **************************************************************************************** -->
+    <div class="rowAlignmentClass bottomBorderClass" style=${"border-color:" + colorByType}>
+        <div class="columnAlignmentClass">
+            <p class="textFormatMedium">${characterData.type.join(" ")}</p>
+            <p class="textFormatSmall">Type</p>
+        </div>
+        <div class="columnAlignmentClass">
+            <p class="textFormatMedium">${characterData.weight}</p>
+            <p class="textFormatSmall">Weight</p>
+        </div>
+        <div class="columnAlignmentClass">
+            <p class="textFormatMedium">${characterData.height}</p>
+            <p class="textFormatSmall">Height</p>
+        </div>
+    </div>
+    <!-- **************************************************************************************** -->
+    <div class="rowAlignmentClass bottomBorderClass" style=${"border-color:" + colorByType}>
+        <div class="columnAlignmentClass rightBorderClass" style=${"border-color:" + colorByType}>
+            <p class="textFormatMedium">${characterData.candy}</p>
+            <p class="textFormatSmall">Candy</p>
+        </div>
+        <div class="columnAlignmentClass">
+            ${"candy_count" in characterData ? '<p class="textFormatMedium">' + characterData.candy_count + '</p>'
+                : '<p class="textFormatMedium"> - </p>'
             }
-            characterCandyCountNumber.classList.add("textFormatMedium");
-            characterCandyCountDiv.appendChild(characterCandyCountNumber);
-
-            let characterCandyCountTitle = document.createElement("P");
-            characterCandyCountTitle.innerHTML = "Candy Count";
-            characterCandyCountTitle.classList.add("textFormatSmall");
-            characterCandyCountDiv.appendChild(characterCandyCountTitle);
-
-/****************************************************************************************/
-    let additionalDataAuxiliarDiv = document.createElement("DIV");
-    additionalDataAuxiliarDiv.classList.add("columnAlignmentClass");
-    characterDynamicDiv.appendChild(additionalDataAuxiliarDiv);
-
-            let characterWeaknessDiv = document.createElement("DIV");
-            characterWeaknessDiv.classList.add("columnAlignmentClass");
-            additionalDataAuxiliarDiv.appendChild(characterWeaknessDiv);
-
-            let characterWeaknessTitle = document.createElement("P");
-            characterWeaknessTitle.innerHTML = "Weakness";
-            characterWeaknessTitle.classList.add("textFormatSmall");
-            characterWeaknessDiv.appendChild(characterWeaknessTitle);
-
-            let characterWeaknessType = document.createElement("DIV");
-            characterWeaknessType.classList.add("rowAlignmentClass");
-            characterWeaknessDiv.appendChild(characterWeaknessType);
-            characterData.weaknesses.forEach((element) => {
-            let characterWeaknessTypeContainer = document.createElement("DIV");
-            characterWeaknessTypeContainer.classList.add("characterWeaknessTypeContainer");
-            characterWeaknessType.appendChild(characterWeaknessTypeContainer);
-
-            let characterWeaknessTypeLogo = document.createElement("IMG");
-            characterWeaknessTypeLogo.setAttribute("src", "image/types/" + element + ".svg");
-            characterWeaknessTypeLogo.classList.add("weaknessImgClass");
-            characterWeaknessTypeContainer.appendChild(characterWeaknessTypeLogo);
-
-            let characterWeaknessTypeName = document.createElement("P");
-            characterWeaknessTypeName.innerHTML = element;
-            characterWeaknessTypeName.classList.add("weaknessTextFormat");
-            characterWeaknessTypeContainer.appendChild(characterWeaknessTypeName);
-
-            });
-
-    let characterAdditionalData = document.createElement("DIV");
-    characterAdditionalData.classList.add("rowAlignmentClass");
-    characterDynamicDiv.appendChild(characterAdditionalData);
-
-            let characterInfoDiv = document.createElement("DIV");
-            characterInfoDiv.classList.add("columnAlignmentClass");
-            characterAdditionalData.appendChild(characterInfoDiv);
-
-
-                let characterInfoTitle = document.createElement("P");
-                characterInfoTitle.innerHTML = "Info";
-                characterInfoTitle.classList.add("textFormatSmall");
-                characterInfoDiv.appendChild(characterInfoTitle);
-
-                let characterInfoBox = document.createElement("P");
-                characterInfoBox.innerHTML = "place-holder text";
-                characterInfoBox.classList.add("textFormatMedium");
-                characterInfoDiv.appendChild(characterInfoBox);
-
-
-            let characterEvolutionDiv = document.createElement("DIV");
-            characterEvolutionDiv.classList.add("columnAlignmentClass");
-            characterAdditionalData.appendChild(characterEvolutionDiv);
-
-
-                let characterEvolutionTitle = document.createElement("P");
-                characterEvolutionTitle.innerHTML = "Evolution path";
-                characterEvolutionTitle.classList.add("textFormatSmall");
-                characterEvolutionDiv.appendChild(characterEvolutionTitle);
-                
-                let characterEvolutionPathContainer = document.createElement("DIV");
-                characterEvolutionPathContainer.classList.add("rowAlignmentClass");
-                characterEvolutionDiv.appendChild(characterEvolutionPathContainer);
-                    
-                /*** Evolution path ******/
-                /** Concatenar arreglos de prev_evolution, pokemon actual y next_evolution */
-                let evolutionPathArray = [];
-
-                if("prev_evolution" in characterData){
-                    evolutionPathArray = evolutionPathArray.concat(characterData.prev_evolution
-                        .map((elementArray) => {
-                        let found = dataPokemon.filter((element) => {
-                            return element.name === elementArray.name;
-                        });
-                        return { "name": elementArray.name, "img": found ? found[0].img : ''};
-                    }));
-                }
-                
-                evolutionPathArray = evolutionPathArray.concat([{
-                    "name": characterData.name,
-                    "img": characterData.img
-                }]);
-
-                if("next_evolution" in characterData){
-                    evolutionPathArray = evolutionPathArray.concat(characterData.next_evolution
-                        .map((elementArray) => {
-                        let found = dataPokemon.filter((element) => {
-                            return element.name === elementArray.name;
-                        });
-                        return { "name": elementArray.name, "img": found ? found[0].img : ''};
-                    }));
-                }          
-                console.log("Result:", evolutionPathArray);
-                    
-                    for (let j=0 ; j < evolutionPathArray.length; j++) {
-                        let characterEvolutionBox = document.createElement("DIV");
-                        characterEvolutionBox.classList.add("columnAlignmentClass");
-                        characterEvolutionPathContainer.appendChild(characterEvolutionBox);
-
-                            let characterEvolutionIMG = document.createElement("IMG");
-                            characterEvolutionIMG.setAttribute("src", evolutionPathArray[j].img);
-                            characterEvolutionIMG.classList.add("weaknessImgClass");
-                            characterEvolutionBox.appendChild(characterEvolutionIMG);
-                            
-                            let characterEvolutionName = document.createElement("P");
-                            characterEvolutionName.innerHTML = evolutionPathArray[j].name;
-                            characterEvolutionName.classList.add("textFormatSmall");
-                            characterEvolutionBox.appendChild(characterEvolutionName);
-                        if (j < evolutionPathArray.length -1){
-                            let characterEvolutionArrowBox = document.createElement("DIV");
-                            characterEvolutionArrowBox.classList.add("columnAlignmentClass");
-                            characterEvolutionArrowBox.classList.add("evolutionPathArrow");
-                            characterEvolutionPathContainer.appendChild(characterEvolutionArrowBox);
-
-                            let characterEvolutionArrow = document.createElement("P");
-                            characterEvolutionArrow.innerHTML = "=>";
-                            characterEvolutionArrow.classList.add("textFormatSmall");
-                            characterEvolutionArrowBox.appendChild(characterEvolutionArrow);
-                        }
+            <p class="textFormatSmall">Candy Count</p>
+        </div>
+    </div>
+    <!-- **************************************************************************************** -->
+    <div class="columnAlignmentClass">
+        <div class="columnAlignmentClass">
+            <p class="textFormatSmall">Weakness</p>
+            <div class="rowAlignmentClass">
+                ${characterData.weaknesses.map((element) => {
+                    return '<div class="characterWeaknessTypeContainer">' +
+                        '<img class="weaknessImgClass"src="image/types/'+ element + '.svg"> ' +
+                        ' <p class="weaknessTextFormat">' + element + '</p> </div>'
+                }).join("")}
+            </div>
+        </div>
+    </div>
+    <!-- **************************************************************************************** -->
+    <div class="rowAlignmentClass">
+        <div class="columnAlignmentClass">
+            <p class="textFormatSmall">Info</p>
+            <p class="textFormatMedium">place-holder text</p>
+        </div>
+        <div class="columnAlignmentClass">
+            <p class="textFormatSmall">Evolution path</p>
+            <div class="rowAlignmentClass">
+                <!-- /******* Map ****** -->
+                <div class="rowAlignmentClass">
+                    ${
+                        evolutionPathArray.map((element) => {
+                            if(evolutionPathIndex < (evolutionPathArray.length -1)){
+                                evolutionPathIndex++;
+                                return '<div class="columnAlignmentClass">' +
+                                '<img class="weaknessImgClass" src=' + element.img + '>' +
+                                '<p class="textFormatSmall">' + element.name + '</p>' +
+                                '</div>' + evolutionPathArrowTemplate
+                            }else {
+                                return '<div class="columnAlignmentClass">' +
+                                '<img class="weaknessImgClass" src=' + element.img + '>' +
+                                '<p class="textFormatSmall">' + element.name + '</p>' +
+                            '</div>'
+                            }
+                        }).join("")
                     }
-            
+                <!-- /******* Fin map *****/ -->
+            </div>
+        </div>
+    </div>`;
+
+    characterDynamicDiv.innerHTML = characterWindowTemplate;
+    characterTitleName = document.getElementById("characterPokemonName").innerHTML; //1988
+                
 /****************************************************************************************/
     showPromptWindow(4);
 };
@@ -1001,15 +893,10 @@ const catchItAnimation = (status, animation) => {
  elementPokeballImage.addEventListener("click", () => {
     catchItAnimation(1, 1);
     /**Create cookie*/
-        createFavoriteCookie(characterTitleName.innerHTML.toUpperCase()); //Descomentar cuando funcione
-        // createFavoriteCookie(num.toString(10));  Descomentar para prueba Cookies
+        createFavoriteCookie(characterTitleName.toUpperCase());
  });
  elementStarFavImage.addEventListener("click", () => {
     catchItAnimation(2, 1);
     /*** Remove cookie */
-        deleteFavorite(characterTitleName.innerHTML.toUpperCase()); //Descomentar cuando funcione
-        // deleteFavorite(num.toString(10)); Descomentar para prueba Cookies
+        deleteFavorite(characterTitleName.toUpperCase().trim());
  });
-
-
-
