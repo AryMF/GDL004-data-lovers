@@ -12,7 +12,7 @@
     left: 50%;
     top: 50%;
     transform: translate(-50%, -42%);
-    /* padding: 0.5% 1% 0.5% 1%; */
+    padding: 0.5% 1% 0.5% 1%;
     border: 10px solid white;
     border-radius: 35px;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
@@ -24,7 +24,7 @@
 }
 .characterImageDIV{
     position: relative;
-    top: -50px;
+    top: -40px;
     display: flex;
     justify-content: center;
     width: 100%;
@@ -34,7 +34,8 @@
 .characterImageClass {
     position: absolute;
     bottom: -30px;
-    width: 250px;
+    /* width: 230px; */
+    width: 18%;
     height: auto;
 }
 
@@ -51,8 +52,8 @@
     display: flex;
     position: relative;
     top: -40px;
+    left: -100px;
     width: fit-content;
-    /* background-color: cornflowerblue; */
 }
 
 .divPokeballImage {
@@ -184,7 +185,6 @@
     width: 100%;
     margin-bottom: 15px;
     padding: 10px 0px;
-    background-color: whitesmoke;
 }
 
 .rowAlignmentClass{
@@ -199,14 +199,13 @@
     font-variant: normal;
     font-size: 2.5vmin;
     color: rgb(58, 57, 57);
-    padding: 3px;  
+    padding: 10px;  
     width: fit-content;
     background-color: hsl(0, 0%, 0%, 30%);
     border-radius: 10px;
 }
 
 .textFormat{
-    /* font-family: Verdana, Geneva, Tahoma, sans-serif, sans-serif; */
     font-family: 'Rajdhani', sans-serif;
     font-style: normal;
     font-variant: normal;
@@ -252,6 +251,30 @@
     border-color: DimGrey;
     border-bottom: dotted;
 }
+.characterWeaknessTypeContainer, .characterEachEvolutionContainer{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0px 20px;
+}
+.weaknessImgClass{
+    height: 120px;
+    /* height: 80px; */
+}
+
+.weaknessTextFormat{
+    font-family: 'Rajdhani', sans-serif;
+    font-style: normal;
+    font-variant: normal;
+    text-align: center; 
+    font-size: 5vmin;
+    color: rgb(68, 67, 67);
+}
+
+.evolutionPathArrow{
+    justify-content: center;
+    padding: 10px 5px;
+}
 
 /************ Animación de ventana prompt ************/
 @-webkit-keyframes animatetopCharacterWindow {
@@ -268,7 +291,7 @@
 .favoritesWindowEmptyClass{
     position: absolute;
     left: 50%;
-    top: 50px;
+    top: 30px;
     transform: translate(-50%, 0%);
     display: flex;
     flex-direction: column;
@@ -278,6 +301,28 @@
 }
 
 .favoritesWindowImageClass{
-    height: 300%;
+    height: 250%;
     margin: 10px;
+}
+
+@media screen and (max-width: 500px) {
+    .characterImageDIV{
+        top: -50px;
+    }
+    .characterImageClass {
+        bottom: -30px;
+        width: 50%;
+    }
+    .divCatchIt{
+        top: -40px;
+        left: -120px;
+    }
+    .pokeballImage, .onClickImage, .starFavImage{
+        width: 15%;
+    }
+    .rowAlignmentClass{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
 }
