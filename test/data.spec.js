@@ -75,7 +75,6 @@ describe("data", () => {
     it("Data debería ser un object", () => {
         expect(typeof data).toBe("object");
     })
-
     describe("data.filteredByNameOrNumber", () => {
         it("filteredByNameOrNumber debería ser una función", () => {
             expect(typeof data.filteredByNameOrNumber).toBe("function");
@@ -122,4 +121,20 @@ describe("data", () => {
             );
         });
     });
+
+    describe("data.sortedByAlphabeticalOrderAsc", () => {
+      it("sortedByAlphabeticalOrderAsc debería ser una función", () => {
+          expect(typeof data.sortedByAlphabeticalOrderAsc).toBe("function");
+      });
+      //TODO: Test de funcionalidad de sortedByAlphabeticalOrderAsc pokemon
+      it("Debería retornar 'Bulbasaur' para 'BULBASAUR'", () => {
+          expect(data.sortedByAlphabeticalOrderAsc(pokemon, 'BULBASAUR')[0])
+          .toHaveProperty('name', "Bulbasaur");
+      });
+
+      it("Debería retornar 'Squirtle' para número 7", () => {
+          expect(data.sortedByAlphabeticalOrderAsc(pokemon, 7)[0])
+          .toHaveProperty('name', "Squirtle");
+      });
+  });
 });
