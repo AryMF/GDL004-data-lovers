@@ -53,7 +53,7 @@ window.data =  {
   sortDataResultDesc: function(data, condition) {
     let sortedResultAsc = [];
     let x = condition;
-
+    
     for (condition in data) {
       if (data.hasOwnProperty(condition)) {
         sortedResultAsc.push(data[condition]);

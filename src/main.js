@@ -216,73 +216,89 @@ rippler.addEventListener("animationend", function(e){
 /********** Impresión en pantalla de Pokemon cards **********/
 
 const printPokemonCards = dataArray => {
-  let typeImagesSRC = "image/typesWhite/";
-  let typeImageExtension = ".svg";
-  let colorByType;
-  let pokemonName;
-  let orderArray = [];
- 
-  pokemonContainerElement.innerHTML = "";
-  
-  let concatTemplateElements = "";
+    let typeImagesSRC = "image/typesWhite/";
+    let typeImageExtension = ".svg";
+    let colorByType;
+    let pokemonName;
+    let orderArray = [];
 
-  dataArray.forEach((element) => { 
+    pokemonContainerElement.innerHTML = "";
+
+    let concatTemplateElements = "";
+
+    dataArray.forEach((element) => { 
 
     if (element.name == "Nidoran ♀ (Female)" || element.name == "Nidoran ♂ (Male)") {
-      pokemonName = element.name.substring(0, 9);
+        pokemonName = element.name.substring(0, 9);
     } else {
-      pokemonName = element.name;
+        pokemonName = element.name;
     } 
-  
+
     for (let i = 0; i < typeArray.length; i++) {
-      if (element.type[0] == typeArray[i].type) {
-          colorByType = typeArray[i].color;
+        if (element.type[0] == typeArray[i].type) {
+            colorByType = typeArray[i].color;
         break;
-      }
+        }
     }
 
     const pokemonCardsTemplate = `
     <div class="divContainerClass">
-      <div class="divCardClass">
-          <div id="divPokemonCard" style = ${"background-color:" + colorByType} tabindex="0" class="divPokemonCardFaceClass divPokemonCardFaceClass--front">
-              <img class="imagePokemon" src = ${element.img} alt= ${element.name}>
-              <p class="numberPokemon">${element.num}</p>
-              <p class="namePokemon">${pokemonName}</p>
-          </div>
-          <div id="divBackPokemonCard" style = ${"background-color:" + colorByType} class="divPokemonCardFaceClass divPokemonCardFaceClass--back">
-              ${
-                  element.type.map((typeElement) => {
-                      return '<img src="' + typeImagesSRC + typeElement + typeImageExtension +'" class="typePokemonIMG">' +
-                      '<p class="typePokemon">' + typeElement + '</p>'
-                  }).join("")
-              }
-          </div>
-      </div>
+        <div class="divCardClass">
+            <div id="divPokemonCard" style = ${"background-color:" + colorByType} tabindex="0" class="divPokemonCardFaceClass divPokemonCardFaceClass--front">
+                <img class="imagePokemon" src = ${element.img} alt= ${element.name}>
+                <p class="numberPokemon">${element.num}</p>
+                <p class="namePokemon">${pokemonName}</p>
+            </div>
+            <div id="divBackPokemonCard" style = ${"background-color:" + colorByType} class="divPokemonCardFaceClass divPokemonCardFaceClass--back">
+                ${
+                    element.type.map((typeElement) => {
+                        return '<img src="' + typeImagesSRC + typeElement + typeImageExtension +'" class="typePokemonIMG">' +
+                        '<p class="typePokemon">' + typeElement + '</p>'
+                    }).join("")
+                }
+            </div>
+        </div>
     </div>`;
 
 
     orderArray.push(element.name);
     concatTemplateElements = concatTemplateElements + pokemonCardsTemplate;
-  }); 
+    }); 
 
-  pokemonContainerElement.innerHTML = concatTemplateElements;
+    //impresion en pantalla
+    pokemonContainerElement.innerHTML = concatTemplateElements;
 
-  let backCards = document.getElementsByClassName("divPokemonCardFaceClass--back");
+    pokemonContainerElement.innerHTML = concatTemplateElements;
 
-  for(let i=0; i< backCards.length;i++){
-    backCards[i].addEventListener("click", function() {
-      characterWindowPrint(orderArray[i].toUpperCase());
-    });
-  }
-
-  let frontCards = document.getElementsByClassName("divPokemonCardFaceClass--front");
-  for(let i=0; i< frontCards.length; i++){
-    frontCards[i].addEventListener("keyup", function(e) {
-      if (e.keyCode === 13) {
+    let backCards = document.getElementsByClassName("divPokemonCardFaceClass--back");
+  
+    for(let i=0; i< backCards.length;i++){
+      backCards[i].addEventListener("click", function() {
         characterWindowPrint(orderArray[i].toUpperCase());
-      }
+      });
+    }
+
+    /* Intentando camiar a querySelector para usar forEach
+    let backCards = document.querySelectorAll(".divPokemonCardFaceClass--back");
+    // console.log(backCards)
+    backCards.forEach((element) => {
+        // console.log(index);
+        element.addEventListener("click", function() {
+            console.log("hola: " + orderArray[index])
+            // characterWindowPrint(orderArray[index].toUpperCase());
+        });
+        index++;
     });
-  }  
+    */
+
+    let frontCards = document.getElementsByClassName("divPokemonCardFaceClass--front");
+    for(let i=0; i< frontCards.length; i++){
+        frontCards[i].addEventListener("keyup", function(e) {
+        if (e.keyCode === 13) {
+            characterWindowPrint(orderArray[i].toUpperCase());
+        }
+        });
+    }  
 };
 
 /******************** Short cut Event listener ********************/

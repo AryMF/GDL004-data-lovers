@@ -79,7 +79,6 @@ describe("data", () => {
         it("filteredByNameOrNumber debería ser una función", () => {
             expect(typeof data.filteredByNameOrNumber).toBe("function");
         });
-        //TODO: Test de funcionalidad de filteredByNameOrNumber pokemon
         it("Debería retornar 'Bulbasaur' para 'BULBASAUR'", () => {
             expect(data.filteredByNameOrNumber(pokemon, 'BULBASAUR')[0])
             .toHaveProperty('name', "Bulbasaur");
@@ -95,7 +94,6 @@ describe("data", () => {
         it("Debería ser una función", () => {
             expect(typeof data.filteredByType).toBe("function");
         });
-        //TODO: Test de funcionalidad de filteredByType
         it("Debería retornar todos los pokemons tipo 'Normal' para 'Normal'", () => {
             expect(data.filteredByType(pokemon, "Normal"))
             .toStrictEqual(
