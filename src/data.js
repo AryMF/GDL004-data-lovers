@@ -27,15 +27,41 @@ window.data =  {
   },
 
   sortDataResultAsc: function(data, condition) {
-    let sortedResultAsc = [];
+    let sortedResultAscAlpha = [];
+    let sortedResultAscNum = [];
     let x = condition;
+    let numEnd = 2;
 
-    for (condition in data) {
-      if (data.hasOwnProperty(condition)) {
-        sortedResultAsc.push(data[condition]);
+    if(condition == "height" || condition == "weight"){
+      for (condition in data) {
+        if (data.hasOwnProperty(condition)) {
+          sortedResultAscNum.push(data[condition]);
+        }
+      }
+    }else {
+      for (condition in data) {
+        if (data.hasOwnProperty(condition)) {
+          sortedResultAscAlpha.push(data[condition]);
+        }
       }
     }
-    sortedResultAsc
+    
+    sortedResultAscNum
+      .sort(function(a, b) {
+        let auxA = a[x].length - numEnd;
+        let auxB = b[x].length - numEnd
+        if (parseFloat( a[x].substring(0, auxA) ) > parseFloat( b[x].substring(0, auxB) ) ){
+          return -1;
+        } else if (parseFloat( a[x].substring(0, auxA) ) < parseFloat( b[x].substring(0, auxB) ) ) {
+          return 1;
+        }
+        return 0;
+      })
+      .forEach(function(element) {
+        return element;
+      });
+
+    sortedResultAscAlpha
       .sort(function(a, b) {
         if (a[x] > b[x]) {
           return -1;
@@ -47,19 +73,52 @@ window.data =  {
       .forEach(function(element) {
         return element;
       });
-    return sortedResultAsc;
+
+    if(sortedResultAscNum != ""){
+      return sortedResultAscNum
+    }
+    else{
+      return sortedResultAscAlpha
+
+    }
   },
 
   sortDataResultDesc: function(data, condition) {
-    let sortedResultAsc = [];
+    let sortedResultDescAlpha = [];
+    let sortedResultDescNum = [];
     let x = condition;
+    let numEnd = 2;
 
-    for (condition in data) {
-      if (data.hasOwnProperty(condition)) {
-        sortedResultAsc.push(data[condition]);
+    if(condition == "height" || condition == "weight"){
+      for (condition in data) {
+        if (data.hasOwnProperty(condition)) {
+          sortedResultDescNum.push(data[condition]);
+        }
+      }
+    }else {
+      for (condition in data) {
+        if (data.hasOwnProperty(condition)) {
+          sortedResultDescAlpha.push(data[condition]);
+        }
       }
     }
-    sortedResultAsc
+    
+    sortedResultDescNum
+      .sort(function(a, b) {
+        let auxA = a[x].length - numEnd;
+        let auxB = b[x].length - numEnd
+        if (parseFloat( a[x].substring(0, auxA) ) < parseFloat( b[x].substring(0, auxB) ) ){
+          return -1;
+        } else if (parseFloat( a[x].substring(0, auxA) ) > parseFloat( b[x].substring(0, auxB) ) ) {
+          return 1;
+        }
+        return 0;
+      })
+      .forEach(function(element) {
+        return element;
+      });
+
+    sortedResultDescAlpha
       .sort(function(a, b) {
         if (a[x] < b[x]) {
           return -1;
@@ -71,6 +130,13 @@ window.data =  {
       .forEach(function(element) {
         return element;
       });
-    return sortedResultAsc;
+
+    if(sortedResultDescNum != ""){
+      return sortedResultDescNum
+    }
+    else{
+      return sortedResultDescAlpha
+
+    }
   }
 };
