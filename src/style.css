@@ -2,6 +2,7 @@
 @import "introPage.css";
 @import "prompt.css";
 @import "styleCharacterWindow.css";
+@import "styleCharts.css";
 
 body {
     background-color: Gainsboro;

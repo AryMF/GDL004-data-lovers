@@ -5,6 +5,7 @@ let filterJSON = [];
 
 /***********Main window *********************/
 let pokemonContainerElement = document.getElementById("pokemonContainer");
+let chartsContainerElement = document.getElementById("chartsContainer");
 /***********Popup windows (Search, FilterBy, SortBy) *********************/
 let promptContainerElement = document.getElementById("promptContainer");
 let searchByPromptElement = document.getElementById("searchByPrompt");
@@ -152,7 +153,7 @@ const main = ()  =>{
 window.addEventListener("load", main);
 
 /********** Animación de intro ******************************/
-/*
+
 let loadingImageDiv = document.getElementById("divLoading");
 let mainScreenDiv = document.getElementById("mainScreen");
 let floatingMenu = document.getElementById("floatingMenuDIV");
@@ -167,7 +168,7 @@ let ripple_wrap = document.getElementById('ripple-wrap');
 let rippler = document.getElementById('ripple');
 let finish = false;
 let soundControl = document.getElementById("soundControl");
-
+/*
 loadingImage.addEventListener("click", () => {
     let time = 1;
     let i = 1;
@@ -697,6 +698,176 @@ const showFavorites = () =>{
     
 };
 
+/************************** Charts window **************************/
+document.getElementById("chartButton").addEventListener("click", () => {
+    pokemonContainerElement.innerHTML = "";
+    pokemonContainerElement.style.visibility = "hidden";
+    chartsContainerElement.style.visibility = "visible";
+    floatingMenu.style.visibility = "hidden";
+    chartsWindowPrint();
+});
+
+const generateData = () =>{
+    console.log("*** Data ***");
+
+    
+};
+
+const chartsWindowPrint = () => {
+    const chartWindowTemplate = `
+        <h1>Charts</h1>
+        <div class="chartDynamicContent">
+            <canvas id="weightNHeight" width="200px" height="150px" style="border:1px solid #000000;">
+            </canvas>
+            <canvas id="line-chart" width="200px" height="150px" style="border:1px solid #000000;">
+            </canvas>
+            <canvas id="polar-chart" width="200px" height="150px" style="border:1px solid #000000;">
+            </canvas>
+            <button id="buttonData"> Data </button>
+        </div>
+    `;
+
+    chartsContainerElement.innerHTML = chartWindowTemplate;
+
+    
+    let ctx = document.getElementById('weightNHeight').getContext('2d');
+
+    let data = {
+    labels: ['20-30', "10-20", "0-10"],
+    datasets: [{
+        label: "Male",
+        backgroundColor: "rgba(54, 162, 235, 0.2)",
+        borderColor: "rgb(54, 162, 235)",
+        borderWidth: 2,
+        data: [-65, -59, -20],
+        }, {
+        label: "Female",
+        backgroundColor: "rgba(255,99,132,0.2)",
+        borderColor: "rgba(255,99,132,1)",
+        borderWidth: 2,
+        data: [72, 45, 18],
+        },
+
+    ]
+    };
+
+    let myBarChart = new Chart(ctx, {
+        type: 'bar',
+        data: data,
+        options: {
+          scales: {
+            yAxes: [{
+              stacked: false
+            }],
+            xAxes: [{
+                ticks: {
+                   callback: function(value, index, values) {
+                    return Math.abs(value);
+                }
+              }
+            }]
+          },
+          tooltips: {
+            callbacks: {
+              label: function(tooltipItems, data) {
+                  return data.datasets[tooltipItems.datasetIndex].label  + ": " +  Math.abs(tooltipItems.xLabel);
+              }
+            }
+          }
+        }
+    });
+
+    // Our labels along the x-axis
+    var years = [1500,1600,1700,1750,1800,1850,1900,1950,1999,2050];
+    // For drawing the lines
+    var africa = [86,114,106,106,107,111,133,221,783,2478];
+    var asia = [282,350,411,502,635,809,947,1402,3700,5267];
+    var europe = [168,170,178,190,203,276,408,547,675,734];
+    var latinAmerica = [40,20,10,16,24,38,74,167,508,784];
+    var northAmerica = [6,3,2,2,7,26,82,172,312,433];
+
+    /** */
+    var ctx2 = document.getElementById("line-chart");
+
+    var myChart = new Chart(ctx2, {
+    type: 'line',
+    data: {
+        labels: years,
+        datasets: [
+            { 
+                data: africa,
+                label: "Africa",
+                borderColor: "#3e95cd",
+                fill: false
+              },
+              { 
+                data: asia,
+                label: "Asia",
+                borderColor: "#3e95cd",
+                fill: false
+              },
+              { 
+                data: europe,
+                label: "Europe",
+                borderColor: "#3e95cd",
+                fill: false
+              },
+              { 
+                data: latinAmerica,
+                label: "Latin America",
+                borderColor: "#3e95cd",
+                fill: false
+              },
+              { 
+                data: northAmerica,
+                label: "North America",
+                borderColor: "#3e95cd",
+                fill: false
+              }
+        ]
+        
+    }
+    });
+
+    /*** */
+    new Chart(document.getElementById("polar-chart"), {
+        type: 'polarArea',
+        data: {
+          labels: ["Africa", "Asia", "Europe", "Latin America", "North America"],
+          datasets: [
+            {
+              label: "Population (millions)",
+              backgroundColor: ["#3e95cd", "#8e5ea2","#3cba9f","#e8c3b9","#c45850"],
+              data: [2478,5267,734,784,433]
+            }
+          ]
+        },
+        options: {
+          title: {
+            display: true,
+            text: 'Predicted world population (millions) in 2050'
+          },
+          tooltips: {
+            callbacks: {
+              label: function(tooltipItems, data) {
+                  return data.datasets[tooltipItems.datasetIndex].labels;
+              }
+            }
+          }
+        }
+    });
+
+
+
+    /*************** Event listener boton *********************** */
+
+    let button = document.getElementById("buttonData");
+    button.addEventListener("click", () => {
+        generateData();
+    });
+};
+
+
 /******************** Character window ********************/
 let elementDivPokeballImage = document.getElementById("divPokeballImage");
 let elementPokeballImage = document.getElementById("pokeballImage");
@@ -854,7 +1025,7 @@ const characterWindowTemplate  = `
     </div>`;
 
     characterDynamicDiv.innerHTML = characterWindowTemplate;
-    characterTitleName = document.getElementById("characterPokemonName").innerHTML; //1988
+    characterTitleName = document.getElementById("characterPokemonName").innerHTML;
                 
 /****************************************************************************************/
     showPromptWindow(4);
