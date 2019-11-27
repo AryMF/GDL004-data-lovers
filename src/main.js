@@ -219,6 +219,7 @@ const printPokemonCards = dataArray => {
   let typeImageExtension = ".svg";
   let colorByType;
   let pokemonName;
+  let orderArray = [];
  
   pokemonContainerElement.innerHTML = "";
   
@@ -258,28 +259,29 @@ const printPokemonCards = dataArray => {
       </div>
     </div>`;
 
+
+    orderArray.push(element.name);
     concatTemplateElements = concatTemplateElements + pokemonCardsTemplate;
   }); 
 
   pokemonContainerElement.innerHTML = concatTemplateElements;
 
   let backCards = document.getElementsByClassName("divPokemonCardFaceClass--back");
+
   for(let i=0; i< backCards.length;i++){
     backCards[i].addEventListener("click", function() {
-      characterWindowPrint(dataPokemon[i].name.toUpperCase());
+      characterWindowPrint(orderArray[i].toUpperCase());
     });
   }
 
   let frontCards = document.getElementsByClassName("divPokemonCardFaceClass--front");
-  for(let i=0; i< frontCards.length;i++){
+  for(let i=0; i< frontCards.length; i++){
     frontCards[i].addEventListener("keyup", function(e) {
       if (e.keyCode === 13) {
-        characterWindowPrint(dataPokemon[i].name.toUpperCase());
+        characterWindowPrint(orderArray[i].toUpperCase());
       }
     });
-  }
-
-  
+  }  
 
 };
 
@@ -723,12 +725,21 @@ let elementStarFavImage = document.getElementById("starFavImage");
 let characterImageElement = document.getElementById("characterImage");
 
 const characterWindowPrint = pokemonName => {
+  console.log("Nombre enviado", pokemonName);
   //Preparar data del pokemon elegido
   let searchPokemon = window.data.filteredByNameOrNumber(
     dataPokemon,
     pokemonName
   );
-  let characterData = searchPokemon[0];
+  let characterData; //Fix para Mew
+  if(searchPokemon.length > 1){
+    characterData = searchPokemon[1];
+  }else {
+    characterData = searchPokemon[0];
+  }
+
+  // let characterData = searchPokemon[0];
+  console.log("Respuesta search", characterData);
   let pokemonCookiesArray = loadFavorites();
 
   // Configuración de botón de favoritos
