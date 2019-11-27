@@ -883,7 +883,14 @@ const characterWindowPrint = (pokemonName) =>{
 
     //Preparar data del pokemon elegido
     let searchPokemon = window.data.filteredByNameOrNumber(dataPokemon, pokemonName);
-    let characterData = searchPokemon[0];
+
+    let characterData; //Fix para Mew
+    if(searchPokemon.length > 1){
+        characterData = searchPokemon[1];
+    }else {
+        characterData = searchPokemon[0];
+    }
+
     let pokemonCookiesArray = loadFavorites();
 
     // Configuración de botón de favoritos
@@ -1027,102 +1034,6 @@ const characterWindowTemplate  = `
                 
 /****************************************************************************************/
     showPromptWindow(4);
-};
-
-  let characterAdditionalData = document.createElement("DIV");
-  characterAdditionalData.classList.add("rowAlignmentClass");
-  characterDynamicDiv.appendChild(characterAdditionalData);
-
-  let characterInfoDiv = document.createElement("DIV");
-  characterInfoDiv.classList.add("columnAlignmentClass");
-  characterAdditionalData.appendChild(characterInfoDiv);
-
-  let characterInfoTitle = document.createElement("P");
-  characterInfoTitle.innerHTML = "Info";
-  characterInfoTitle.classList.add("textFormatSmall");
-  characterInfoDiv.appendChild(characterInfoTitle);
-
-  let characterInfoBox = document.createElement("P");
-  characterInfoBox.innerHTML = "place-holder text";
-  characterInfoBox.classList.add("textFormatMedium");
-  characterInfoDiv.appendChild(characterInfoBox);
-
-  let characterEvolutionDiv = document.createElement("DIV");
-  characterEvolutionDiv.classList.add("columnAlignmentClass");
-  characterAdditionalData.appendChild(characterEvolutionDiv);
-
-  let characterEvolutionTitle = document.createElement("P");
-  characterEvolutionTitle.innerHTML = "Evolution path";
-  characterEvolutionTitle.classList.add("textFormatSmall");
-  characterEvolutionDiv.appendChild(characterEvolutionTitle);
-
-  let characterEvolutionPathContainer = document.createElement("DIV");
-  characterEvolutionPathContainer.classList.add("rowAlignmentClass");
-  characterEvolutionDiv.appendChild(characterEvolutionPathContainer);
-
-  /*** Evolution path ******/
-  /** Concatenar arreglos de prev_evolution, pokemon actual y next_evolution */
-  let evolutionPathArray = [];
-
-  if ("prev_evolution" in characterData) {
-    evolutionPathArray = evolutionPathArray.concat(
-      characterData.prev_evolution.map(elementArray => {
-        let found = dataPokemon.filter(element => {
-          return element.name === elementArray.name;
-        });
-        return { name: elementArray.name, img: found ? found[0].img : "" };
-      })
-    );
-  }
-
-  evolutionPathArray = evolutionPathArray.concat([
-    {
-      name: characterData.name,
-      img: characterData.img
-    }
-  ]);
-
-  if ("next_evolution" in characterData) {
-    evolutionPathArray = evolutionPathArray.concat(
-      characterData.next_evolution.map(elementArray => {
-        let found = dataPokemon.filter(element => {
-          return element.name === elementArray.name;
-        });
-        return { name: elementArray.name, img: found ? found[0].img : "" };
-      })
-    );
-  }
-  console.log("Result:", evolutionPathArray);
-
-  for (let j = 0; j < evolutionPathArray.length; j++) {
-    let characterEvolutionBox = document.createElement("DIV");
-    characterEvolutionBox.classList.add("columnAlignmentClass");
-    characterEvolutionPathContainer.appendChild(characterEvolutionBox);
-
-    let characterEvolutionIMG = document.createElement("IMG");
-    characterEvolutionIMG.setAttribute("src", evolutionPathArray[j].img);
-    characterEvolutionIMG.classList.add("weaknessImgClass");
-    characterEvolutionBox.appendChild(characterEvolutionIMG);
-
-    let characterEvolutionName = document.createElement("P");
-    characterEvolutionName.innerHTML = evolutionPathArray[j].name;
-    characterEvolutionName.classList.add("textFormatSmall");
-    characterEvolutionBox.appendChild(characterEvolutionName);
-    if (j < evolutionPathArray.length - 1) {
-      let characterEvolutionArrowBox = document.createElement("DIV");
-      characterEvolutionArrowBox.classList.add("columnAlignmentClass");
-      characterEvolutionArrowBox.classList.add("evolutionPathArrow");
-      characterEvolutionPathContainer.appendChild(characterEvolutionArrowBox);
-
-      let characterEvolutionArrow = document.createElement("P");
-      characterEvolutionArrow.innerHTML = "=>";
-      characterEvolutionArrow.classList.add("textFormatSmall");
-      characterEvolutionArrowBox.appendChild(characterEvolutionArrow);
-    }
-  }
-
-  /****************************************************************************************/
-  showPromptWindow(4);
 };
 
 const catchItAnimation = (status, animation) => {
