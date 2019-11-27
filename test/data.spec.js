@@ -75,7 +75,6 @@ describe("data", () => {
     it("Data debería ser un object", () => {
         expect(typeof data).toBe("object");
     })
-
     describe("data.filteredByNameOrNumber", () => {
         it("filteredByNameOrNumber debería ser una función", () => {
             expect(typeof data.filteredByNameOrNumber).toBe("function");
@@ -138,6 +137,4 @@ describe("data", () => {
           .toHaveProperty('name', "Squirtle");
       });
   });
-
-
 });

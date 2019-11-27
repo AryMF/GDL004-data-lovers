@@ -1,12 +1,3 @@
-/* Manejo de data */
-
-// esta es una función de ejemplo
-
-// econditionport const example = () => {
-//   return 'example';
-// };
-
-
 window.data =  {
   filteredByNameOrNumber: function(data, condition){
     let filterJSON = [];
@@ -34,8 +25,6 @@ window.data =  {
     });
     return filterJSON;
   },
-
- 
 
   sortDataResultAsc: function(data, condition) {
     let sortedResultAsc = [];

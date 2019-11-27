@@ -7,6 +7,7 @@ let filterJSON = [];
 let pokemonContainerElement = document.getElementById("pokemonContainer");
 let homeButtonElement = document.getElementById("homeButton");
 let toggleFavElement = document.getElementById("toggleFav");
+let chartsContainerElement = document.getElementById("chartsContainer");
 /***********Popup windows (Search, FilterBy, SortBy) *********************/
 let promptContainerElement = document.getElementById("promptContainer");
 let searchByPromptElement = document.getElementById("searchByPrompt");
@@ -19,7 +20,7 @@ let buttonCloseNode = document.getElementsByClassName("buttonCloseClass");
 /***********Popup windows Character *********************/
 let characterWindowElement = document.getElementById("characterWindow");
 let characterDynamicDiv = document.getElementById("characterDynamicContent");
-let characterTitleName = document.createElement("P");
+let characterTitleName = "";
 
 const typeArray = [
   {
@@ -154,7 +155,7 @@ const main = () => {
 window.addEventListener("load", main);
 
 /********** Animación de intro ******************************/
-/*
+
 let loadingImageDiv = document.getElementById("divLoading");
 let mainScreenDiv = document.getElementById("mainScreen");
 let floatingMenu = document.getElementById("floatingMenuDIV");
@@ -169,7 +170,7 @@ let ripple_wrap = document.getElementById('ripple-wrap');
 let rippler = document.getElementById('ripple');
 let finish = false;
 let soundControl = document.getElementById("soundControl");
-
+/*
 loadingImage.addEventListener("click", () => {
     let time = 1;
     let i = 1;
@@ -282,7 +283,6 @@ const printPokemonCards = dataArray => {
       }
     });
   }  
-
 };
 
 /******************** Short cut Event listener ********************/
@@ -396,20 +396,16 @@ document.getElementById("searchPromptButton").addEventListener("click", () => {
 });
 
 document.getElementById("searchPromptInput").addEventListener("input", () => {
-  searchPromptInputElement.value = searchPromptInputElement.value.replace(
-    " ",
-    ""
-  );
-  searchPromptInputElement.value = searchPromptInputElement.value.toUpperCase();
-  if (searchPromptInputElement.value != "") {
-    filterJSON = window.data.filteredByNameOrNumber(
-      dataPokemon,
-      searchPromptInputElement.value
-    );
-    printPokemonCards(filterJSON);
-  } else {
-    printPokemonCards(dataPokemon);
-  }
+    searchPromptInputElement.value = searchPromptInputElement.value.replace(" ", "");
+    searchPromptInputElement.value = searchPromptInputElement.value.toUpperCase();
+    /*** Regresar al principio de la pagina ***/
+    document.documentElement.scrollTop = 0;
+    if(searchPromptInputElement.value != ""){
+        filterJSON = window.data.filteredByNameOrNumber(dataPokemon, searchPromptInputElement.value);
+        printPokemonCards(filterJSON);
+    }else {
+        printPokemonCards(dataPokemon);
+    }
 });
 
 document
@@ -420,19 +416,16 @@ document
     }
   });
 
-const searchByInput = () => {
-  if (searchPromptInputElement.value != "") {
-    filterJSON = window.data.filteredByNameOrNumber(
-      dataPokemon,
-      searchPromptInputElement.value
-    );
-    filterJSON == ""
-      ? printPokemonCards(dataPokemon)
-      : printPokemonCards(filterJSON);
-    hiddenPromptWindow();
-  } else {
-    printPokemonCards(dataPokemon);
-  }
+const searchByInput = () =>{
+    /*** Regresar al principio de la pagina ***/
+    document.documentElement.scrollTop = 0;
+    if(searchPromptInputElement.value != ""){
+        filterJSON = window.data.filteredByNameOrNumber(dataPokemon, searchPromptInputElement.value);
+        filterJSON == "" ? printPokemonCards(dataPokemon): printPokemonCards(filterJSON);
+        hiddenPromptWindow();
+    }else {
+        printPokemonCards(dataPokemon);
+    }
 };
 
 /************************  Filter modal  *********************************/
@@ -454,40 +447,37 @@ document.addEventListener("keyup", function(event) {
 });
 
 const filterPromptCreator = () => {
-  closeFloatingMenu();
-  for (let i = 0; i < 15; i++) {
-    let buttonElement = document.createElement("BUTTON");
-    buttonElement.classList.add("filterByTypeButton");
-    buttonElement.value = typeArray[i].type;
-    buttonElement.innerHTML = typeArray[i].type;
-    buttonElement.id = typeArray[i].type;
-    buttonElement.style.backgroundColor = typeArray[i].color;
-    buttonElement.tabIndex = 0;
-    buttonElement.focus();
-    buttonElement.addEventListener("click", function() {
-      filterJSON = window.data.filteredByType(dataPokemon, buttonElement.value);
-      filterJSON == ""
-        ? printPokemonCards(dataPokemon)
-        : printPokemonCards(filterJSON);
-      hiddenPromptWindow();
-    });
-    buttonElement.addEventListener("keyup", function(e) {
-      if (e.keyCode === 13) {
-        filterJSON = window.data.filteredByType(
-          dataPokemon,
-          buttonElement.value
-        );
-        filterJSON == ""
-          ? printPokemonCards(dataPokemon)
-          : printPokemonCards(filterJSON);
-        hiddenPromptWindow();
-      }
-    });
-    typeButtonsDiv.appendChild(buttonElement);
-  }
-  filterByPromptElement.style.WebkitAnimationPlayState = "running";
-  showPromptWindow(2);
-  document.getElementById("Normal").focus();
+    closeFloatingMenu();
+    for(let i=0; i<15; i++){
+        let buttonElement = document.createElement("BUTTON");
+        buttonElement.classList.add("filterByTypeButton");
+        buttonElement.value = typeArray[i].type;
+        buttonElement.innerHTML = typeArray[i].type;
+        buttonElement.id =  typeArray[i].type;
+        buttonElement.style.backgroundColor = typeArray[i].color;
+        buttonElement.tabIndex = 0;
+        buttonElement.focus();
+        buttonElement.addEventListener("click", function() {
+            /*** Regresar al principio de la pagina ***/
+            document.documentElement.scrollTop = 0;
+            filterJSON = window.data.filteredByType(dataPokemon, buttonElement.value);
+            filterJSON == "" ? printPokemonCards(dataPokemon): printPokemonCards(filterJSON);
+            hiddenPromptWindow();
+        });
+        buttonElement.addEventListener('keyup',function(e){
+            if (e.keyCode === 13) {
+                /*** Regresar al principio de la pagina ***/
+                document.documentElement.scrollTop = 0;
+                filterJSON = window.data.filteredByType(dataPokemon, buttonElement.value);
+                filterJSON == "" ? printPokemonCards(dataPokemon): printPokemonCards(filterJSON);
+                hiddenPromptWindow();
+            }
+        });
+        typeButtonsDiv.appendChild(buttonElement);
+    }
+    filterByPromptElement.style.WebkitAnimationPlayState = "running";
+    showPromptWindow(2);
+    document.getElementById("Normal").focus();
 };
 
 /************************  Sort by modal  *********************************/
@@ -510,45 +500,43 @@ document.addEventListener("keyup", function(event) {
 
 const sortByPromptCreator = () => {
   let sortByJSON;
-  let buttonIsPair;
-
+  closeFloatingMenu();
   for (let i = 0; i < sortByOptions.length; i++) {
-    buttonIsPair = i % 2;
     let buttonElement = document.createElement("BUTTON");
     buttonElement.classList.add("filterByTypeButton");
-    // buttonElement.value = sortByArray[i];
-    // buttonElement.innerHTML = sortByArray[i];
-    buttonElement.value = sortByOptions[i].buttonText;
+    buttonElement.id =  sortByOptions[i].buttonText;
     buttonElement.innerHTML = sortByOptions[i].buttonText;
     buttonElement.style.backgroundColor = typeArray[i].color;
+    buttonElement.tabIndex = 0;
+    buttonElement.focus();
     buttonElement.addEventListener("click", function() {
-      if (filterJSON != "") {
+        /*** Regresar al principio de la pagina ***/
+        document.documentElement.scrollTop = 0;
+        if (filterJSON != "") {
         if (i == 0 || i == 2 || i == 4 || i == 6) {
-          sortByJSON = window.data.sortDataResultDesc(
+            sortByJSON = window.data.sortDataResultDesc(
             filterJSON,
-            // sortArrayConditions[i]
             sortByOptions[i].buttonArgument
-          );
+            );
         } else {
-          sortByJSON = window.data.sortDataResultAsc(
+            sortByJSON = window.data.sortDataResultAsc(
             filterJSON,
             sortByOptions[i].buttonArgument
-          );
+            );
         }
-      } else {
-        if (i == 0 || i == 2 || i == 4 || i == 6) {
-          sortByJSON = window.data.sortDataResultDesc(
-            dataPokemon,
-            sortByOptions[i].buttonArgument
-          );
         } else {
-          sortByJSON = window.data.sortDataResultAsc(
+        if (i == 0 || i == 2 || i == 4 || i == 6) {
+            sortByJSON = window.data.sortDataResultDesc(
             dataPokemon,
             sortByOptions[i].buttonArgument
-          );
+            );
+        } else {
+            sortByJSON = window.data.sortDataResultAsc(
+            dataPokemon,
+            sortByOptions[i].buttonArgument
+            );
         }
       }
-      // sortByJSON == "" ? printPokemonCards(dataPokemon) : printPokemonCards(sortByJSON);
       printPokemonCards(sortByJSON);
       hiddenPromptWindow();
     });
@@ -556,6 +544,7 @@ const sortByPromptCreator = () => {
   }
   sortByPromptElement.style.WebkitAnimationPlayState = "running";
   showPromptWindow(1);
+  document.getElementById("A-Z").focus();
 };
 
 /*********************Home button*********************/
@@ -577,29 +566,24 @@ checkedHomeButtonElement.addEventListener("change", () => {
 });*/
 
 /*************************  Modal manager  *********************************/
-const showPromptWindow = option => {
-  /*** Regresar al principio de la pagina ***/
-  document.body.scrollTop = 0;
-  document.documentElement.scrollTop = 0;
-  /**************************************************/
-  promptContainerElement.style.visibility = "visible";
-
-  switch (option) {
-    case 1:
-      sortByPromptElement.style.visibility = "visible";
-      break;
-    case 2:
-      filterByPromptElement.style.visibility = "visible";
-      break;
-    case 3:
-      searchByPromptElement.style.visibility = "visible";
-      break;
-    case 4:
-      characterWindowElement.style.visibility = "visible";
-      break;
-    default:
-      break;
-  }
+const showPromptWindow = (option) => {
+    promptContainerElement.style.visibility = "visible";
+    switch(option){
+        case 1:
+            sortByPromptElement.style.visibility = "visible";
+        break;
+        case 2:
+            filterByPromptElement.style.visibility = "visible";
+        break;
+        case 3:
+            searchByPromptElement.style.visibility = "visible";
+        break;
+        case 4:
+            characterWindowElement.style.visibility = "visible";
+        break;
+        default:
+        break;
+    }
 };
 
 /************************  Close modal  *********************************/
@@ -664,23 +648,19 @@ const loadFavorites = () => {
   return pokemonCookiesArray;
 };
 
-const createFavoriteCookie = pokemonId => {
-  let pokemonCookiesArray = loadFavorites();
-  pokemonCookiesArray.push(pokemonId);
-  document.cookie =
-    "favoritePokemon=" +
-    pokemonCookiesArray.join(" ") +
-    "; expires =Mo, 18 Jan 2038 12:00:00 UTC";
+const createFavoriteCookie = (pokemonName) => {
+    let pokemonCookiesArray = loadFavorites();
+    pokemonCookiesArray.push(pokemonName);
+    document.cookie = "favoritePokemon=" + pokemonCookiesArray.join(" ") + "; expires =Mo, 18 Jan 2038 12:00:00 UTC";
+    console.log("createFavorite: " + document.cookie);
 };
 
-const deleteFavorite = pokemonId => {
-  let pokemonCookiesArray = loadFavorites();
-  let index = pokemonCookiesArray.indexOf(pokemonId);
+const deleteFavorite = (pokemonName) => {
+    let pokemonCookiesArray = loadFavorites();
+    let index = pokemonCookiesArray.indexOf(pokemonName);
 
-  index > -1
-    ? pokemonCookiesArray.splice(index, 1)
-    : console.error("No existe ese id en favoritos");
-  document.cookie = "favoritePokemon=" + pokemonCookiesArray.join(" ");
+    index > -1 ? pokemonCookiesArray.splice(index, 1) : console.error("No existe ese id en favoritos");
+    document.cookie = "favoritePokemon=" + pokemonCookiesArray.join(" ");
 };
 
 const showFavorites = () => {
@@ -716,6 +696,176 @@ const showFavorites = () => {
   }
 };
 
+/************************** Charts window **************************/
+document.getElementById("chartButton").addEventListener("click", () => {
+    pokemonContainerElement.innerHTML = "";
+    pokemonContainerElement.style.visibility = "hidden";
+    chartsContainerElement.style.visibility = "visible";
+    floatingMenu.style.visibility = "hidden";
+    chartsWindowPrint();
+});
+
+const generateData = () =>{
+    console.log("*** Data ***");
+
+    
+};
+
+const chartsWindowPrint = () => {
+    const chartWindowTemplate = `
+        <h1>Charts</h1>
+        <div class="chartDynamicContent">
+            <canvas id="weightNHeight" width="200px" height="150px" style="border:1px solid #000000;">
+            </canvas>
+            <canvas id="line-chart" width="200px" height="150px" style="border:1px solid #000000;">
+            </canvas>
+            <canvas id="polar-chart" width="200px" height="150px" style="border:1px solid #000000;">
+            </canvas>
+            <button id="buttonData"> Data </button>
+        </div>
+    `;
+
+    chartsContainerElement.innerHTML = chartWindowTemplate;
+
+    
+    let ctx = document.getElementById('weightNHeight').getContext('2d');
+
+    let data = {
+    labels: ['20-30', "10-20", "0-10"],
+    datasets: [{
+        label: "Male",
+        backgroundColor: "rgba(54, 162, 235, 0.2)",
+        borderColor: "rgb(54, 162, 235)",
+        borderWidth: 2,
+        data: [-65, -59, -20],
+        }, {
+        label: "Female",
+        backgroundColor: "rgba(255,99,132,0.2)",
+        borderColor: "rgba(255,99,132,1)",
+        borderWidth: 2,
+        data: [72, 45, 18],
+        },
+
+    ]
+    };
+
+    let myBarChart = new Chart(ctx, {
+        type: 'bar',
+        data: data,
+        options: {
+          scales: {
+            yAxes: [{
+              stacked: false
+            }],
+            xAxes: [{
+                ticks: {
+                   callback: function(value, index, values) {
+                    return Math.abs(value);
+                }
+              }
+            }]
+          },
+          tooltips: {
+            callbacks: {
+              label: function(tooltipItems, data) {
+                  return data.datasets[tooltipItems.datasetIndex].label  + ": " +  Math.abs(tooltipItems.xLabel);
+              }
+            }
+          }
+        }
+    });
+
+    // Our labels along the x-axis
+    var years = [1500,1600,1700,1750,1800,1850,1900,1950,1999,2050];
+    // For drawing the lines
+    var africa = [86,114,106,106,107,111,133,221,783,2478];
+    var asia = [282,350,411,502,635,809,947,1402,3700,5267];
+    var europe = [168,170,178,190,203,276,408,547,675,734];
+    var latinAmerica = [40,20,10,16,24,38,74,167,508,784];
+    var northAmerica = [6,3,2,2,7,26,82,172,312,433];
+
+    /** */
+    var ctx2 = document.getElementById("line-chart");
+
+    var myChart = new Chart(ctx2, {
+    type: 'line',
+    data: {
+        labels: years,
+        datasets: [
+            { 
+                data: africa,
+                label: "Africa",
+                borderColor: "#3e95cd",
+                fill: false
+              },
+              { 
+                data: asia,
+                label: "Asia",
+                borderColor: "#3e95cd",
+                fill: false
+              },
+              { 
+                data: europe,
+                label: "Europe",
+                borderColor: "#3e95cd",
+                fill: false
+              },
+              { 
+                data: latinAmerica,
+                label: "Latin America",
+                borderColor: "#3e95cd",
+                fill: false
+              },
+              { 
+                data: northAmerica,
+                label: "North America",
+                borderColor: "#3e95cd",
+                fill: false
+              }
+        ]
+        
+    }
+    });
+
+    /*** */
+    new Chart(document.getElementById("polar-chart"), {
+        type: 'polarArea',
+        data: {
+          labels: ["Africa", "Asia", "Europe", "Latin America", "North America"],
+          datasets: [
+            {
+              label: "Population (millions)",
+              backgroundColor: ["#3e95cd", "#8e5ea2","#3cba9f","#e8c3b9","#c45850"],
+              data: [2478,5267,734,784,433]
+            }
+          ]
+        },
+        options: {
+          title: {
+            display: true,
+            text: 'Predicted world population (millions) in 2050'
+          },
+          tooltips: {
+            callbacks: {
+              label: function(tooltipItems, data) {
+                  return data.datasets[tooltipItems.datasetIndex].labels;
+              }
+            }
+          }
+        }
+    });
+
+
+
+    /*************** Event listener boton *********************** */
+
+    let button = document.getElementById("buttonData");
+    button.addEventListener("click", () => {
+        generateData();
+    });
+};
+
+
 /******************** Character window ********************/
 let elementDivPokeballImage = document.getElementById("divPokeballImage");
 let elementPokeballImage = document.getElementById("pokeballImage");
@@ -724,203 +874,160 @@ let elementStarFavImage = document.getElementById("starFavImage");
 
 let characterImageElement = document.getElementById("characterImage");
 
-const characterWindowPrint = pokemonName => {
-  console.log("Nombre enviado", pokemonName);
-  //Preparar data del pokemon elegido
-  let searchPokemon = window.data.filteredByNameOrNumber(
-    dataPokemon,
-    pokemonName
-  );
-  let characterData; //Fix para Mew
-  if(searchPokemon.length > 1){
-    characterData = searchPokemon[1];
-  }else {
-    characterData = searchPokemon[0];
-  }
+const characterWindowPrint = (pokemonName) =>{
+    characterTitleName = ""; //Asegurar que este vació
+    let evolutionPathArrowTemplate = `<div class="columnAlignmentClass evolutionPathArrow">
+        <p class="textFormatSmall">=&gt;</p>
+        </div>`; //Template necesario
+    let evolutionPathIndex = 0; // Variable necesaria 
 
-  // let characterData = searchPokemon[0];
-  console.log("Respuesta search", characterData);
-  let pokemonCookiesArray = loadFavorites();
+    //Preparar data del pokemon elegido
+    let searchPokemon = window.data.filteredByNameOrNumber(dataPokemon, pokemonName);
+    let characterData = searchPokemon[0];
+    let pokemonCookiesArray = loadFavorites();
 
-  // Configuración de botón de favoritos
-  if (pokemonCookiesArray.indexOf(pokemonName) != -1) {
-    catchItAnimation(1, 0); /*el pokemon esta en favoritos*/
-  } else {
-    catchItAnimation(2, 0);
-  }
-
-  // Color de ventana
-  let i = 0;
-  for (i; i < typeArray.length; i++) {
-    if (characterData.type[0] == typeArray[i].type) {
-      break;
+    // Configuración de botón de favoritos
+    if(pokemonCookiesArray.indexOf(pokemonName) != -1){
+        catchItAnimation(1, 0); /*el pokemon esta en favoritos*/
+    }else {
+        catchItAnimation(2, 0);
     }
-  }
-  //characterWindowElement.setAttribute("style", "background-color: " + typeArray[i].color);
-  characterWindowElement.setAttribute(
-    "style",
-    "border-color: " + typeArray[i].color
-  );
 
-  //Carga la imagen del pokemon
-  let cuteImageSRC = "https://pokeres.bastionbot.org/images/pokemon/";
-  let cuteImageExt = ".png";
-  characterImageElement.setAttribute(
-    "src",
-    cuteImageSRC + characterData.id + cuteImageExt
-  ); // Si la comentas sale la imagen linda
-  // characterDynamicDiv
-  /****************************************************************************************/
-  let characterTitle = document.createElement("DIV");
-  /*let templateString = `<div class="columnAlignmentClass" style="color:#${typeArray[i].color}"></div>`;
-    mimimi.innerHTML = templateString;*/
-  characterTitle.classList.add("columnAlignmentClass");
-  characterDynamicDiv.appendChild(characterTitle);
-  // characterTitleName -- Global
-  characterTitleName.classList.add("textFormatBig");
-  characterTitleName.setAttribute("style", "color: " + typeArray[i].color);
-  characterTitleName.innerHTML = characterData.name;
-  characterTitle.appendChild(characterTitleName);
-  let characterTitleNumber = document.createElement("P");
-  characterTitleNumber.innerHTML = characterData.num;
-  characterTitleNumber.classList.add("characterTitleNumberClass");
-  characterTitle.appendChild(characterTitleNumber);
+    // Color de ventana
+    let colorByType;
+    for(let i = 0 ; i < typeArray.length;i++){
+        if(characterData.type[0] == typeArray[i].type){
+            colorByType = typeArray[i].color;
+            break;
+        }
+    }
 
-  /****************************************************************************************/
-  let characterGeneralData = document.createElement("DIV");
-  characterGeneralData.classList.add("rowAlignmentClass");
-  characterGeneralData.classList.add("bottomBorderClass");
-  characterGeneralData.setAttribute(
-    "style",
-    "border-color: " + typeArray[i].color
-  );
-  characterDynamicDiv.appendChild(characterGeneralData);
+    /*** Evolution path ******/
+    /** Concatenar arreglos de prev_evolution, pokemon actual y next_evolution */
+    let evolutionPathArray = [];
 
-  let characterTypeDiv = document.createElement("DIV");
-  characterTypeDiv.classList.add("columnAlignmentClass");
-  characterGeneralData.appendChild(characterTypeDiv);
+    if("prev_evolution" in characterData){
+        evolutionPathArray = evolutionPathArray.concat(characterData.prev_evolution
+            .map((elementArray) => {
+            let found = dataPokemon.filter((element) => {
+                return element.name === elementArray.name;
+            });
+            return { "name": elementArray.name, "img": found ? found[0].img : ''};
+        }));
+    }
+    
+    evolutionPathArray = evolutionPathArray.concat([{
+        "name": characterData.name,
+        "img": characterData.img
+    }]);
 
-  let characterTypeNumber = document.createElement("P");
-  characterTypeNumber.innerHTML = characterData.type.join(" ");
-  characterTypeNumber.classList.add("textFormatMedium");
-  characterTypeDiv.appendChild(characterTypeNumber);
+    if("next_evolution" in characterData){
+        evolutionPathArray = evolutionPathArray.concat(characterData.next_evolution
+            .map((elementArray) => {
+            let found = dataPokemon.filter((element) => {
+                return element.name === elementArray.name;
+            });
+            return { "name": elementArray.name, "img": found ? found[0].img : ''};
+        }));
+    }          
+    /***** Fin de concatenación */
+    
 
-  let characterTypeTitle = document.createElement("P");
-  characterTypeTitle.innerHTML = "Type";
-  characterTypeTitle.classList.add("textFormatSmall");
-  characterTypeDiv.appendChild(characterTypeTitle);
+    characterWindowElement.setAttribute("style", "border-color: " + colorByType);
 
-  let characterWeightDiv = document.createElement("DIV");
-  characterWeightDiv.classList.add("columnAlignmentClass");
-  characterGeneralData.appendChild(characterWeightDiv);
+    //Carga la imagen del pokemon 
+    let cuteImageSRC = "https://pokeres.bastionbot.org/images/pokemon/";
+    let cuteImageExt = ".png";
+    characterImageElement.setAttribute("src", cuteImageSRC + characterData.id + cuteImageExt); // Si la comentas sale la imagen linda
 
-  let characterWeightNumber = document.createElement("P");
-  characterWeightNumber.innerHTML = characterData.weight;
-  characterWeightNumber.classList.add("textFormatMedium");
-  characterWeightDiv.appendChild(characterWeightNumber);
+// characterDynamicDiv
+/****************************************************************************************/
+const characterWindowTemplate  = `
+    <!-- Contenido dinámico -->
+    <!-- **************************************************************************************** -->
+    <div class="columnAlignmentClass">
+        <p id="characterPokemonName" class="textFormatBig" style= ${"color:" + colorByType}> ${characterData.name}</p>
+        <p class="characterTitleNumberClass">${characterData.num}</p>
+    </div>
+    <!-- **************************************************************************************** -->
+    <div class="rowAlignmentClass bottomBorderClass" style=${"border-color:" + colorByType}>
+        <div class="columnAlignmentClass">
+            <p class="textFormatMedium">${characterData.type.join(" ")}</p>
+            <p class="textFormatSmall">Type</p>
+        </div>
+        <div class="columnAlignmentClass">
+            <p class="textFormatMedium">${characterData.weight}</p>
+            <p class="textFormatSmall">Weight</p>
+        </div>
+        <div class="columnAlignmentClass">
+            <p class="textFormatMedium">${characterData.height}</p>
+            <p class="textFormatSmall">Height</p>
+        </div>
+    </div>
+    <!-- **************************************************************************************** -->
+    <div class="rowAlignmentClass bottomBorderClass" style=${"border-color:" + colorByType}>
+        <div class="columnAlignmentClass rightBorderClass" style=${"border-color:" + colorByType}>
+            <p class="textFormatMedium">${characterData.candy}</p>
+            <p class="textFormatSmall">Candy</p>
+        </div>
+        <div class="columnAlignmentClass">
+            ${"candy_count" in characterData ? '<p class="textFormatMedium">' + characterData.candy_count + '</p>'
+                : '<p class="textFormatMedium"> - </p>'
+            }
+            <p class="textFormatSmall">Candy Count</p>
+        </div>
+    </div>
+    <!-- **************************************************************************************** -->
+    <div class="columnAlignmentClass">
+        <div class="columnAlignmentClass">
+            <p class="textFormatSmall">Weakness</p>
+            <div class="rowAlignmentClass">
+                ${characterData.weaknesses.map((element) => {
+                    return '<div class="characterWeaknessTypeContainer">' +
+                        '<img class="weaknessImgClass"src="image/types/'+ element + '.svg"> ' +
+                        ' <p class="weaknessTextFormat">' + element + '</p> </div>'
+                }).join("")}
+            </div>
+        </div>
+    </div>
+    <!-- **************************************************************************************** -->
+    <div class="rowAlignmentClass">
+        <div class="columnAlignmentClass">
+            <p class="textFormatSmall">Info</p>
+            <p class="textFormatMedium">place-holder text</p>
+        </div>
+        <div class="columnAlignmentClass">
+            <p class="textFormatSmall">Evolution path</p>
+            <div class="rowAlignmentClass">
+                <!-- /******* Map ****** -->
+                <div class="rowAlignmentClass">
+                    ${
+                        evolutionPathArray.map((element) => {
+                            if(evolutionPathIndex < (evolutionPathArray.length -1)){
+                                evolutionPathIndex++;
+                                return '<div class="columnAlignmentClass">' +
+                                '<img class="weaknessImgClass" src=' + element.img + '>' +
+                                '<p class="textFormatSmall">' + element.name + '</p>' +
+                                '</div>' + evolutionPathArrowTemplate
+                            }else {
+                                return '<div class="columnAlignmentClass">' +
+                                '<img class="weaknessImgClass" src=' + element.img + '>' +
+                                '<p class="textFormatSmall">' + element.name + '</p>' +
+                            '</div>'
+                            }
+                        }).join("")
+                    }
+                <!-- /******* Fin map *****/ -->
+            </div>
+        </div>
+    </div>`;
 
-  let characterWeightTitle = document.createElement("P");
-  characterWeightTitle.innerHTML = "Weight";
-  characterWeightTitle.classList.add("textFormatSmall");
-  characterWeightDiv.appendChild(characterWeightTitle);
-
-  let characterHeightDiv = document.createElement("DIV");
-  characterHeightDiv.classList.add("columnAlignmentClass");
-  characterGeneralData.appendChild(characterHeightDiv);
-
-  let characterHeightNumber = document.createElement("P");
-  characterHeightNumber.innerHTML = characterData.height;
-  characterHeightNumber.classList.add("textFormatMedium");
-  characterHeightDiv.appendChild(characterHeightNumber);
-
-  let characterHeightTitle = document.createElement("P");
-  characterHeightTitle.innerHTML = "Height";
-  characterHeightTitle.classList.add("textFormatSmall");
-  characterHeightDiv.appendChild(characterHeightTitle);
-
-  /****************************************************************************************/
-  let characterCandyData = document.createElement("DIV");
-  characterCandyData.classList.add("rowAlignmentClass");
-  characterCandyData.classList.add("bottomBorderClass");
-  characterCandyData.setAttribute(
-    "style",
-    "border-color: " + typeArray[i].color
-  );
-  characterDynamicDiv.appendChild(characterCandyData);
-
-  let characterCandyDiv = document.createElement("DIV");
-  characterCandyDiv.classList.add("columnAlignmentClass");
-  characterCandyDiv.classList.add("rightBorderClass");
-  characterCandyDiv.setAttribute(
-    "style",
-    "border-color: " + typeArray[i].color
-  );
-  characterCandyData.appendChild(characterCandyDiv);
-
-  let characterCandyType = document.createElement("P");
-  characterCandyType.innerHTML = characterData.candy;
-  characterCandyType.classList.add("textFormatMedium");
-  characterCandyDiv.appendChild(characterCandyType);
-
-  let characterCandyTitle = document.createElement("P");
-  characterCandyTitle.innerHTML = "Candy";
-  characterCandyTitle.classList.add("textFormatSmall");
-  characterCandyDiv.appendChild(characterCandyTitle);
-
-  let characterCandyCountDiv = document.createElement("DIV");
-  characterCandyCountDiv.classList.add("columnAlignmentClass");
-  characterCandyData.appendChild(characterCandyCountDiv);
-  let characterCandyCountNumber = document.createElement("P");
-  if ("candy_count" in characterData) {
-    characterCandyCountNumber.innerHTML = characterData.candy_count;
-  } else {
-    characterCandyCountNumber.innerHTML = " - ";
-  }
-  characterCandyCountNumber.classList.add("textFormatMedium");
-  characterCandyCountDiv.appendChild(characterCandyCountNumber);
-
-  let characterCandyCountTitle = document.createElement("P");
-  characterCandyCountTitle.innerHTML = "Candy Count";
-  characterCandyCountTitle.classList.add("textFormatSmall");
-  characterCandyCountDiv.appendChild(characterCandyCountTitle);
-
-  /****************************************************************************************/
-  let additionalDataAuxiliarDiv = document.createElement("DIV");
-  additionalDataAuxiliarDiv.classList.add("columnAlignmentClass");
-  characterDynamicDiv.appendChild(additionalDataAuxiliarDiv);
-
-  let characterWeaknessDiv = document.createElement("DIV");
-  characterWeaknessDiv.classList.add("columnAlignmentClass");
-  additionalDataAuxiliarDiv.appendChild(characterWeaknessDiv);
-
-  let characterWeaknessTitle = document.createElement("P");
-  characterWeaknessTitle.innerHTML = "Weakness";
-  characterWeaknessTitle.classList.add("textFormatSmall");
-  characterWeaknessDiv.appendChild(characterWeaknessTitle);
-
-  let characterWeaknessType = document.createElement("DIV");
-  characterWeaknessType.classList.add("rowAlignmentClass");
-  characterWeaknessDiv.appendChild(characterWeaknessType);
-  characterData.weaknesses.forEach(element => {
-    let characterWeaknessTypeContainer = document.createElement("DIV");
-    characterWeaknessTypeContainer.classList.add(
-      "characterWeaknessTypeContainer"
-    );
-    characterWeaknessType.appendChild(characterWeaknessTypeContainer);
-
-    let characterWeaknessTypeLogo = document.createElement("IMG");
-    characterWeaknessTypeLogo.setAttribute(
-      "src",
-      "image/types/" + element + ".svg"
-    );
-    characterWeaknessTypeLogo.classList.add("weaknessImgClass");
-    characterWeaknessTypeContainer.appendChild(characterWeaknessTypeLogo);
-
-    let characterWeaknessTypeName = document.createElement("P");
-    characterWeaknessTypeName.innerHTML = element;
-    characterWeaknessTypeName.classList.add("weaknessTextFormat");
-    characterWeaknessTypeContainer.appendChild(characterWeaknessTypeName);
-  });
+    characterDynamicDiv.innerHTML = characterWindowTemplate;
+    characterTitleName = document.getElementById("characterPokemonName").innerHTML;
+                
+/****************************************************************************************/
+    showPromptWindow(4);
+};
 
   let characterAdditionalData = document.createElement("DIV");
   characterAdditionalData.classList.add("rowAlignmentClass");
@@ -1048,16 +1155,13 @@ const catchItAnimation = (status, animation) => {
     elementStarFavImage.classList.remove("starFavImage");
   }
 };
-
-elementPokeballImage.addEventListener("click", () => {
-  catchItAnimation(1, 1);
-  /**Create cookie*/
-  createFavoriteCookie(characterTitleName.innerHTML.toUpperCase()); //Descomentar cuando funcione
-  // createFavoriteCookie(num.toString(10));  Descomentar para prueba Cookies
-});
-elementStarFavImage.addEventListener("click", () => {
-  catchItAnimation(2, 1);
-  /*** Remove cookie */
-  deleteFavorite(characterTitleName.innerHTML.toUpperCase()); //Descomentar cuando funcione
-  // deleteFavorite(num.toString(10)); Descomentar para prueba Cookies
-});
+ elementPokeballImage.addEventListener("click", () => {
+    catchItAnimation(1, 1);
+    /**Create cookie*/
+        createFavoriteCookie(characterTitleName.toUpperCase());
+ });
+ elementStarFavImage.addEventListener("click", () => {
+    catchItAnimation(2, 1);
+    /*** Remove cookie */
+        deleteFavorite(characterTitleName.toUpperCase().trim());
+ });

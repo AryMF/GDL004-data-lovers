@@ -2,6 +2,7 @@
 @import "introPage.css";
 @import "prompt.css";
 @import "styleCharacterWindow.css";
+@import "styleCharts.css";
 
 body {
   background-color: Gainsboro;
@@ -263,6 +264,14 @@ body {
   text-transform: uppercase;
 }
 /***** Ajustes web responsiva: Main window*****/
+@media(hover: hover) and (pointer: fine) {
+    #menuButton:hover, #favoritesButton:hover, 
+#chartButton:hover{
+    color: white;
+    cursor: pointer;
+}
+}
+
 @media screen and (max-width: 768px) {
   .namePokemon {
     font-size: 3vmin;
