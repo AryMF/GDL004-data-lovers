@@ -1,0 +1,333 @@
+@import "reset.css";
+@import "introPage.css";
+@import "prompt.css";
+@import "styleCharacterWindow.css";
+
+body {
+  background-color: Gainsboro;
+}
+
+.mainScreenClass {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 0%;
+  padding: 0%;
+  /* visibility: hidden; /*Descomentar para activar animación intro*/
+}
+
+/***** Menu barra superior *****/
+.header {
+  position: fixed;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-content: center;
+  top: 0;
+  left: 0;
+  width: 99vw;
+  height: 10vh;
+  background-color: crimson;
+  z-index: 1;
+}
+.topMenuButtonContainer {
+  background-color: transparent;
+  border: 0;
+  flex: 0;
+}
+
+.header div {
+  flex: 1;
+}
+
+.titleText {
+  font-family: "Rajdhani", sans-serif;
+  font-size: 8vmin;
+  letter-spacing: 1vw;
+  font-weight: bold;
+  text-align: center;
+  padding: 0.1vh 0.5vw;
+  margin: 15px 0px 0px;
+}
+
+#homeButton {
+  visibility: hidden;
+}
+
+#menuButton,
+#favoritesButton,
+#chartButton,
+#homeButton {
+  font-size: 40px;
+  margin: 0px 10px;
+  color: black;
+}
+
+#menuButton:hover,
+#menuButton:focus,
+#favoritesButton:hover,
+#favoritesButton:focus,
+#chartButton:hover,
+#chartButton:focus,
+#homeButton:hover,
+#homeButton:focus {
+  color: white;
+  cursor: pointer;
+}
+
+/***** Menu flotante *****/
+.floatingMenuDIV {
+  position: fixed;
+  display: flex;
+  align-items: center;
+  flex-direction: column-reverse;
+  bottom: 0.5vh;
+  right: 0.5vw;
+  width: fit-content;
+  background-color: transparent;
+  z-index: 1;
+  /*visibility: hidden; /*Descomentar para activar animación intro*/
+}
+
+#toggle {
+  display: none;
+}
+
+#toggle:checked ~ #floatingMenu {
+  transform: rotate(135deg);
+  box-shadow: 0 0 0 0 transparent;
+}
+
+.floatingMenuClass {
+  position: sticky;
+  position: -webkit-sticky;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 0 3vh 0;
+  background-color: cornflowerblue;
+  border-radius: 100px;
+  transition: all 0.5s ease-in-out;
+}
+
+.floatingMenuClassNormal {
+  width: 90px;
+  height: 90px;
+}
+
+.floatingMenuClassNormal i {
+  font-size: 60px;
+  color: white;
+}
+
+.floatingMenuClassSmall {
+  width: 45px;
+  height: 45px;
+  color: black;
+  animation: pop 0.3s linear 1;
+}
+
+.floatingMenuClassSmall i {
+  font-size: 30px;
+  color: black;
+}
+
+@keyframes pop {
+  50% {
+    transform: scale(1.1);
+  }
+}
+
+.floatingMenuElement {
+  position: sticky;
+  position: -webkit-sticky;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 90px;
+  height: 90px;
+  margin: 0 0 3vh 0;
+  background-color: cornflowerblue;
+  border-radius: 100px;
+  visibility: hidden;
+}
+
+.floatingMenuElement i {
+  font-size: 50px;
+  color: white;
+}
+
+.floatingMenuClassNormal:hover i,
+.floatingMenuElement:hover i {
+  color: black;
+}
+
+/***** Body pokemons *****/
+.pokemonContainerGrid {
+  position: absolute;
+  top: 20vmin;
+  left: 0;
+  display: flex;
+  flex-flow: row wrap;
+  background-color: transparent;
+  width: 99vw;
+}
+
+.divContainerClass {
+  display: flex;
+  justify-content: center;
+  /*Seis columnas*/
+  flex: 15%;
+  padding: 5px;
+}
+
+.divCardClass {
+  background-color: transparent;
+  position: relative;
+  padding: 0% 0% 10% 0%;
+}
+
+.divPokemonCardFaceClass {
+  border-radius: 20px;
+  border: 5px solid white;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 180px;
+  height: 280px;
+  backface-visibility: hidden;
+  transform-style: preserve-3d;
+  transition: transform 0.4s ease-in-out;
+}
+
+.divPokemonCardFaceClass--front {
+  background: #2c3e50;
+  transform: rotateY(0deg);
+}
+
+.divPokemonCardFaceClass--back {
+  justify-content: center;
+  position: absolute;
+  top: 0;
+  left: 0%;
+  background: #502c45;
+  transform: rotateY(-180deg);
+  cursor: pointer;
+}
+
+.divCardClass:hover .divPokemonCardFaceClass--front {
+  transform: rotateY(-180deg);
+}
+
+.divCardClass:hover .divPokemonCardFaceClass--back {
+  transform: rotateY(0deg);
+}
+
+.imagePokemon {
+  margin: 20px 0 0 0;
+  width: 85%;
+}
+
+.numberPokemon {
+  font-family: "Rajdhani", sans-serif;
+  font-weight: normal;
+  text-align: center;
+  font-size: 2vmin;
+  background-color: rgb(53, 46, 46, 40%);
+  border-radius: 5px;
+  padding: 0.5vmin;
+  margin: 2vh 0 0 0;
+}
+
+.namePokemon {
+  font-family: "Ubuntu", sans-serif;
+  font-weight: bold;
+  font-size: 28px;
+  text-align: center;
+  margin: 0.5vh 0 1vh 0;
+}
+
+.typePokemonIMG {
+  height: 60px;
+  margin: 20px 0px 6px;
+}
+
+.typePokemon {
+  font-family: "Ubuntu", sans-serif;
+  font-weight: bold;
+  font-size: 3vmin;
+  color: #fff;
+  text-align: center;
+  text-transform: uppercase;
+}
+/***** Ajustes web responsiva: Main window*****/
+@media screen and (max-width: 768px) {
+  .namePokemon {
+    font-size: 3vmin;
+  }
+}
+
+@media screen and (max-width: 500px) {
+  #menuButton,
+  #favoritesButton,
+  #chartButton {
+    font-size: 30px;
+    margin: 0px 3px;
+  }
+  .floatingMenuDIV {
+    bottom: 0.5vh;
+    right: 2vw;
+    width: fit-content;
+  }
+  .floatingMenu {
+    width: 18vw;
+    height: 10vh;
+    margin: 0 0 3vh 0;
+  }
+  .floatingMenuClassNormal {
+    width: 60px;
+    height: 60px;
+  }
+
+  .floatingMenuClassNormal i {
+    font-size: 50px;
+    color: white;
+  }
+  .floatingMenuClassSmall {
+    width: 40px;
+    height: 40px;
+    color: black;
+    animation: pop 0.3s linear 1;
+  }
+  .floatingMenuElement {
+    width: 60px;
+    height: 60px;
+    margin: 0 0 3vh 0;
+  }
+  .floatingMenuElement i {
+    font-size: 35px;
+  }
+
+  .divContainerClass {
+    flex: 100%;
+  }
+  .menuButton {
+    width: 16vw;
+    height: 12vh;
+  }
+  .titleText {
+    font-size: 14vmin;
+  }
+  .favoritesButton {
+    width: 16vw;
+    height: 12vh;
+  }
+  .numberPokemon {
+    font-size: 5vmin;
+  }
+  .namePokemon {
+    font-size: 10vmin;
+  }
+}
