@@ -1,0 +1,12 @@
+.chartsContainerClass{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 99vw;
+}
+
+.chartDynamicContent{
+    width: 500px;
+    height: fit-content;
+}
