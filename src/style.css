@@ -169,6 +169,7 @@ body {
   display: flex;
   flex-flow: row wrap;
   justify-content: flex-end;
+  align-items: center;
   position: absolute;
   top: 10vmin;
   left: 0;
