@@ -91,7 +91,7 @@ body {
   /*visibility: hidden; /*Descomentar para activar animación intro*/
 }
 
-#toggle {
+#toggle, #toggleFav, #toggleCharts{
   display: none;
 }
 
@@ -165,6 +165,32 @@ body {
 }
 
 /***** Body pokemons *****/
+#activeFilterAndSort{
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: flex-end;
+  align-items: center;
+  position: absolute;
+  top: 10vmin;
+  left: 0;
+  width: 99vw;
+  padding: 0px 0px 4px;
+  border-bottom: solid;
+  border-color: gray;
+  border-width: 1.2px;
+  
+}
+#activeFilterAndSort p{
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 4vmin;
+  color: DarkSlateGrey; 
+  margin: 0px 9px;
+}
+
+#filterByTag, #sortByTag{
+  color: orangered !important;
+}
+
 .pokemonContainerGrid {
   position: absolute;
   top: 20vmin;
@@ -235,10 +261,10 @@ body {
   font-family: "Rajdhani", sans-serif;
   font-weight: normal;
   text-align: center;
-  font-size: 2vmin;
+  font-size: 17px;
   background-color: rgb(53, 46, 46, 40%);
   border-radius: 5px;
-  padding: 0.5vmin;
+  padding: 0.6vmin;
   margin: 2vh 0 0 0;
 }
 
@@ -273,9 +299,7 @@ body {
 }
 
 @media screen and (max-width: 768px) {
-  .namePokemon {
-    font-size: 3vmin;
-  }
+
 }
 
 @media screen and (max-width: 500px) {
@@ -334,9 +358,6 @@ body {
     height: 12vh;
   }
   .numberPokemon {
-    font-size: 5vmin;
-  }
-  .namePokemon {
-    font-size: 10vmin;
+    font-size: 22px;
   }
 }

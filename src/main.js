@@ -1,5 +1,5 @@
-const DATA_URL =
-  "https://raw.githubusercontent.com/AryMF/GDL004-data-lovers/master/src/data/pokemon/pokemon.json";
+// import data from '../src/data';
+const DATA_URL = "https://raw.githubusercontent.com/AryMF/GDL004-data-lovers/master/src/data/pokemon/pokemon.json";
 let dataPokemon = [];
 let filterJSON = [];
 
@@ -7,6 +7,9 @@ let filterJSON = [];
 let pokemonContainerElement = document.getElementById("pokemonContainer");
 let homeButtonElement = document.getElementById("homeButton");
 let toggleFavElement = document.getElementById("toggleFav");
+let toggleChartsElement = document.getElementById("toggleCharts");
+let activeFilterAndSortContainer = document.getElementById("activeFilterAndSort");
+let activeFilterAndSortTags= document.querySelectorAll("#activeFilterAndSort p");
 let chartsContainerElement = document.getElementById("chartsContainer");
 /***********Popup windows (Search, FilterBy, SortBy) *********************/
 let promptContainerElement = document.getElementById("promptContainer");
@@ -215,74 +218,93 @@ rippler.addEventListener("animationend", function(e){
 */
 /********** Impresión en pantalla de Pokemon cards **********/
 
-const printPokemonCards = dataArray => {
-  let typeImagesSRC = "image/typesWhite/";
-  let typeImageExtension = ".svg";
-  let colorByType;
-  let pokemonName;
-  let orderArray = [];
- 
-  pokemonContainerElement.innerHTML = "";
-  
-  let concatTemplateElements = "";
+const printPokemonCards = (dataArray, filterByText = "All", sortByText = "All") => {
+    let typeImagesSRC = "image/typesWhite/";
+    let typeImageExtension = ".svg";
+    let colorByType;
+    let pokemonName;
+    let orderArray = [];
 
-  dataArray.forEach((element) => { 
+    activeFilterAndSortTags[1].innerHTML = filterByText;
+    activeFilterAndSortTags[4].innerHTML = sortByText;
+
+    pokemonContainerElement.innerHTML = "";
+
+    let concatTemplateElements = "";
+
+    dataArray.forEach((element) => { 
 
     if (element.name == "Nidoran ♀ (Female)" || element.name == "Nidoran ♂ (Male)") {
-      pokemonName = element.name.substring(0, 9);
+        pokemonName = element.name.substring(0, 9);
     } else {
-      pokemonName = element.name;
+        pokemonName = element.name;
     } 
-  
+
     for (let i = 0; i < typeArray.length; i++) {
-      if (element.type[0] == typeArray[i].type) {
-          colorByType = typeArray[i].color;
+        if (element.type[0] == typeArray[i].type) {
+            colorByType = typeArray[i].color;
         break;
-      }
+        }
     }
 
     const pokemonCardsTemplate = `
     <div class="divContainerClass">
-      <div class="divCardClass">
-          <div id="divPokemonCard" style = ${"background-color:" + colorByType} tabindex="0" class="divPokemonCardFaceClass divPokemonCardFaceClass--front">
-              <img class="imagePokemon" src = ${element.img} alt= ${element.name}>
-              <p class="numberPokemon">${element.num}</p>
-              <p class="namePokemon">${pokemonName}</p>
-          </div>
-          <div id="divBackPokemonCard" style = ${"background-color:" + colorByType} class="divPokemonCardFaceClass divPokemonCardFaceClass--back">
-              ${
-                  element.type.map((typeElement) => {
-                      return '<img src="' + typeImagesSRC + typeElement + typeImageExtension +'" class="typePokemonIMG">' +
-                      '<p class="typePokemon">' + typeElement + '</p>'
-                  }).join("")
-              }
-          </div>
-      </div>
+        <div class="divCardClass">
+            <div id="divPokemonCard" style = ${"background-color:" + colorByType} tabindex="0" class="divPokemonCardFaceClass divPokemonCardFaceClass--front">
+                <img class="imagePokemon" src = ${element.img} alt= ${element.name}>
+                <p class="numberPokemon">${element.num}</p>
+                <p class="namePokemon">${pokemonName}</p>
+            </div>
+            <div id="divBackPokemonCard" style = ${"background-color:" + colorByType} class="divPokemonCardFaceClass divPokemonCardFaceClass--back">
+                ${
+                    element.type.map((typeElement) => {
+                        return '<img src="' + typeImagesSRC + typeElement + typeImageExtension +'" class="typePokemonIMG">' +
+                        '<p class="typePokemon">' + typeElement + '</p>'
+                    }).join("")
+                }
+            </div>
+        </div>
     </div>`;
 
 
     orderArray.push(element.name);
     concatTemplateElements = concatTemplateElements + pokemonCardsTemplate;
-  }); 
+    }); 
 
-  pokemonContainerElement.innerHTML = concatTemplateElements;
+    //impresion en pantalla
+    pokemonContainerElement.innerHTML = concatTemplateElements;
 
-  let backCards = document.getElementsByClassName("divPokemonCardFaceClass--back");
+    pokemonContainerElement.innerHTML = concatTemplateElements;
 
-  for(let i=0; i< backCards.length;i++){
-    backCards[i].addEventListener("click", function() {
-      characterWindowPrint(orderArray[i].toUpperCase());
+    let backCards = document.getElementsByClassName("divPokemonCardFaceClass--back");
+  
+    for(let i=0; i< backCards.length;i++){
+      backCards[i].addEventListener("click", function() {
+        characterWindowPrint(orderArray[i]);
+      });
+    }
+
+    /* Intentando camiar a querySelector para usar forEach
+    let backCards = document.querySelectorAll(".divPokemonCardFaceClass--back");
+    // console.log(backCards)
+    backCards.forEach((element, index) => {
+        // console.log(index);
+        element.addEventListener("click", function() {
+            console.log("hola: " + orderArray[index])
+            // characterWindowPrint(orderArray[index].toUpperCase());
+        });
+        index++;
     });
-  }
+    */
 
-  let frontCards = document.getElementsByClassName("divPokemonCardFaceClass--front");
-  for(let i=0; i< frontCards.length; i++){
-    frontCards[i].addEventListener("keyup", function(e) {
-      if (e.keyCode === 13) {
-        characterWindowPrint(orderArray[i].toUpperCase());
-      }
-    });
-  }  
+    let frontCards = document.getElementsByClassName("divPokemonCardFaceClass--front");
+    for(let i=0; i< frontCards.length; i++){
+        frontCards[i].addEventListener("keyup", function(e) {
+        if (e.keyCode === 13) {
+            characterWindowPrint(orderArray[i]);
+        }
+        });
+    }  
 };
 
 /******************** Short cut Event listener ********************/
@@ -380,15 +402,15 @@ const searchPromptCreator = () => {
   searchByPromptElement.style.WebkitAnimationPlayState = "running";
   document.getElementById("searchPromptInput").focus();
 };
+
 document.getElementById("searchPromptButton").addEventListener("click", () => {
   if (searchPromptInputElement.value != "") {
-    filterJSON = window.data.filteredByNameOrNumber(
-      dataPokemon,
-      searchPromptInputElement.value
-    );
-    filterJSON == ""
-      ? printPokemonCards(dataPokemon)
-      : printPokemonCards(filterJSON);
+    filterJSON = window.data.filteredByNameOrNumber(dataPokemon, searchPromptInputElement.value);
+    if(filterJSON == ""){
+      printPokemonCards(dataPokemon);
+    } else {
+      printPokemonCards(filterJSON), "\"" + searchPromptInputElement.value + "\"";
+    }
     hiddenPromptWindow();
   } else {
     printPokemonCards(dataPokemon);
@@ -402,7 +424,7 @@ document.getElementById("searchPromptInput").addEventListener("input", () => {
     document.documentElement.scrollTop = 0;
     if(searchPromptInputElement.value != ""){
         filterJSON = window.data.filteredByNameOrNumber(dataPokemon, searchPromptInputElement.value);
-        printPokemonCards(filterJSON);
+        printPokemonCards(filterJSON, "\"" + searchPromptInputElement.value + "\"");
     }else {
         printPokemonCards(dataPokemon);
     }
@@ -421,7 +443,11 @@ const searchByInput = () =>{
     document.documentElement.scrollTop = 0;
     if(searchPromptInputElement.value != ""){
         filterJSON = window.data.filteredByNameOrNumber(dataPokemon, searchPromptInputElement.value);
-        filterJSON == "" ? printPokemonCards(dataPokemon): printPokemonCards(filterJSON);
+        if(filterJSON == ""){
+          printPokemonCards(dataPokemon);
+        } else {
+          printPokemonCards(filterJSON, "\"" + searchPromptInputElement.value + "\"");
+        }
         hiddenPromptWindow();
     }else {
         printPokemonCards(dataPokemon);
@@ -461,7 +487,7 @@ const filterPromptCreator = () => {
             /*** Regresar al principio de la pagina ***/
             document.documentElement.scrollTop = 0;
             filterJSON = window.data.filteredByType(dataPokemon, buttonElement.value);
-            filterJSON == "" ? printPokemonCards(dataPokemon): printPokemonCards(filterJSON);
+            filterJSON == "" ? printPokemonCards(dataPokemon): printPokemonCards(filterJSON, "\"" + buttonElement.value + "\"");
             hiddenPromptWindow();
         });
         buttonElement.addEventListener('keyup',function(e){
@@ -469,7 +495,7 @@ const filterPromptCreator = () => {
                 /*** Regresar al principio de la pagina ***/
                 document.documentElement.scrollTop = 0;
                 filterJSON = window.data.filteredByType(dataPokemon, buttonElement.value);
-                filterJSON == "" ? printPokemonCards(dataPokemon): printPokemonCards(filterJSON);
+                filterJSON == "" ? printPokemonCards(dataPokemon): printPokemonCards(filterJSON, "\"" + buttonElement.value + "\"");
                 hiddenPromptWindow();
             }
         });
@@ -512,12 +538,10 @@ const sortByPromptCreator = () => {
     buttonElement.addEventListener("click", function() {
         /*** Regresar al principio de la pagina ***/
         document.documentElement.scrollTop = 0;
-        if (filterJSON != "") {
+        if (filterJSON.length > 0) {
         if (i == 0 || i == 2 || i == 4 || i == 6) {
             sortByJSON = window.data.sortDataResultDesc(
-            filterJSON,
-            sortByOptions[i].buttonArgument
-            );
+            filterJSON, sortByOptions[i].buttonArgument);
         } else {
             sortByJSON = window.data.sortDataResultAsc(
             filterJSON,
@@ -537,7 +561,7 @@ const sortByPromptCreator = () => {
             );
         }
       }
-      printPokemonCards(sortByJSON);
+      printPokemonCards(sortByJSON, activeFilterAndSortTags[1].innerHTML, sortByOptions[i].buttonText);
       hiddenPromptWindow();
     });
     sortByButtons.appendChild(buttonElement);
@@ -546,8 +570,6 @@ const sortByPromptCreator = () => {
   showPromptWindow(1);
   document.getElementById("A-Z").focus();
 };
-
-
 
 /*************************  Modal manager  *********************************/
 const showPromptWindow = (option) => {
@@ -606,6 +628,7 @@ const hiddenPromptWindow = () => {
   characterDynamicDiv.innerHTML = "";
   elementDivPokeballImage.style.visibility = "hidden";
   elementDivFavImage.style.visibility = "hidden";
+  characterImageElement.setAttribute("src", "");
   if(toggleFavElement.checked === true){
     showFavorites();
   }
@@ -617,14 +640,29 @@ const hiddenPromptWindow = () => {
 
 document.getElementById("favoritesButton").addEventListener("click", () => {
   toggleFavElement.checked = true;
-  showFavorites();
+  toggleChartsElement.checked = false;
+  homeButtonElement.style.visibility = "visible";
+  pokemonContainerElement.style.visibility = "visible";
+  /***Cerrar Main */
+  pokemonContainerElement.innerHTML = "";
+  floatingMenu.style.visibility = "hidden";
+  /***Cerrar Charts */
+  chartsContainerElement.style.visibility = "hidden";
+  showFavorites();  
 });
 
 document.getElementById("homeButton").addEventListener("click", () => {
-  
-  printPokemonCards(dataPokemon);
-  homeButtonElement.style.visibility = "hidden";
   toggleFavElement.checked = false;
+  toggleChartsElement.checked = false;
+  homeButtonElement.style.visibility = "hidden";
+  /***Cerrar Favoritos */
+  floatingMenu.style.visibility = "visible";
+  /***Cerrar Charts */
+  chartsContainerElement.style.visibility = "hidden";
+  /***Abrir Main */
+  pokemonContainerElement.style.visibility = "visible";
+
+  printPokemonCards(dataPokemon);  
 });
 
 const loadFavorites = () => {
@@ -649,19 +687,20 @@ const deleteFavorite = (pokemonName) => {
 };
 
 const showFavorites = () => {
-  homeButtonElement.style.visibility = "visible";
   let pokemonCookiesArray = loadFavorites();
-  let favoritesJSON = [];
+  //Usar filterJSON global
+  filterJSON = [];
+  // let filterJSON = [];
   dataPokemon.forEach(element => {
     pokemonCookiesArray.forEach(favoriteID => {
       if (favoriteID === element.name.toUpperCase()) {
-        favoritesJSON.push(element);
+        filterJSON.push(element);
       }
     });
   });
 
-  if (favoritesJSON != "") {
-    printPokemonCards(favoritesJSON);
+  if (filterJSON.length > 0) {
+    printPokemonCards(filterJSON);
   } else {
     pokemonContainerElement.innerHTML = "";
     let favoritesWindowEmpty = document.createElement("DIV");
@@ -683,6 +722,10 @@ const showFavorites = () => {
 
 /************************** Charts window **************************/
 document.getElementById("chartButton").addEventListener("click", () => {
+    toggleChartsElement.checked = true;
+    toggleFavElement.checked = false;
+    homeButtonElement.style.visibility = "visible";
+
     pokemonContainerElement.innerHTML = "";
     pokemonContainerElement.style.visibility = "hidden";
     chartsContainerElement.style.visibility = "visible";
@@ -862,25 +905,20 @@ let characterImageElement = document.getElementById("characterImage");
 
 const characterWindowPrint = (pokemonName) =>{
     characterTitleName = ""; //Asegurar que este vació
+    //Template necesario
     let evolutionPathArrowTemplate = `<div class="columnAlignmentClass evolutionPathArrow">
         <p class="textFormatSmall">=&gt;</p>
-        </div>`; //Template necesario
+        </div>`; 
     let evolutionPathIndex = 0; // Variable necesaria 
 
     //Preparar data del pokemon elegido
-    let searchPokemon = window.data.filteredByNameOrNumber(dataPokemon, pokemonName);
-
-    let characterData; //Fix para Mew
-    if(searchPokemon.length > 1){
-        characterData = searchPokemon[1];
-    }else {
-        characterData = searchPokemon[0];
-    }
-
+    let searchPokemon = window.data.filteredByNameOrNumber(dataPokemon, pokemonName, true);
+    let characterData = searchPokemon[0];
+    
+    // Llamar data de cookies favoritos 
     let pokemonCookiesArray = loadFavorites();
-
     // Configuración de botón de favoritos
-    if(pokemonCookiesArray.indexOf(pokemonName) != -1){
+    if(pokemonCookiesArray.indexOf(pokemonName.toUpperCase()) != -1){
         catchItAnimation(1, 0); /*el pokemon esta en favoritos*/
     }else {
         catchItAnimation(2, 0);
@@ -902,9 +940,11 @@ const characterWindowPrint = (pokemonName) =>{
     if("prev_evolution" in characterData){
         evolutionPathArray = evolutionPathArray.concat(characterData.prev_evolution
             .map((elementArray) => {
+            let found = data.filteredByNameOrNumber(dataPokemon, elementArray.name);  
+            /*
             let found = dataPokemon.filter((element) => {
                 return element.name === elementArray.name;
-            });
+            });*/
             return { "name": elementArray.name, "img": found ? found[0].img : ''};
         }));
     }
@@ -923,7 +963,7 @@ const characterWindowPrint = (pokemonName) =>{
             return { "name": elementArray.name, "img": found ? found[0].img : ''};
         }));
     }          
-    /***** Fin de concatenación */
+    /***** Fin de concatenación evolution path ****/
     
 
     characterWindowElement.setAttribute("style", "border-color: " + colorByType);
@@ -1055,10 +1095,18 @@ const catchItAnimation = (status, animation) => {
  elementPokeballImage.addEventListener("click", () => {
     catchItAnimation(1, 1);
     /**Create cookie*/
-        createFavoriteCookie(characterTitleName.toUpperCase());
+    createFavoriteCookie(characterTitleName.toUpperCase());
+    /** Refrescar pantalla favoritos **/
+    if(toggleFavElement.checked === true){
+      showFavorites();
+    }
  });
  elementStarFavImage.addEventListener("click", () => {
     catchItAnimation(2, 1);
     /*** Remove cookie */
-        deleteFavorite(characterTitleName.toUpperCase().trim());
+    deleteFavorite(characterTitleName.toUpperCase().trim());
+    /** Refrescar pantalla favoritos **/
+    if(toggleFavElement.checked === true){
+      showFavorites();
+    }
  });

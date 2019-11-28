@@ -1,16 +1,34 @@
+// const data =  {
 window.data =  {
-  filteredByNameOrNumber: function(data, condition){
+  filteredByNameOrNumber: function(data, condition, wholeWord = false){
     let filterJSON = [];
-    filterJSON = data.filter((array) => {
-      if(("name" in array && array.name.toUpperCase().match(condition) == condition) || ("id" in array && array.id == condition)){
+    let pokemonName = condition;
 
-        return true;
+    if (isNaN(condition)) {
+      pokemonName = condition.toUpperCase();
+      pokemonName = pokemonName.replace(" ♀ ","").replace(" ♂ ","").replace("(", "").replace(")", "");
+    }
+
+    if (wholeWord){
+      pokemonName = "\\b" + pokemonName + "\\b";
+    }
+
+    filterJSON = data.filter((array) => {
+      let nullValidation = array.name.toUpperCase().replace(" ♀ ","").replace(" ♂ ","").replace("(", "").replace(")", "").match(pokemonName); 
+
+      if(("name" in array && nullValidation && array.name.toUpperCase()
+      .replace(" ♀ ","").replace(" ♂ ","").replace("(", "").replace(")", "")
+      .match(pokemonName).length > 0) || ("id" in array && array.id == condition)){
+          return true;
       } else {
         return false;
       }
     });
+
     return filterJSON;
   },
+
+  
   
    filteredByType: function(data, condition){
     let filterJSON = [];
@@ -138,3 +156,5 @@ window.data =  {
     }
   }
 };
+
+export default data;

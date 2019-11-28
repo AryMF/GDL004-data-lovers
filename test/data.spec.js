@@ -1,12 +1,13 @@
-global.window = global;
-// import data  from '../src/data'
-require('../src/data'); // preguntar wtf?
+// global.window = global;
+import data from '../src/data';
 import dataPokemon from '../src/data/pokemon/pokemon.json';
 const pokemon = dataPokemon.pokemon;
+
 describe("data", () => {
     it("Data debería ser un object", () => {
         expect(typeof data).toBe("object");
     })
+
     describe("data.filteredByNameOrNumber", () => {
         it("filteredByNameOrNumber debería ser una función", () => {
             expect(typeof data.filteredByNameOrNumber).toBe("function");
@@ -47,6 +48,7 @@ describe("data", () => {
           expect(data.sortDataResultAsc(pokemon, "name")[150])
           .toHaveProperty('name', "Abra");
         });
+
         it('returns `Should return: 8.79 m as the first item from the array.`', () => {
           expect(data.sortDataResultAsc(pokemon, 'height')[0]).toHaveProperty("height",'8.79 m');
         });
@@ -77,5 +79,3 @@ describe("data", () => {
       });
     });//cierre describe:"data.sortDataResultDesc" 
 }); //cierre describe: "data"
-
-
