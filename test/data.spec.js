@@ -1,140 +1,81 @@
-global.window = global;
-const isData = require('../src/data');
-
-const pokemon = [{
-    "id": 1,
-    "name": "Bulbasaur",
-    "type": [
-      "Grass",
-      "Poison"
-    ],
-    "height": "0.71 m",
-    "weight": "6.9 kg",
-  },
-  {
-    "id": 4,
-    "name": "Charmander",
-    "type": [
-      "Fire"
-    ],
-    "height": "0.61 m",
-    "weight": "8.5 kg",
-  },
-  {
-    "id": 7,
-    "name": "Squirtle",
-    "type": [
-      "Water"
-    ],
-    "height": "0.51 m",
-    "weight": "9.0 kg",
-  },
- 
-  {
-    "id": 12,
-    "name": "Butterfree",
-    "type": [
-      "Bug",
-      "Flying"
-    ],
-    "height": "1.09 m",
-    "weight": "32.0 kg",
-  },
-  {
-    "id": 14,
-    "name": "Kakuna",
-    "type": [
-      "Bug",
-      "Poison"
-    ],
-    "height": "0.61 m",
-    "weight": "10.0 kg",
-  },
-  {
-    "id": 17,
-    "name": "Pidgeotto",
-    "type": [
-      "Normal",
-      "Flying"
-    ],
-    "height": "1.09 m",
-    "weight": "30.0 kg",
-  }, 
-  {
-    "id": 19,
-    "name": "Rattata",
-    "type": [
-      "Normal"
-    ],
-    "height": "0.30 m",
-    "weight": "3.5 kg",
-  }
-];
+// global.window = global;
+import data from '../src/data';
+import dataPokemon from '../src/data/pokemon/pokemon.json';
+const pokemon = dataPokemon.pokemon;
 
 describe("data", () => {
     it("Data debería ser un object", () => {
         expect(typeof data).toBe("object");
     })
+
     describe("data.filteredByNameOrNumber", () => {
         it("filteredByNameOrNumber debería ser una función", () => {
             expect(typeof data.filteredByNameOrNumber).toBe("function");
         });
-        //TODO: Test de funcionalidad de filteredByNameOrNumber pokemon
         it("Debería retornar 'Bulbasaur' para 'BULBASAUR'", () => {
-            expect(data.filteredByNameOrNumber(pokemon, 'BULBASAUR')[0])
+            expect(data.filteredByNameOrNumber(pokemon, 'BULBASAUR', true)[0])
             .toHaveProperty('name', "Bulbasaur");
         });
-
-        it("Debería retornar 'Squirtle' para número 7", () => {
-            expect(data.filteredByNameOrNumber(pokemon, 7)[0])
-            .toHaveProperty('name', "Squirtle");
+        it("Debería retornar 'Mewtwo' para número 150", () => {
+            expect(data.filteredByNameOrNumber(pokemon, 150)[0])
+            .toHaveProperty("name", "Mewtwo");
         });
     });
-
     describe("data.filteredByType", () => {
         it("Debería ser una función", () => {
-            expect(typeof data.filteredByType).toBe("function");
+          expect(typeof data.filteredByType).toBe("function");
         });
-        //TODO: Test de funcionalidad de filteredByType
-        it("Debería retornar todos los pokemons tipo 'Normal' para 'Normal'", () => {
-            expect(data.filteredByType(pokemon, "Normal"))
-            .toStrictEqual(
-                [{
-                    "id": 17,
-                    "name": "Pidgeotto",
-                    "type": [
-                      "Normal",
-                      "Flying"
-                    ],
-                    "height": "1.09 m",
-                    "weight": "30.0 kg",
-                  }, 
-                  {
-                    "id": 19,
-                    "name": "Rattata",
-                    "type": [
-                      "Normal"
-                    ],
-                    "height": "0.30 m",
-                    "weight": "3.5 kg",
-                }]
-            );
+        it("Debería retornar 'Squirtle' en la primera posición para tipo 'Water'", () => {
+          expect(data.filteredByType(pokemon, "Water")[0])
+          .toHaveProperty('name', "Squirtle");
+        });
+        it("Debería retornar 11 elementos para tipo 'Rock'", () => {
+          expect(data.filteredByType(pokemon, "Rock"))
+          .toHaveLength(11);
         });
     });
+    //TEST orderData
 
-    describe("data.sortedByAlphabeticalOrderAsc", () => {
-      it("sortedByAlphabeticalOrderAsc debería ser una función", () => {
-          expect(typeof data.sortedByAlphabeticalOrderAsc).toBe("function");
-      });
-      //TODO: Test de funcionalidad de sortedByAlphabeticalOrderAsc pokemon
-      it("Debería retornar 'Bulbasaur' para 'BULBASAUR'", () => {
-          expect(data.sortedByAlphabeticalOrderAsc(pokemon, 'BULBASAUR')[0])
-          .toHaveProperty('name', "Bulbasaur");
-      });
+    describe("data.sortDataResultAsc", () => {
+        it("Debería ser una función", () => {
+          expect(typeof data.sortDataResultAsc).toBe("function");
+        });
+        it("Debería retornar 'Zubat' en la primera posición para orden 'Z-A'", () => {
+          expect(data.sortDataResultAsc(pokemon, "name")[0])
+          .toHaveProperty('name', "Zubat");
+        });
+        it("Debería retornar 'Abra' en la ultima posición para orden 'Z-A'", () => {
+          expect(data.sortDataResultAsc(pokemon, "name")[150])
+          .toHaveProperty('name', "Abra");
+        });
 
-      it("Debería retornar 'Squirtle' para número 7", () => {
-          expect(data.sortedByAlphabeticalOrderAsc(pokemon, 7)[0])
-          .toHaveProperty('name', "Squirtle");
+        it('returns `Should return: 8.79 m as the first item from the array.`', () => {
+          expect(data.sortDataResultAsc(pokemon, 'height')[0]).toHaveProperty("height",'8.79 m');
+        });
+        it('returns `Should return: 0.20 m as the last item from the array.`', () => {
+          expect(data.sortDataResultAsc(pokemon, 'height')[150]).toHaveProperty("height",'0.20 m');
+        });
+    }); // cierre describe: "data.sortDataResultAsc"
+
+    describe("data.sortDataResultDesc", () => {
+      it("Debería ser una función", () => {
+        expect(typeof data.sortDataResultDesc).toBe("function");
       });
-  });
-});
+      it("Debería retornar '0.1 kg' en la primera posición para orden 'peso'", () => {
+        expect(data.sortDataResultDesc(pokemon, "weight")[0])
+        .toHaveProperty('weight', "0.1 kg");
+      });
+      it("Debería retornar '460.0 kg' en la última posición para orden 'peso'", () => {
+        expect(data.sortDataResultDesc(pokemon, "weight")[150])
+        .toHaveProperty('weight', "460.0 kg");
+      });
+      it("Debería retornar '1' en la primera posición para orden 'peso'", () => {
+        expect(data.sortDataResultDesc(pokemon, "id")[0])
+        .toHaveProperty('id', 1 );
+      });
+      it("Debería retornar '151' en la última posición para orden 'peso'", () => {
+        expect(data.sortDataResultDesc(pokemon, "id")[150])
+        .toHaveProperty('id', 151);
+      });
+    });//cierre describe:"data.sortDataResultDesc" 
+}); //cierre describe: "data"
