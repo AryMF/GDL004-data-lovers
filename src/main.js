@@ -1,5 +1,4 @@
-const DATA_URL =
-  "https://raw.githubusercontent.com/AryMF/GDL004-data-lovers/master/src/data/pokemon/pokemon.json";
+const DATA_URL = "https://raw.githubusercontent.com/AryMF/GDL004-data-lovers/master/src/data/pokemon/pokemon.json";
 let dataPokemon = [];
 let filterJSON = [];
 
