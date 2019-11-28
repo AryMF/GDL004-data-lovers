@@ -740,6 +740,7 @@ const generateData = () =>{
 };
 
 const chartsWindowPrint = () => {
+  homeButtonElement.style.visibility = "visible";
     const chartWindowTemplate = `
         <h1>Charts</h1>
         <div class="chartDynamicContent">
