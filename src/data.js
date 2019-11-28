@@ -1,3 +1,4 @@
+// const data =  {
 window.data =  {
   filteredByNameOrNumber: function(data, condition, wholeWord = false){
     let filterJSON = [];
@@ -59,7 +60,6 @@ window.data =  {
         } else if (a[x] < b[x]) {
           return 1;
         }
-        return 0;
       })
       .forEach(function(element) {
         return element;
@@ -83,7 +83,6 @@ window.data =  {
         } else if (a[x] > b[x]) {
           return 1;
         }
-        return 0;
       })
       .forEach(function(element) {
         return element;
@@ -91,3 +90,5 @@ window.data =  {
     return sortedResultAsc;
   }
 };
+
+export default data;

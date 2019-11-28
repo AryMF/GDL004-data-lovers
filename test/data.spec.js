@@ -1,6 +1,5 @@
-global.window = global;
-// import data  from '../src/data'
-require('../src/data'); // preguntar wtf?
+// global.window = global;
+import data from '../src/data';
 import dataPokemon from '../src/data/pokemon/pokemon.json';
 const pokemon = dataPokemon.pokemon;
 

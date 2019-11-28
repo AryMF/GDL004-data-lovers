@@ -1,3 +1,4 @@
+// import data from '../src/data';
 const DATA_URL = "https://raw.githubusercontent.com/AryMF/GDL004-data-lovers/master/src/data/pokemon/pokemon.json";
 let dataPokemon = [];
 let filterJSON = [];
@@ -286,7 +287,7 @@ const printPokemonCards = (dataArray, filterByText = "All", sortByText = "All") 
     /* Intentando camiar a querySelector para usar forEach
     let backCards = document.querySelectorAll(".divPokemonCardFaceClass--back");
     // console.log(backCards)
-    backCards.forEach((element) => {
+    backCards.forEach((element, index) => {
         // console.log(index);
         element.addEventListener("click", function() {
             console.log("hola: " + orderArray[index])
