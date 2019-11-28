@@ -146,7 +146,7 @@ const main = () => {
   getData()
     .then(dataJSON => {
       dataPokemon = dataJSON.pokemon;
-      printPokemonCards(dataPokemon, "Filter by: All"); /**Comentar para animación intro */
+      printPokemonCards(dataPokemon); /**Comentar para animación intro */
     })
     .catch(error => {
       console.error("Error al cargar JSON por fetch");
@@ -217,15 +217,15 @@ rippler.addEventListener("animationend", function(e){
 */
 /********** Impresión en pantalla de Pokemon cards **********/
 
-const printPokemonCards = (dataArray, filterByText = "Filter by: All", sortByText = "Sort by: All") => {
+const printPokemonCards = (dataArray, filterByText = "All", sortByText = "All") => {
     let typeImagesSRC = "image/typesWhite/";
     let typeImageExtension = ".svg";
     let colorByType;
     let pokemonName;
     let orderArray = [];
 
-    activeFilterAndSortTags[0].innerHTML = filterByText;
-    activeFilterAndSortTags[2].innerHTML = sortByText;
+    activeFilterAndSortTags[1].innerHTML = filterByText;
+    activeFilterAndSortTags[4].innerHTML = sortByText;
 
     pokemonContainerElement.innerHTML = "";
 
@@ -408,7 +408,7 @@ document.getElementById("searchPromptButton").addEventListener("click", () => {
     if(filterJSON == ""){
       printPokemonCards(dataPokemon);
     } else {
-      printPokemonCards(filterJSON), "Filter by search: \"" + searchPromptInputElement.value + "\"";
+      printPokemonCards(filterJSON), "\"" + searchPromptInputElement.value + "\"";
     }
     hiddenPromptWindow();
   } else {
@@ -423,7 +423,7 @@ document.getElementById("searchPromptInput").addEventListener("input", () => {
     document.documentElement.scrollTop = 0;
     if(searchPromptInputElement.value != ""){
         filterJSON = window.data.filteredByNameOrNumber(dataPokemon, searchPromptInputElement.value);
-        printPokemonCards(filterJSON, "Filter by search: \"" + searchPromptInputElement.value + "\"");
+        printPokemonCards(filterJSON, "\"" + searchPromptInputElement.value + "\"");
     }else {
         printPokemonCards(dataPokemon);
     }
@@ -445,7 +445,7 @@ const searchByInput = () =>{
         if(filterJSON == ""){
           printPokemonCards(dataPokemon);
         } else {
-          printPokemonCards(filterJSON, "Filter by search: \"" + searchPromptInputElement.value + "\"");
+          printPokemonCards(filterJSON, "\"" + searchPromptInputElement.value + "\"");
         }
         hiddenPromptWindow();
     }else {
@@ -486,7 +486,7 @@ const filterPromptCreator = () => {
             /*** Regresar al principio de la pagina ***/
             document.documentElement.scrollTop = 0;
             filterJSON = window.data.filteredByType(dataPokemon, buttonElement.value);
-            filterJSON == "" ? printPokemonCards(dataPokemon): printPokemonCards(filterJSON, "Filter by type:  \"" + buttonElement.value + "\"");
+            filterJSON == "" ? printPokemonCards(dataPokemon): printPokemonCards(filterJSON, "\"" + buttonElement.value + "\"");
             hiddenPromptWindow();
         });
         buttonElement.addEventListener('keyup',function(e){
@@ -494,7 +494,7 @@ const filterPromptCreator = () => {
                 /*** Regresar al principio de la pagina ***/
                 document.documentElement.scrollTop = 0;
                 filterJSON = window.data.filteredByType(dataPokemon, buttonElement.value);
-                filterJSON == "" ? printPokemonCards(dataPokemon): printPokemonCards(filterJSON, "Filter by type: \"" + buttonElement.value + "\"");
+                filterJSON == "" ? printPokemonCards(dataPokemon): printPokemonCards(filterJSON, "\"" + buttonElement.value + "\"");
                 hiddenPromptWindow();
             }
         });
@@ -560,7 +560,7 @@ const sortByPromptCreator = () => {
             );
         }
       }
-      printPokemonCards(sortByJSON, activeFilterAndSortTags[0].innerHTML, "Filter by type: " + sortByOptions[i].buttonText);
+      printPokemonCards(sortByJSON, activeFilterAndSortTags[1].innerHTML, sortByOptions[i].buttonText);
       hiddenPromptWindow();
     });
     sortByButtons.appendChild(buttonElement);

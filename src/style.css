@@ -168,20 +168,28 @@ body {
 #activeFilterAndSort{
   display: flex;
   flex-flow: row wrap;
-  justify-content: center;
+  justify-content: flex-end;
   position: absolute;
   top: 10vmin;
   left: 0;
-  background-color: lightcoral;
   width: 99vw;
+  padding: 0px 0px 4px;
+  border-bottom: solid;
+  border-color: gray;
+  border-width: 1.2px;
+  
 }
-
 #activeFilterAndSort p{
   font-family: 'Rajdhani', sans-serif;
-  font-size: 5vmin;
+  font-size: 4vmin;
   color: DarkSlateGrey; 
-  margin: 0px 5px;
+  margin: 0px 9px;
 }
+
+#filterByTag, #sortByTag{
+  color: orangered !important;
+}
+
 .pokemonContainerGrid {
   position: absolute;
   top: 20vmin;
