@@ -547,23 +547,7 @@ const sortByPromptCreator = () => {
   document.getElementById("A-Z").focus();
 };
 
-/*********************Home button*********************/
-/*let checkedHomeButtonElement = document.getElementById("checkedHomeButton");
-// let homeButton = document.getElementById("homeButton");
 
-checkedHomeButtonElement.addEventListener("change", () => {
-  if (checkedHomeButtonElement.checked == true) {
-    printPokemonCards(dataPokemon);
-  } else {
-    closeFloatingMenu();
-  }
-});
-*/
-/*document.getElementById("homeButton").addEventListener("click", () => {
-  printPokemonCards(dataPokemon);
-  filterJSON = [];
-  console.log("Reset");
-});*/
 
 /*************************  Modal manager  *********************************/
 const showPromptWindow = (option) => {
@@ -637,9 +621,10 @@ document.getElementById("favoritesButton").addEventListener("click", () => {
 });
 
 document.getElementById("homeButton").addEventListener("click", () => {
-  toggleFavElement.checked = false;
+  
   printPokemonCards(dataPokemon);
   homeButtonElement.style.visibility = "hidden";
+  toggleFavElement.checked = false;
 });
 
 const loadFavorites = () => {
@@ -712,6 +697,7 @@ const generateData = () =>{
 };
 
 const chartsWindowPrint = () => {
+  homeButtonElement.style.visibility = "visible";
     const chartWindowTemplate = `
         <h1>Charts</h1>
         <div class="chartDynamicContent">

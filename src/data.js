@@ -29,6 +29,7 @@ window.data =  {
   sortDataResultAsc: function(data, condition) {
     let sortedResultAscAlpha = [];
     let sortedResultAscNum = [];
+    
     let x = condition;
     let numEnd = 2;
 
@@ -41,6 +42,7 @@ window.data =  {
     }else {
       for (condition in data) {
         if (data.hasOwnProperty(condition)) {
+          //console.log(data[condition]);
           sortedResultAscAlpha.push(data[condition]);
         }
       }
@@ -55,7 +57,6 @@ window.data =  {
         } else if (parseFloat( a[x].substring(0, auxA) ) < parseFloat( b[x].substring(0, auxB) ) ) {
           return 1;
         }
-        return 0;
       })
       .forEach(function(element) {
         return element;
@@ -68,7 +69,6 @@ window.data =  {
         } else if (a[x] < b[x]) {
           return 1;
         }
-        return 0;
       })
       .forEach(function(element) {
         return element;
@@ -112,7 +112,6 @@ window.data =  {
         } else if (parseFloat( a[x].substring(0, auxA) ) > parseFloat( b[x].substring(0, auxB) ) ) {
           return 1;
         }
-        return 0;
       })
       .forEach(function(element) {
         return element;
@@ -125,7 +124,6 @@ window.data =  {
         } else if (a[x] > b[x]) {
           return 1;
         }
-        return 0;
       })
       .forEach(function(element) {
         return element;
