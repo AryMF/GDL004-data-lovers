@@ -48,8 +48,6 @@
       Your browser does not support the audio element.
     </audio>
 
-
-
     <!-- Menú flotante -->
     <div id="floatingMenuDIV" class="floatingMenuDIV">
       <input type="checkbox" id="toggle" />
@@ -69,6 +67,7 @@
         <i class="fa fa-refresh"></i>
       </nav>
     </div>
+
     <!-- Main screen -->
     <div id="mainScreen" class="mainScreenClass">
       <!-- Barra de menu superior -->
@@ -88,10 +87,16 @@
           <button class="topMenuButtonContainer" tabindex="-1" for="toggleFav">
               <i id="favoritesButton" class="fa fa-star" tabindex="0"></i>
           </button>
-        <button class="topMenuButtonContainer" tabindex="-1">
-            <i id="chartButton" class="fa fa-bar-chart"></i>
-        </button>
+        <input id="toggleCharts" type="checkbox"/>
+          <button class="topMenuButtonContainer" tabindex="-1" for="toggleCharts">
+              <i id="chartButton" class="fa fa-bar-chart"></i>
+          </button>
       </header>
+      <div id="activeFilterAndSort">
+        <p id="filterByTag"> Filter by: All </p>
+        <p> == </p>
+        <p id="sortByTag"> Sort by: All </p>
+      </div>
       <!-- Despliegue de pokemons -->
       <main id="pokemonContainer" class="pokemonContainerGrid" ></main>
       <!-- Sección de Gráficas -->
@@ -182,7 +187,7 @@
             </div>
           </div>
           <div class="characterImageDIV">
-              <img id="characterImage" class="characterImageClass" src="image/imagePlaceholder.png"/>
+              <img id="characterImage" class="characterImageClass" src=""/>
           </div>
           <!-- Contenido dinámico -->
           <div id="characterDynamicContent"></div>

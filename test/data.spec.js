@@ -15,7 +15,7 @@ describe("data", () => {
             expect(typeof data.filteredByNameOrNumber).toBe("function");
         });
         it("Debería retornar 'Bulbasaur' para 'BULBASAUR'", () => {
-            expect(data.filteredByNameOrNumber(pokemon, 'BULBASAUR')[0])
+            expect(data.filteredByNameOrNumber(pokemon, 'BULBASAUR', true)[0])
             .toHaveProperty('name', "Bulbasaur");
         });
         it("Debería retornar 'Mewtwo' para número 150", () => {
