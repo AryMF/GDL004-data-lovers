@@ -27,7 +27,7 @@ body {
   align-content: center;
   top: 0;
   left: 0;
-  width: 99vw;
+  width: 100vw;
   height: 10vh;
   background-color: crimson;
   z-index: 1;
@@ -51,6 +51,12 @@ body {
   padding: 0.1vh 0.5vw;
   margin: 15px 0px 0px;
 }
+
+/**Solo para Usability testing **/
+#menuButton{
+  visibility: hidden;
+}
+/*******************************/
 
 #homeButton {
   visibility: hidden;
@@ -183,7 +189,7 @@ body {
 }
 #activeFilterAndSort p{
   font-family: 'Rajdhani', sans-serif;
-  font-size: 4vmin;
+  font-size: 3vmin;
   color: DarkSlateGrey; 
   margin: 0px 9px;
 }
@@ -306,9 +312,10 @@ body {
 @media screen and (max-width: 500px) {
   #menuButton,
   #favoritesButton,
-  #chartButton {
-    font-size: 30px;
-    margin: 0px 3px;
+  #chartButton,
+  #homeButton {
+    font-size: 28px;
+    margin: 0px .5px;
   }
   .floatingMenuDIV {
     bottom: 0.5vh;
@@ -353,6 +360,7 @@ body {
   }
   .titleText {
     font-size: 14vmin;
+    letter-spacing: .2vw;
   }
   .favoritesButton {
     width: 16vw;
