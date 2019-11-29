@@ -1,7 +1,9 @@
 // import data from '../src/data';
 const DATA_URL = "https://raw.githubusercontent.com/AryMF/GDL004-data-lovers/master/src/data/pokemon/pokemon.json";
+const DATA_API = "https://pokeapi.co/api/v2/pokemon?limit=151";
 let dataPokemon = [];
 let filterJSON = [];
+let dataPokedexArray = [];
 
 /***********Main window *********************/
 let pokemonContainerElement = document.getElementById("pokemonContainer");
@@ -24,6 +26,10 @@ let buttonCloseNode = document.getElementsByClassName("buttonCloseClass");
 let characterWindowElement = document.getElementById("characterWindow");
 let characterDynamicDiv = document.getElementById("characterDynamicContent");
 let characterTitleName = "";
+/*********** Text to speech *********************/
+let language = 1; //TODO: Valor que debe almacenarse en cookie
+let voiceStatusFlag = false;
+var synth = window.speechSynthesis;
 
 const typeArray = [
   {
@@ -136,7 +142,42 @@ const sortByOptions = [
 ];
 
 /******************** Llamada de datos ********************/
+/**** Pokedex entries ****/
+const apiCallFunction = (url = "", option = {}) => {
+  const http_method = option.method || "GET"; //Código de defensa
+  return fetch(url, {method: http_method});
+};
 
+async function getPokemonData (){
+  let dataRequest = await apiCallFunction(DATA_API, {method: "GET"});
+  let call1 = await dataRequest.json();
+  for(let i=0; i< call1.results.length; i++){
+      let call2 = await apiCallFunction(call1.results[i].url, {method: "GET"});
+      let pokemonData = await call2.json();
+      let call3 = await apiCallFunction(pokemonData.species.url, {method: "GET"});
+      let flavorText = await call3.json();
+      let flavorTextArrayES = flavorText.flavor_text_entries.filter(element => {
+          if(element.language.name == "es" && element.version.name == "omega-ruby"){
+              return true;
+          }
+          return false;
+      });
+      let flavorTextArrayEN = flavorText.flavor_text_entries.filter(element => {
+          if(element.language.name == "en" && element.version.name == "omega-ruby"){
+              return true;
+          }
+          return false;
+      });
+      dataPokedexArray.push(
+      {
+          "id": pokemonData.id,
+          "flavor_text_es": flavorTextArrayES[0].flavor_text,
+          "flavor_text_en": flavorTextArrayEN[0].flavor_text
+      });
+  };
+};
+
+/**** */
 async function getData() {
   const dataRequest = await fetch(DATA_URL);
   const dataJSON = await dataRequest.json();
@@ -147,7 +188,9 @@ const main = () => {
   getData()
     .then(dataJSON => {
       dataPokemon = dataJSON.pokemon;
-      printPokemonCards(dataPokemon); /**Comentar para animación intro */
+      getPokemonData().then( () => {
+        printPokemonCards(dataPokemon); /**Comentar para animación intro */
+      });      
     })
     .catch(error => {
       console.error("Error al cargar JSON por fetch");
@@ -632,6 +675,8 @@ const hiddenPromptWindow = () => {
   if(toggleFavElement.checked === true){
     showFavorites();
   }
+  /**Detener voz */
+  synth.cancel();
 };
 
 /************************ Favorites window ************************/
@@ -646,6 +691,7 @@ document.getElementById("favoritesButton").addEventListener("click", () => {
   /***Cerrar Main */
   pokemonContainerElement.innerHTML = "";
   floatingMenu.style.visibility = "hidden";
+  activeFilterAndSortContainer.style.visibility = "hidden";
   /***Cerrar Charts */
   chartsContainerElement.style.visibility = "hidden";
   showFavorites();  
@@ -661,6 +707,7 @@ document.getElementById("homeButton").addEventListener("click", () => {
   chartsContainerElement.style.visibility = "hidden";
   /***Abrir Main */
   pokemonContainerElement.style.visibility = "visible";
+  activeFilterAndSortContainer.style.visibility = "visible";
 
   printPokemonCards(dataPokemon);  
 });
@@ -728,22 +775,28 @@ document.getElementById("chartButton").addEventListener("click", () => {
 
     pokemonContainerElement.innerHTML = "";
     pokemonContainerElement.style.visibility = "hidden";
+    activeFilterAndSortContainer.style.visibility = "hidden";
     chartsContainerElement.style.visibility = "visible";
     floatingMenu.style.visibility = "hidden";
     chartsWindowPrint();
 });
 
 const generateData = () =>{
-    console.log("*** Data ***");
-
+    let data = "Mock data";
     
+    return data;    
 };
 
 const chartsWindowPrint = () => {
-  homeButtonElement.style.visibility = "visible";
+    let dataForCharts = generateData();
+
+
     const chartWindowTemplate = `
         <h1>Charts</h1>
+        <br/><br/>
         <div class="chartDynamicContent">
+            <p>${dataForCharts}</p>
+            <!--
             <canvas id="weightNHeight" width="200px" height="150px" style="border:1px solid #000000;">
             </canvas>
             <canvas id="line-chart" width="200px" height="150px" style="border:1px solid #000000;">
@@ -751,12 +804,13 @@ const chartsWindowPrint = () => {
             <canvas id="polar-chart" width="200px" height="150px" style="border:1px solid #000000;">
             </canvas>
             <button id="buttonData"> Data </button>
+            -->
         </div>
     `;
 
     chartsContainerElement.innerHTML = chartWindowTemplate;
-
-    
+    /*
+    //Ejemplo 01
     let ctx = document.getElementById('weightNHeight').getContext('2d');
 
     let data = {
@@ -813,7 +867,7 @@ const chartsWindowPrint = () => {
     var latinAmerica = [40,20,10,16,24,38,74,167,508,784];
     var northAmerica = [6,3,2,2,7,26,82,172,312,433];
 
-    /** */
+    //Ejemplo 02
     var ctx2 = document.getElementById("line-chart");
 
     var myChart = new Chart(ctx2, {
@@ -855,24 +909,25 @@ const chartsWindowPrint = () => {
         
     }
     });
+    
 
-    /*** */
+    //Ejemplo 03
     new Chart(document.getElementById("polar-chart"), {
         type: 'polarArea',
         data: {
-          labels: ["Africa", "Asia", "Europe", "Latin America", "North America"],
+          labels: ["Normal", "Fire", "Water", "Flying", "Grass"],
           datasets: [
             {
               label: "Population (millions)",
               backgroundColor: ["#3e95cd", "#8e5ea2","#3cba9f","#e8c3b9","#c45850"],
-              data: [2478,5267,734,784,433]
+              data: [24, 12, 32, 19, 14]
             }
           ]
         },
         options: {
           title: {
             display: true,
-            text: 'Predicted world population (millions) in 2050'
+            text: 'Algún dato genial sobre Pokémon [Sección en construcción]'
           },
           tooltips: {
             callbacks: {
@@ -884,14 +939,14 @@ const chartsWindowPrint = () => {
         }
     });
 
-
-
     /*************** Event listener boton *********************** */
 
+    /*
     let button = document.getElementById("buttonData");
     button.addEventListener("click", () => {
         generateData();
     });
+    */
 };
 
 
@@ -907,13 +962,16 @@ const characterWindowPrint = (pokemonName) =>{
     characterTitleName = ""; //Asegurar que este vació
     //Template necesario
     let evolutionPathArrowTemplate = `<div class="columnAlignmentClass evolutionPathArrow">
-        <p class="textFormatSmall">=&gt;</p>
+        <p class="textFormatSmall">&#8594;</p>
         </div>`; 
     let evolutionPathIndex = 0; // Variable necesaria 
 
     //Preparar data del pokemon elegido
     let searchPokemon = window.data.filteredByNameOrNumber(dataPokemon, pokemonName, true);
     let characterData = searchPokemon[0];
+
+    let pokedexEntry = language == 0 ? dataPokedexArray[characterData.id-1].flavor_text_es
+        : dataPokedexArray[characterData.id-1].flavor_text_en;
     
     // Llamar data de cookies favoritos 
     let pokemonCookiesArray = loadFavorites();
@@ -1027,7 +1085,7 @@ const characterWindowTemplate  = `
     <div class="rowAlignmentClass">
         <div class="columnAlignmentClass">
             <p class="textFormatSmall">Info</p>
-            <p class="textFormatMedium">place-holder text</p>
+            <p class="textFormatPokeEntry">${pokedexEntry}</p>
         </div>
         <div class="columnAlignmentClass">
             <p class="textFormatSmall">Evolution path</p>
@@ -1109,4 +1167,27 @@ const catchItAnimation = (status, animation) => {
     if(toggleFavElement.checked === true){
       showFavorites();
     }
+ });
+
+ /** Text to speech */
+ document.getElementById("dexterVoice").addEventListener("click", () =>{
+  
+  if ('speechSynthesis' in window) {
+    if(!voiceStatusFlag){
+      voiceStatusFlag = true;
+      console.log("Synthesis support. Make your web apps talk!");
+      let msg = new SpeechSynthesisUtterance(document.querySelector(".textFormatPokeEntry").innerHTML);
+      msg.voice = synth.getVoices()[3]; // Es: 5 || EN-GB Male: 3 || EN-GB FEM: 2
+      msg.onend = function(){
+        voiceStatusFlag = false;
+      };
+      synth.speak(msg);
+
+      /*synth.getVoices().forEach(voice => {
+        console.log(voice.name, voice.lang);
+      })*/
+    } else {
+      synth.cancel();
+    }
+   }   
  });
