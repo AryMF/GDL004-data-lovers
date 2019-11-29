@@ -1177,13 +1177,14 @@ const catchItAnimation = (status, animation) => {
       voiceStatusFlag = true;
       console.log("Synthesis support. Make your web apps talk!");
       let msg = new SpeechSynthesisUtterance(document.querySelector(".textFormatPokeEntry").innerHTML);
-      msg.voice = synth.getVoices()[3]; // Es: 5 || EN-GB Male: 3 || EN-GB FEM: 2
+      language == 0 ? msg.voice = synth.getVoices()[5] : msg.voice = synth.getVoices()[3]; // ES: 5 || EN-GB Male: 3 || EN-GB FEM: 2
       msg.onend = function(){
         voiceStatusFlag = false;
       };
       synth.speak(msg);
 
-      /*synth.getVoices().forEach(voice => {
+      /* Imprime arreglo de voces disponibles
+      synth.getVoices().forEach(voice => {
         console.log(voice.name, voice.lang);
       })*/
     } else {
