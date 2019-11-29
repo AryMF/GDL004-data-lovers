@@ -107,7 +107,7 @@ body {
   align-items: center;
   justify-content: center;
   margin: 0 0 3vh 0;
-  background-color: cornflowerblue;
+  background-color: rgb(0, 3, 187);
   border-radius: 100px;
   transition: all 0.5s ease-in-out;
 }
@@ -149,7 +149,7 @@ body {
   width: 90px;
   height: 90px;
   margin: 0 0 3vh 0;
-  background-color: cornflowerblue;
+  background-color:  rgb(0, 3, 187);
   border-radius: 100px;
   visibility: hidden;
 }
@@ -178,6 +178,7 @@ body {
   border-bottom: solid;
   border-color: gray;
   border-width: 1.2px;
+  visibility: hidden;
   
 }
 #activeFilterAndSort p{

@@ -367,6 +367,7 @@ document.getElementById("resetButton").addEventListener("click", () => {
   closeFloatingMenu();
   filterJSON = [];
   printPokemonCards(dataPokemon);
+  activeFilterAndSortContainer.style.visibility = "hidden";
 });
 
 /**** Reset with short cut ****/
@@ -375,6 +376,7 @@ document.addEventListener("keyup", function(event) {
     closeFloatingMenu();
     filterJSON = [];
     printPokemonCards(dataPokemon);
+    activeFilterAndSortContainer.style.visibility = "hidden";
   }
 });
 
@@ -401,6 +403,7 @@ const searchPromptCreator = () => {
   showPromptWindow(3);
   searchByPromptElement.style.WebkitAnimationPlayState = "running";
   document.getElementById("searchPromptInput").focus();
+  activeFilterAndSortContainer.style.visibility = "visible";
 };
 
 document.getElementById("searchPromptButton").addEventListener("click", () => {
@@ -484,6 +487,7 @@ const filterPromptCreator = () => {
         buttonElement.tabIndex = 0;
         buttonElement.focus();
         buttonElement.addEventListener("click", function() {
+            activeFilterAndSortContainer.style.visibility = "visible";
             /*** Regresar al principio de la pagina ***/
             document.documentElement.scrollTop = 0;
             filterJSON = window.data.filteredByType(dataPokemon, buttonElement.value);
@@ -536,6 +540,8 @@ const sortByPromptCreator = () => {
     buttonElement.tabIndex = 0;
     buttonElement.focus();
     buttonElement.addEventListener("click", function() {
+    activeFilterAndSortContainer.style.visibility = "visible";
+      
         /*** Regresar al principio de la pagina ***/
         document.documentElement.scrollTop = 0;
         if (filterJSON.length > 0) {
