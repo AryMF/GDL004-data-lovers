@@ -239,6 +239,15 @@
     color: rgb(68, 67, 67);
 }
 
+.textFormatPokeEntry{
+    font-family: 'Rajdhani', sans-serif;
+    font-style: normal;
+    font-variant: normal;
+    text-align: center; 
+    font-size: 3.5vmin;
+    color: rgb(68, 67, 67);
+}
+
 .rightBorderClass{
     border-width: 5px;
     border-color: DimGrey;
@@ -284,6 +293,24 @@
 @keyframes animatetopCharacterWindow {
     from {top:-300px;}
     to {top:50%;}
+}
+
+/************ Text to speech button ************/
+#dexterVoice{
+    width: fit-content;
+    border-radius: 50px;
+    background: transparent;
+}
+
+#dexterVoice i{
+    font-size: 5vmin;
+    padding: .5px;
+    width: 50px;
+    border-radius: 10px;
+}
+
+#dexterVoice i:hover{
+    color: maroon;
 }
 
 /************ Favorite window empty Psyduck ************/

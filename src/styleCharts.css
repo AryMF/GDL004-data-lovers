@@ -3,6 +3,9 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    position: absolute;
+    top: 10vmin;
+    left: 0px;
     width: 99vw;
 }
 
