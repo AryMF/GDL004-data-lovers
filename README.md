@@ -113,6 +113,7 @@ For any questions make sure to contact us to clear them for you.
 ![Pokedex Sketched Prototype Main](src/images/readme/prototipoSketchMain.png)
 ![Pokedex Sketched Prototype CW](src/images/readme/sketchedPrototype.png)
 ![Pokedex Sketched Prototype Mobile Device](src/images/readme/prototipoCW.png)
+![Pokedex Sketched Prototype Mobile Device Filter](src/images/readme/prototipoFilterBy.png)
 
 ### High Fidelity Prototypes
 ![Pokedex HF Prototype Intro](src/images/readme/introPrototype.jpeg)
