@@ -7,8 +7,10 @@
 * [3. Site Instructions](#3-site-instructions)
 * [4. User Stories](#4-user-stories)
 * [5. Prototypes](#5-prototypes)
-* [6. User Testing and Feedback](#6-user-testing-and-feedback)
-* [7. Contact Information ](#7-contact-information )
+* [6. Finished Product ](#7-finished-product)
+* [7. User Testing and Feedback](#6-user-testing-and-feedback)
+* [8. Contact Information ](#7-contact-information )
+
 
 ***
 
@@ -97,11 +99,11 @@ For any questions make sure to contact us to clear them for you.
 ## 4. User Stories
 
 ![Pokedex User Stories](src/images/readme/userStories.png)
-* First User Story
+
 ![Pokedex First User Story](src/images/readme/firstUserStory.png)
-* Second User Story
+
 ![Pokedex Second User Story](src/images/readme/secondUserStory.png)
-* Third User Story
+
 ![Pokedex Third User Story](src/images/readme/thirdUserStory.png)
 
 ## 5. Prototypes
@@ -110,10 +112,10 @@ For any questions make sure to contact us to clear them for you.
 
 ![Pokedex Sketched Prototype Main](src/images/readme/prototipoSketchMain.png)
 ![Pokedex Sketched Prototype CW](src/images/readme/sketchedPrototype.png)
-
+![Pokedex Sketched Prototype Mobile Device](src/images/readme/prototipoCW.png)
 
 ### High Fidelity Prototypes
-
+![Pokedex HF Prototype Intro](src/images/readme/introPrototype.jpeg)
 ![Pokedex HF Prototype Main](src/images/readme/prototypeFirstPage.png)
 ![Pokedex HF Prototype Character Window](src/images/readme/prototypeCharacterWindow.png)
 ![Pokedex HF Prototype Sort](src/images/readme/pokedexSortPrototype.png)
@@ -124,7 +126,7 @@ For any questions make sure to contact us to clear them for you.
 ![Finished Product Prompts](src/images/readme/finishedProductPromptss.png)
 ![Finished Product Character Window](src/images/readme/ssLiveSiteCardandWindow.png)
 
-## 6. User Testing and Feedback
+## 7. User Testing and Feedback
 
 ### Sprint working and SCRUM
 ![Kanban Board](src/images/readme/sprintPlanningBoard.jpeg)
@@ -140,13 +142,13 @@ mejoraste en tu propuesta final. -->
 
 
 
-## 7. Contact Information 
+## 8. Contact Information 
 
-- AryMF 
-[Ary's Github](https://github.com/AryMF)
-Ary's email: 
-- Majo Aquino
-[Majo's Github](https://github.com/majoaquino99)
+- AryMF <br>
+[Ary's Github](https://github.com/AryMF) <br>
+Ary's email: ariadne.hp@gmail.com <br><br>
+- Majo Aquino <br>
+[Majo's Github](https://github.com/majoaquino99)<br>
 Majo's email: majo.aqh@gmail.com
 
 
