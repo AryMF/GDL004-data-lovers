@@ -15,31 +15,63 @@ body {
   align-items: center;
   margin: 0%;
   padding: 0%;
-  /* visibility: hidden; /*Descomentar para activar animación intro*/
+  visibility: hidden; /*Descomentar para activar animación intro*/
 }
 
 /***** Menu barra superior *****/
+a {
+  text-decoration: none;
+}
+#homeButton, #toggleLanguageEN, #toggleLanguageES {
+  visibility: hidden; 
+}
+
+#toggleLanguageEN:checked ~ #languageEN{
+  color: white;
+}
+#toggleLanguageES:checked ~ #languageES{
+  color: whitesmoke;
+}
+
 .header {
   position: fixed;
   display: flex;
   flex-direction: row;
-  justify-content: center;
-  align-content: center;
   top: 0;
   left: 0;
   width: 100vw;
   height: 10vh;
+  padding: 10px 0;
   background-color: crimson;
   z-index: 1;
 }
-.topMenuButtonContainer {
-  background-color: transparent;
-  border: 0;
-  flex: 0;
+
+.headerNavColumn{
+  display: flex;
+  flex-direction: column; 
+  flex: 1;
+  align-self: center;
+  width: fit-content;
 }
 
-.header div {
+.headerNav{
+  display: flex;
+  flex-direction: row; 
   flex: 1;
+  align-self: center;
+}
+.headerNav li{
+  align-self: center;
+}
+
+.topMenuButtonContainer {
+  border: 0;
+  background-color: transparent;
+}
+
+.titleDiv {
+  flex: 3;
+  align-self: center;
 }
 
 .titleText {
@@ -52,17 +84,16 @@ body {
   margin: 15px 0px 0px;
 }
 
-/**Solo para Usability testing **/
-#menuButton{
-  visibility: hidden;
-}
-/*******************************/
-
-#homeButton {
-  visibility: hidden;
+.headerNav ul{
+  display: flex;
+  flex-direction: row;
+  font-size: 20px;
+  margin: 0px 10px;
+  color: black;
 }
 
 #menuButton,
+#gitHubButton,
 #favoritesButton,
 #chartButton,
 #homeButton {
@@ -73,6 +104,12 @@ body {
 
 #menuButton:hover,
 #menuButton:focus,
+#gitHubButton:hover,
+#gitHubButton:focus,
+#languageEN:hover,
+#languageEN:focus,
+#languageES:hover,
+#languageES:focus,
 #favoritesButton:hover,
 #favoritesButton:focus,
 #chartButton:hover,
@@ -82,6 +119,12 @@ body {
   color: white;
   cursor: pointer;
 }
+
+/**Solo para Usability testing **/
+#menuButton{
+  visibility: hidden;
+}
+/*******************************/
 
 /***** Menu flotante *****/
 .floatingMenuDIV {
@@ -94,7 +137,7 @@ body {
   width: fit-content;
   background-color: transparent;
   z-index: 1;
-  /*visibility: hidden; /*Descomentar para activar animación intro*/
+  visibility: hidden; /*Descomentar para activar animación intro*/
 }
 
 #toggle, #toggleFav, #toggleCharts{
@@ -185,12 +228,12 @@ body {
   border-color: gray;
   border-width: 1.2px;
   visibility: hidden;
-  
+
 }
 #activeFilterAndSort p{
   font-family: 'Rajdhani', sans-serif;
   font-size: 3vmin;
-  color: DarkSlateGrey; 
+  color: DarkSlateGrey;
   margin: 0px 9px;
 }
 
@@ -298,18 +341,37 @@ body {
 }
 /***** Ajustes web responsiva: Main window*****/
 @media(hover: hover) and (pointer: fine) {
-    #menuButton:hover, #favoritesButton:hover, 
-#chartButton:hover{
+  #menuButton:hover, #favoritesButton:hover,
+  #chartButton:hover{
     color: white;
     cursor: pointer;
-}
+  }
 }
 
 @media screen and (max-width: 768px) {
 
 }
 
+/* @media screen and (max-width: 768px) { */
 @media screen and (max-width: 500px) {
+  .header{
+    height: fit-content;
+    flex-flow: row wrap;
+    justify-content: center;
+  }
+  .headerNavColumn{
+    order: 1;
+  }
+  .titleDiv {
+    order: 3;
+  }
+  .headerNav{
+    order: 2;
+    display: flex;
+    flex-direction: row; 
+    flex: 1;
+    align-self: center;
+  }
   #menuButton,
   #favoritesButton,
   #chartButton,
@@ -368,5 +430,52 @@ body {
   }
   .numberPokemon {
     font-size: 22px;
+  }
+  @media only screen and (orientation: landscape) {
+    .floatingMenuClass {
+      background-color: green;
+    }
+  }
+  
+}
+
+/* @media only screen and (max-width: 850px) and (orientation: landscape) {*/
+@media only screen and (orientation: landscape) {
+  .floatingMenuDIV {
+    flex-direction: row-reverse;
+  }
+
+  .floatingMenuDIV {
+    bottom: 0.5vh;
+    right: 2vw;
+    width: fit-content;
+  }
+  .floatingMenu {
+    width: 18vw;
+    height: 10vh;
+    margin: 0 0 3vh 0;
+  }
+  .floatingMenuClassNormal {
+    width: 60px;
+    height: 60px;
+  }
+
+  .floatingMenuClassNormal i {
+    font-size: 50px;
+    color: white;
+  }
+  .floatingMenuClassSmall {
+    width: 40px;
+    height: 40px;
+    color: black;
+    animation: pop 0.3s linear 1;
+  }
+  .floatingMenuElement {
+    width: 60px;
+    height: 60px;
+    margin: 0 0 3vh 0;
+  }
+  .floatingMenuElement i {
+    font-size: 35px;
   }
 }
