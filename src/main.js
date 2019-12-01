@@ -1,4 +1,3 @@
-// import data from '../src/data';
 const DATA_URL = "https://raw.githubusercontent.com/AryMF/GDL004-data-lovers/master/src/data/pokemon/pokemon.json";
 const DATA_API = "https://pokeapi.co/api/v2/pokemon?limit=151";
 let dataPokemon = [];
@@ -7,6 +6,10 @@ let dataPokedexArray = [];
 
 /***********Main window *********************/
 let pokemonContainerElement = document.getElementById("pokemonContainer");
+let buttonLanguageEN = document.querySelector("#languageEN");
+let toggleLanguageEN = document.querySelector("#toggleLanguageEN");
+let buttonLanguageES = document.querySelector("#languageES");
+let toggleLanguageES = document.querySelector("#toggleLanguageES");
 let homeButtonElement = document.getElementById("homeButton");
 let toggleFavElement = document.getElementById("toggleFav");
 let toggleChartsElement = document.getElementById("toggleCharts");
@@ -23,11 +26,11 @@ let sortByPromptElement = document.getElementById("sortByPrompt");
 let sortByButtons = document.getElementById("sortByButtonsDiv");
 let buttonCloseNode = document.getElementsByClassName("buttonCloseClass");
 /***********Popup windows Character *********************/
-let characterWindowElement = document.getElementById("characterWindow");
-let characterDynamicDiv = document.getElementById("characterDynamicContent");
-let characterTitleName = "";
+let characterWindowElement = document.querySelector("#characterWindow");
+let pokeballAndImagDiv = document.querySelector(".pokeballAndImagDiv");
+let characterDynamicDiv = document.querySelector("#characterDynamicContent");
 /*********** Text to speech *********************/
-let language = 1; //TODO: Valor que debe almacenarse en cookie
+let language = 1; // TODO: probablemente no es necesarios
 let voiceStatusFlag = false;
 var synth = window.speechSynthesis;
 
@@ -141,6 +144,66 @@ const sortByOptions = [
   }
 ];
 
+/********** Animación de intro ******************************/
+
+let loadingImageDiv = document.getElementById("divLoading");
+let mainScreenDiv = document.getElementById("mainScreen");
+let floatingMenu = document.getElementById("floatingMenuDIV");
+
+let loadingImage = document.getElementById("loadingImage");
+let divLoadingImage = document.getElementById("divLoadingImage");
+
+let ledImage = document.getElementById("ledImage");
+let divLedImage = document.getElementById("divLedImage");
+
+let ripple_wrap = document.getElementById('ripple-wrap');
+let rippler = document.getElementById('ripple');
+let finish = false;
+let soundControl = document.getElementById("soundControl");
+
+
+// loadingImage.addEventListener("click", () => {
+const animationDataLoadingEnd = () => {
+    let time = 1;
+    let i = 1;
+    let intervalTime = 600;
+    let interval = setInterval(() => {
+        if(i < 5){
+            time = time - 0.2;
+            loadingImage.style.webkitAnimation ="loading " + time + "s  linear 0s infinite";
+        } else{
+            loadingImage.style.WebkitAnimationPlayState = "paused";
+            divLoadingImage.style.visibility = "hidden";
+            divLedImage.style.visibility = "visible";
+            ledImage.style.webkitAnimation = "light .5s linear 2";
+            soundControl.play();
+            clearInterval(interval);
+            let intervalTwo = setInterval(() => {
+                if(i == 6){
+                    divLedImage.style.visibility = "hidden";
+                    ripple_wrap.classList.add('goripple');
+                    rippler.style.WebkitAnimationPlayState = "running";
+                    rippler.style.animationPlayState = "running";
+                    setTimeout(function() {
+                        loadingImageDiv.style.visibility = "hidden";
+                        mainScreenDiv.style.visibility = "visible"; //Cambiar por pantalla main
+                        floatingMenu.style.visibility = "visible";
+                        openFloatingMenu();
+                    },1000);
+                    clearInterval(intervalTwo);
+                }
+            }, 1500);
+        }
+        i++;
+    }, intervalTime);
+};
+
+rippler.addEventListener("animationend", function(e){
+    ripple_wrap.classList.remove('goripple');
+
+});
+/**/
+
 /******************** Llamada de datos ********************/
 /**** Pokedex entries ****/
 const apiCallFunction = (url = "", option = {}) => {
@@ -189,8 +252,10 @@ const main = () => {
     .then(dataJSON => {
       dataPokemon = dataJSON.pokemon;
       getPokemonData().then( () => {
+        console.log("Carga de data finalizada");
         printPokemonCards(dataPokemon); /**Comentar para animación intro */
-      });      
+        animationDataLoadingEnd();
+      });
     })
     .catch(error => {
       console.error("Error al cargar JSON por fetch");
@@ -200,65 +265,6 @@ const main = () => {
 
 window.addEventListener("load", main);
 
-/********** Animación de intro ******************************/
-
-let loadingImageDiv = document.getElementById("divLoading");
-let mainScreenDiv = document.getElementById("mainScreen");
-let floatingMenu = document.getElementById("floatingMenuDIV");
-
-let loadingImage = document.getElementById("loadingImage");
-let divLoadingImage = document.getElementById("divLoadingImage");
-
-let ledImage = document.getElementById("ledImage");
-let divLedImage = document.getElementById("divLedImage");
-
-let ripple_wrap = document.getElementById('ripple-wrap');
-let rippler = document.getElementById('ripple');
-let finish = false;
-let soundControl = document.getElementById("soundControl");
-/*
-loadingImage.addEventListener("click", () => {
-    let time = 1;
-    let i = 1;
-    let intervalTime = 600;
-    let interval = setInterval(() => {
-        if(i < 5){
-            time = time - 0.2;
-            loadingImage.style.webkitAnimation ="loading " + time + "s  linear 0s infinite";
-        } else{
-            loadingImage.style.WebkitAnimationPlayState = "paused";
-            divLoadingImage.style.visibility = "hidden";
-            divLedImage.style.visibility = "visible";
-            ledImage.style.webkitAnimation = "light .5s linear 2";
-            soundControl.play();
-            clearInterval(interval);
-            let intervalTwo = setInterval(() => {
-                if(i == 6){
-                    divLedImage.style.visibility = "hidden";
-                    ripple_wrap.classList.add('goripple');
-                    rippler.style.WebkitAnimationPlayState = "running";
-                    rippler.style.animationPlayState = "running";
-                    setTimeout(function() {
-                        loadingImageDiv.style.visibility = "hidden";
-                        mainScreenDiv.style.visibility = "visible"; //Cambiar por pantalla main
-                        floatingMenu.style.visibility = "visible";
-                        printPokemonCards(dataPokemon);
-                    },1000);
-                    clearInterval(intervalTwo);
-                }
-            }, 1500);
-        }
-        i++;
-    }, intervalTime);
-    
-    
-});
-
-rippler.addEventListener("animationend", function(e){
-    ripple_wrap.classList.remove('goripple');
-        
-});
-*/
 /********** Impresión en pantalla de Pokemon cards **********/
 
 const printPokemonCards = (dataArray, filterByText = "All", sortByText = "All") => {
@@ -275,13 +281,13 @@ const printPokemonCards = (dataArray, filterByText = "All", sortByText = "All") 
 
     let concatTemplateElements = "";
 
-    dataArray.forEach((element) => { 
+    dataArray.forEach((element) => {
 
     if (element.name == "Nidoran ♀ (Female)" || element.name == "Nidoran ♂ (Male)") {
         pokemonName = element.name.substring(0, 9);
     } else {
         pokemonName = element.name;
-    } 
+    }
 
     for (let i = 0; i < typeArray.length; i++) {
         if (element.type[0] == typeArray[i].type) {
@@ -312,7 +318,7 @@ const printPokemonCards = (dataArray, filterByText = "All", sortByText = "All") 
 
     orderArray.push(element.name);
     concatTemplateElements = concatTemplateElements + pokemonCardsTemplate;
-    }); 
+    });
 
     //impresion en pantalla
     pokemonContainerElement.innerHTML = concatTemplateElements;
@@ -320,7 +326,7 @@ const printPokemonCards = (dataArray, filterByText = "All", sortByText = "All") 
     pokemonContainerElement.innerHTML = concatTemplateElements;
 
     let backCards = document.getElementsByClassName("divPokemonCardFaceClass--back");
-  
+
     for(let i=0; i< backCards.length;i++){
       backCards[i].addEventListener("click", function() {
         characterWindowPrint(orderArray[i]);
@@ -347,10 +353,22 @@ const printPokemonCards = (dataArray, filterByText = "All", sortByText = "All") 
             characterWindowPrint(orderArray[i]);
         }
         });
-    }  
+    }
 };
 
-/******************** Short cut Event listener ********************/
+/******************** Event listeners ********************/
+
+buttonLanguageEN.addEventListener("click", () => {
+  toggleLanguageES.checked = false;
+  toggleLanguageEN.checked = true;
+  language = 1;
+});
+
+buttonLanguageES.addEventListener("click", () => {
+  toggleLanguageEN.checked = false;
+  toggleLanguageES.checked = true;
+  language = 0;
+});
 
 /*********************** Floating menu ***********************/
 let toggleElement = document.getElementById("toggle");
@@ -424,6 +442,7 @@ document.addEventListener("keyup", function(event) {
 });
 
 /************************  Search modal  *********************************/
+//TODO: Mensaje de busqueda sin matches
 document.getElementById("searchButton").addEventListener("click", () => {
   searchPromptCreator();
 });
@@ -584,7 +603,7 @@ const sortByPromptCreator = () => {
     buttonElement.focus();
     buttonElement.addEventListener("click", function() {
     activeFilterAndSortContainer.style.visibility = "visible";
-      
+
         /*** Regresar al principio de la pagina ***/
         document.documentElement.scrollTop = 0;
         if (filterJSON.length > 0) {
@@ -674,10 +693,11 @@ const hiddenPromptWindow = () => {
   filterByPromptElement.style.visibility = "hidden";
   searchByPromptElement.style.visibility = "hidden";
   characterWindowElement.style.visibility = "hidden";
+  pokeballAndImagDiv.innerHTML = "";
   characterDynamicDiv.innerHTML = "";
-  elementDivPokeballImage.style.visibility = "hidden";
-  elementDivFavImage.style.visibility = "hidden";
-  characterImageElement.setAttribute("src", "");
+  // elementDivPokeballImage.style.visibility = "hidden"; borrar
+  // elementDivFavImage.style.visibility = "hidden"; borrar
+  // characterImageElement.setAttribute("src", "");
   if(toggleFavElement.checked === true){
     showFavorites();
   }
@@ -690,6 +710,7 @@ const hiddenPromptWindow = () => {
 
 
 document.getElementById("favoritesButton").addEventListener("click", () => {
+  closeFloatingMenu();
   toggleFavElement.checked = true;
   toggleChartsElement.checked = false;
   homeButtonElement.style.visibility = "visible";
@@ -700,7 +721,7 @@ document.getElementById("favoritesButton").addEventListener("click", () => {
   activeFilterAndSortContainer.style.visibility = "hidden";
   /***Cerrar Charts */
   chartsContainerElement.style.visibility = "hidden";
-  showFavorites();  
+  showFavorites();
 });
 
 document.getElementById("homeButton").addEventListener("click", () => {
@@ -713,9 +734,9 @@ document.getElementById("homeButton").addEventListener("click", () => {
   chartsContainerElement.style.visibility = "hidden";
   /***Abrir Main */
   pokemonContainerElement.style.visibility = "visible";
-  activeFilterAndSortContainer.style.visibility = "visible";
+  // activeFilterAndSortContainer.style.visibility = "visible";
 
-  printPokemonCards(dataPokemon);  
+  printPokemonCards(dataPokemon);
 });
 
 const loadFavorites = () => {
@@ -775,6 +796,7 @@ const showFavorites = () => {
 
 /************************** Charts window **************************/
 document.getElementById("chartButton").addEventListener("click", () => {
+    closeFloatingMenu();
     toggleChartsElement.checked = true;
     toggleFavElement.checked = false;
     homeButtonElement.style.visibility = "visible";
@@ -789,8 +811,8 @@ document.getElementById("chartButton").addEventListener("click", () => {
 
 const generateData = () =>{
     let data = "Mock data";
-    
-    return data;    
+
+    return data;
 };
 
 const chartsWindowPrint = () => {
@@ -798,11 +820,11 @@ const chartsWindowPrint = () => {
 
 
     const chartWindowTemplate = `
-        <h1>Charts</h1>
+        <h2>Charts</h2>
         <br/><br/>
         <div class="chartDynamicContent">
             <p>${dataForCharts}</p>
-            <!--
+
             <canvas id="weightNHeight" width="200px" height="150px" style="border:1px solid #000000;">
             </canvas>
             <canvas id="line-chart" width="200px" height="150px" style="border:1px solid #000000;">
@@ -810,12 +832,12 @@ const chartsWindowPrint = () => {
             <canvas id="polar-chart" width="200px" height="150px" style="border:1px solid #000000;">
             </canvas>
             <button id="buttonData"> Data </button>
-            -->
+
         </div>
     `;
 
     chartsContainerElement.innerHTML = chartWindowTemplate;
-    /*
+
     //Ejemplo 01
     let ctx = document.getElementById('weightNHeight').getContext('2d');
 
@@ -881,41 +903,41 @@ const chartsWindowPrint = () => {
     data: {
         labels: years,
         datasets: [
-            { 
+            {
                 data: africa,
                 label: "Africa",
                 borderColor: "#3e95cd",
                 fill: false
               },
-              { 
+              {
                 data: asia,
                 label: "Asia",
                 borderColor: "#3e95cd",
                 fill: false
               },
-              { 
+              {
                 data: europe,
                 label: "Europe",
                 borderColor: "#3e95cd",
                 fill: false
               },
-              { 
+              {
                 data: latinAmerica,
                 label: "Latin America",
                 borderColor: "#3e95cd",
                 fill: false
               },
-              { 
+              {
                 data: northAmerica,
                 label: "North America",
                 borderColor: "#3e95cd",
                 fill: false
               }
         ]
-        
+
     }
     });
-    
+
 
     //Ejemplo 03
     new Chart(document.getElementById("polar-chart"), {
@@ -947,30 +969,23 @@ const chartsWindowPrint = () => {
 
     /*************** Event listener boton *********************** */
 
-    /*
+
     let button = document.getElementById("buttonData");
     button.addEventListener("click", () => {
         generateData();
     });
-    */
+
 };
 
 
 /******************** Character window ********************/
-let elementDivPokeballImage = document.getElementById("divPokeballImage");
-let elementPokeballImage = document.getElementById("pokeballImage");
-let elementDivFavImage = document.getElementById("divFavImage");
-let elementStarFavImage = document.getElementById("starFavImage");
-
-let characterImageElement = document.getElementById("characterImage");
 
 const characterWindowPrint = (pokemonName) =>{
-    characterTitleName = ""; //Asegurar que este vació
     //Template necesario
     let evolutionPathArrowTemplate = `<div class="columnAlignmentClass evolutionPathArrow">
         <p class="textFormatSmall">&#8594;</p>
-        </div>`; 
-    let evolutionPathIndex = 0; // Variable necesaria 
+        </div>`;
+    let evolutionPathIndex = 0; // Variable necesaria
 
     //Preparar data del pokemon elegido
     let searchPokemon = window.data.filteredByNameOrNumber(dataPokemon, pokemonName, true);
@@ -978,15 +993,6 @@ const characterWindowPrint = (pokemonName) =>{
 
     let pokedexEntry = language == 0 ? dataPokedexArray[characterData.id-1].flavor_text_es
         : dataPokedexArray[characterData.id-1].flavor_text_en;
-    
-    // Llamar data de cookies favoritos 
-    let pokemonCookiesArray = loadFavorites();
-    // Configuración de botón de favoritos
-    if(pokemonCookiesArray.indexOf(pokemonName.toUpperCase()) != -1){
-        catchItAnimation(1, 0); /*el pokemon esta en favoritos*/
-    }else {
-        catchItAnimation(2, 0);
-    }
 
     // Color de ventana
     let colorByType;
@@ -1004,7 +1010,7 @@ const characterWindowPrint = (pokemonName) =>{
     if("prev_evolution" in characterData){
         evolutionPathArray = evolutionPathArray.concat(characterData.prev_evolution
             .map((elementArray) => {
-            let found = data.filteredByNameOrNumber(dataPokemon, elementArray.name);  
+            let found = data.filteredByNameOrNumber(dataPokemon, elementArray.name);
             /*
             let found = dataPokemon.filter((element) => {
                 return element.name === elementArray.name;
@@ -1012,7 +1018,7 @@ const characterWindowPrint = (pokemonName) =>{
             return { "name": elementArray.name, "img": found ? found[0].img : ''};
         }));
     }
-    
+
     evolutionPathArray = evolutionPathArray.concat([{
         "name": characterData.name,
         "img": characterData.img
@@ -1026,20 +1032,59 @@ const characterWindowPrint = (pokemonName) =>{
             });
             return { "name": elementArray.name, "img": found ? found[0].img : ''};
         }));
-    }          
+    }
     /***** Fin de concatenación evolution path ****/
-    
 
     characterWindowElement.setAttribute("style", "border-color: " + colorByType);
 
-    //Carga la imagen del pokemon 
+    //Ruta para la imagen del pokemon
     let cuteImageSRC = "https://pokeres.bastionbot.org/images/pokemon/";
     let cuteImageExt = ".png";
-    characterImageElement.setAttribute("src", cuteImageSRC + characterData.id + cuteImageExt); // Si la comentas sale la imagen linda
 
 // characterDynamicDiv
 /****************************************************************************************/
-const characterWindowTemplate  = `
+const characterWindowTemplate1 = `
+  <!-- Botón animado pokeball -->
+  <div id="divCatchIt" class="divCatchIt">
+    <div id="divPokeballImage" class="divPokeballImage">
+          <span class="tooltiptextPokeball popoverTextFormat">Catch it!</span>
+          <svg id="pokeballImage" class="pokeballImage" viewbox="0 0 322 322" xmlns="http://www.w3.org/2000/svg">
+              <g clip-path="pokeball">
+              <!-- Relleno rojo 1-->
+              <path d="M160.63 9.44882C140.777 9.44875 121.118 13.3591 102.776 20.9567C84.4334 28.5543 67.7673 39.6902 53.7287 53.7287C39.6902 67.7673 28.5543 84.4334 20.9567 102.776C13.3591 121.118 9.44875 140.777 9.44882 160.63H311.812C311.812 140.777 307.902 121.118 300.304 102.776C292.707 84.4334 281.571 67.7673 267.532 53.7287C253.494 39.6902 236.827 28.5543 218.485 20.9567C200.143 13.3591 180.484 9.44875 160.63 9.44882V9.44882Z" fill="#800000"/>
+              <!-- Border superior 2-->
+              <path fill-rule="evenodd" clip-rule="evenodd" d="M99.1598 12.2271C118.648 4.1547 139.536 -7.53392e-05 160.63 1.02462e-09C181.725 -7.53392e-05 202.613 4.1547 222.101 12.2271C241.59 20.2995 259.298 32.1315 274.214 47.0474C289.129 61.9633 300.961 79.6712 309.034 99.1598C317.106 118.648 321.261 139.536 321.261 160.63C321.261 165.849 317.031 170.079 311.812 170.079H9.44882C4.23039 170.079 1.90745e-05 165.849 1.02461e-09 160.63C-7.53392e-05 139.536 4.15471 118.648 12.2271 99.1598C20.2995 79.6712 32.1315 61.9633 47.0474 47.0474C61.9634 32.1315 79.6712 20.2995 99.1598 12.2271ZM160.63 18.8976C142.018 18.8976 123.587 22.5636 106.392 29.6863C89.1957 36.809 73.5712 47.2489 60.4101 60.41C47.2489 73.5712 36.809 89.1957 29.6863 106.392C23.7715 120.671 20.2404 135.802 19.2129 151.182H302.048C301.02 135.802 297.489 120.671 291.575 106.392C284.452 89.1957 274.012 73.5712 260.851 60.41C247.69 47.2489 232.065 36.809 214.869 29.6863C197.674 22.5636 179.243 18.8976 160.63 18.8976Z" fill="black"/>
+              <!-- Relleno blanco 3-->
+              <path d="M160.63 311.812C180.484 311.812 200.143 307.902 218.485 300.304C236.827 292.707 253.494 281.571 267.532 267.532C281.571 253.494 292.707 236.827 300.304 218.485C307.902 200.143 311.812 180.484 311.812 160.631H9.44882C9.44875 180.484 13.3591 200.143 20.9567 218.485C28.5543 236.827 39.6902 253.494 53.7287 267.532C67.7673 281.571 84.4334 292.707 102.776 300.304C121.118 307.902 140.777 311.812 160.63 311.812V311.812Z" fill="white"/>
+              <!-- Borde inferior 4-->
+              <path fill-rule="evenodd" clip-rule="evenodd" d="M1.00976e-09 160.63C1.80232e-05 155.412 4.23039 151.182 9.44882 151.182H311.812C317.03 151.182 321.261 155.412 321.261 160.63C321.261 181.725 317.106 202.613 309.034 222.101C300.961 241.59 289.129 259.298 274.213 274.214C259.298 289.129 241.59 300.961 222.101 309.034C202.613 317.106 181.725 321.261 160.63 321.261C139.536 321.261 118.648 317.106 99.1598 309.034C79.6712 300.961 61.9634 289.129 47.0474 274.214C32.1315 259.298 20.2995 241.59 12.2271 222.101C4.15471 202.613 -7.47911e-05 181.725 1.00976e-09 160.63ZM19.2129 170.079C20.2404 185.459 23.7715 200.59 29.6863 214.869C36.809 232.065 47.2489 247.69 60.4101 260.851C73.5712 274.012 89.1957 284.452 106.392 291.575C123.587 298.697 142.018 302.363 160.63 302.363C179.243 302.363 197.674 298.697 214.869 291.575C232.065 284.452 247.69 274.012 260.851 260.851C274.012 247.69 284.452 232.065 291.575 214.869C297.489 200.59 301.02 185.459 302.048 170.079H19.2129Z" fill="black"/>
+              <!-- Centro negro 5-->
+              <path d="M160.63 217.323C191.941 217.323 217.323 191.941 217.323 160.63C217.323 129.32 191.941 103.938 160.63 103.938C129.32 103.938 103.938 129.32 103.938 160.63C103.938 191.941 129.32 217.323 160.63 217.323Z" fill="black"/>
+              <!-- Centro blanco 6-->
+              <path d="M160.63 198.426C181.504 198.426 198.426 181.504 198.426 160.63C198.426 139.757 181.504 122.835 160.63 122.835C139.757 122.835 122.835 139.757 122.835 160.63C122.835 181.504 139.757 198.426 160.63 198.426Z" fill="white"/>
+              </g>
+              <defs>
+              <clippath id="clip0">
+              <rect width="321.261" height="321.261" fill="white"/>
+              </clippath>
+              </defs>
+          </svg>
+    </div>
+    <div id="divFavImage" class="divFavImage">
+      <svg id="starFavImage" viewbox="0 0 308 293" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M145.432 5.23722C149.319 -1.22099 158.681 -1.22101 162.568 5.2372L207.773 80.3517C209.169 82.6718 211.446 84.3265 214.084 84.9375L299.492 104.718C306.835 106.419 309.728 115.323 304.787 121.015L247.318 187.219C245.543 189.264 244.673 191.941 244.907 194.639L252.487 281.979C253.138 289.488 245.564 294.991 238.623 292.051L157.901 257.853C155.408 256.796 152.592 256.796 150.099 257.853L69.3767 292.051C62.4363 294.991 54.8615 289.488 55.5132 281.979L63.0931 194.639C63.3272 191.941 62.4573 189.264 60.6822 187.219L3.21311 121.015C-1.72797 115.323 1.16533 106.419 8.50846 104.718L93.9156 84.9375C96.5536 84.3265 98.8311 82.6718 100.227 80.3517L145.432 5.23722Z" fill="#D4AF37"/>
+          <path fill-rule="evenodd" clip-rule="evenodd" d="M154 29.7871L117.364 90.6644C113.175 97.6247 106.342 102.589 98.4281 104.422L29.2091 120.453L75.7856 174.108C81.1108 180.243 83.7206 188.275 83.0182 196.368L76.875 267.153L142.297 239.437C149.777 236.268 158.223 236.268 165.703 239.437L231.125 267.153L224.982 196.368C224.279 188.275 226.889 180.243 232.214 174.108L278.791 120.453L209.572 104.422C201.658 102.589 194.825 97.6247 190.636 90.6644L154 29.7871ZM162.568 5.2372C158.681 -1.221 149.319 -1.22099 145.432 5.23722L100.227 80.3517C98.8311 82.6718 96.5536 84.3265 93.9156 84.9375L8.50846 104.718C1.16533 106.419 -1.72797 115.323 3.21311 121.015L60.6822 187.219C62.4573 189.264 63.3272 191.941 63.0931 194.639L55.5132 281.979C54.8615 289.488 62.4363 294.991 69.3767 292.051L150.099 257.853C152.592 256.796 155.408 256.796 157.901 257.853L238.623 292.051C245.564 294.991 253.138 289.488 252.487 281.979L244.907 194.639C244.673 191.941 245.543 189.264 247.318 187.219L304.787 121.015C309.728 115.323 306.835 106.419 299.492 104.718L214.084 84.9375C211.446 84.3265 209.169 82.6718 207.773 80.3517L162.568 5.2372Z" fill="black"/>
+      </svg>
+    </div>
+  </div>
+  <div class="characterImageDIV">
+      <img id="characterImage" class="characterImageClass" src=${cuteImageSRC + characterData.id + cuteImageExt}>
+  </div>
+`;
+
+pokeballAndImagDiv.innerHTML = characterWindowTemplate1;
+
+const characterWindowTemplate2  = `
     <!-- Contenido dinámico -->
     <!-- **************************************************************************************** -->
     <div class="columnAlignmentClass">
@@ -1090,7 +1135,7 @@ const characterWindowTemplate  = `
     <!-- **************************************************************************************** -->
     <div class="rowAlignmentClass">
         <div class="columnAlignmentClass">
-            <p class="textFormatSmall">Info</p>
+            <p class="textFormatSmall">Pokedex entry</p>
             <p class="textFormatPokeEntry">${pokedexEntry}</p>
         </div>
         <div class="columnAlignmentClass">
@@ -1119,75 +1164,97 @@ const characterWindowTemplate  = `
         </div>
     </div>`;
 
-    characterDynamicDiv.innerHTML = characterWindowTemplate;
-    characterTitleName = document.getElementById("characterPokemonName").innerHTML;
-                
-/****************************************************************************************/
+    characterDynamicDiv.innerHTML = characterWindowTemplate2;
+
+    let elementDivPokeballImage = document.querySelector("#divPokeballImage"); 
+    let elementPokeballImage = document.querySelector("#pokeballImage");
+    let elementDivFavImage = document.querySelector("#divFavImage"); 
+    let elementStarFavImage = document.querySelector("#starFavImage");
+    let characterTitleName = document.querySelector("#characterPokemonName").innerHTML;
+
+    const catchItAnimation = (status, animation) => {
+      let shrinkAnimationDelay = 0;
+      let showElementDelay = 0;
+      /* Define si hace la animacion */
+      if (animation === 1) {
+        shrinkAnimationDelay = 300;
+        showElementDelay = 1000;
+      }
+    
+      if (status === 1) {
+        elementPokeballImage.classList.remove("pokeballImage");
+        elementPokeballImage.classList.add("onClickImage");
+    
+        setTimeout(() => {
+          elementPokeballImage.classList.add("onClickShrink");
+        }, shrinkAnimationDelay);
+        setTimeout(() => {
+          elementDivPokeballImage.style.visibility = "hidden";
+          elementDivFavImage.style.visibility = "visible";
+          elementStarFavImage.classList.add("starFavImage");
+        }, showElementDelay);
+      } else {
+        elementPokeballImage.classList.add("pokeballImage");
+        elementPokeballImage.classList.remove("onClickImage");
+        elementPokeballImage.classList.remove("onClickShrink");
+        elementDivPokeballImage.style.visibility = "visible";
+        elementDivFavImage.style.visibility = "hidden";
+        elementStarFavImage.classList.remove("starFavImage");
+      }
+    };
+
+    // Llamar data de cookies favoritos
+    let pokemonCookiesArray = loadFavorites();
+    // Configuración de botón de favoritos
+    if(pokemonCookiesArray.indexOf(pokemonName.toUpperCase()) != -1){
+        catchItAnimation(1, 0); //el pokemon esta en favoritos
+    }else {
+        catchItAnimation(2, 0);
+    }
+    
+    elementPokeballImage.addEventListener("click", () => {
+      catchItAnimation(1, 1);
+      //**Create cookie
+      createFavoriteCookie(characterTitleName.toUpperCase());
+      //** Refrescar pantalla favoritos
+      if(toggleFavElement.checked === true){
+        showFavorites();
+      }
+   });
+   elementStarFavImage.addEventListener("click", () => {
+      catchItAnimation(2, 1);
+      //*** Remove cookie
+      deleteFavorite(characterTitleName.toUpperCase().trim());
+      //** Refrescar pantalla favoritos
+      if(toggleFavElement.checked === true){
+        showFavorites();
+      }
+    });
+/**********/
     showPromptWindow(4);
 };
 
-const catchItAnimation = (status, animation) => {
-  let shrinkAnimationDelay = 0;
-  let showElementDelay = 0;
-  /* Define si hace la animacion */
-  if (animation === 1) {
-    shrinkAnimationDelay = 300;
-    showElementDelay = 1000;
-  }
-
-  if (status === 1) {
-    elementPokeballImage.classList.remove("pokeballImage");
-    elementPokeballImage.classList.add("onClickImage");
-
-    setTimeout(() => {
-      elementPokeballImage.classList.add("onClickShrink");
-    }, shrinkAnimationDelay);
-    setTimeout(() => {
-      elementDivPokeballImage.style.visibility = "hidden";
-      elementDivFavImage.style.visibility = "visible";
-      elementStarFavImage.classList.add("starFavImage");
-    }, showElementDelay);
-  } else {
-    elementPokeballImage.classList.add("pokeballImage");
-    elementPokeballImage.classList.remove("onClickImage");
-    elementPokeballImage.classList.remove("onClickShrink");
-    elementDivPokeballImage.style.visibility = "visible";
-    elementDivFavImage.style.visibility = "hidden";
-    elementStarFavImage.classList.remove("starFavImage");
-  }
-};
- elementPokeballImage.addEventListener("click", () => {
-    catchItAnimation(1, 1);
-    /**Create cookie*/
-    createFavoriteCookie(characterTitleName.toUpperCase());
-    /** Refrescar pantalla favoritos **/
-    if(toggleFavElement.checked === true){
-      showFavorites();
-    }
- });
- elementStarFavImage.addEventListener("click", () => {
-    catchItAnimation(2, 1);
-    /*** Remove cookie */
-    deleteFavorite(characterTitleName.toUpperCase().trim());
-    /** Refrescar pantalla favoritos **/
-    if(toggleFavElement.checked === true){
-      showFavorites();
-    }
- });
-
  /** Text to speech */
  document.getElementById("dexterVoice").addEventListener("click", () =>{
-  
+
   if ('speechSynthesis' in window) {
     if(!voiceStatusFlag){
       voiceStatusFlag = true;
       console.log("Synthesis support. Make your web apps talk!");
-      let msg = new SpeechSynthesisUtterance(document.querySelector(".textFormatPokeEntry").innerHTML);
+      let msg = new SpeechSynthesisUtterance(document.querySelector("#characterPokemonName").innerHTML);
       language == 0 ? msg.voice = synth.getVoices()[5] : msg.voice = synth.getVoices()[3]; // ES: 5 || EN-GB Male: 3 || EN-GB FEM: 2
       msg.onend = function(){
         voiceStatusFlag = false;
       };
+      let msg2 = new SpeechSynthesisUtterance(document.querySelector(".textFormatPokeEntry").innerHTML);
+      language == 0 ? msg2.voice = synth.getVoices()[5] : msg2.voice = synth.getVoices()[3]; // ES: 5 || EN-GB Male: 3 || EN-GB FEM: 2
+      msg2.onend = function(){
+        voiceStatusFlag = false;
+      };
       synth.speak(msg);
+      setTimeout(() => {
+        synth.speak(msg2);
+      }, 1000);
 
       /* Imprime arreglo de voces disponibles
       synth.getVoices().forEach(voice => {
@@ -1196,5 +1263,5 @@ const catchItAnimation = (status, animation) => {
     } else {
       synth.cancel();
     }
-   }   
+   }
  });
