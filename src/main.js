@@ -259,6 +259,8 @@ rippler.addEventListener("animationend", function(e){
         
 });
 */
+
+
 /********** Impresión en pantalla de Pokemon cards **********/
 
 const printPokemonCards = (dataArray, filterByText = "All", sortByText = "All") => {
@@ -421,6 +423,15 @@ document.addEventListener("keyup", function(event) {
     printPokemonCards(dataPokemon);
     activeFilterAndSortContainer.style.visibility = "hidden";
   }
+});
+
+/**********Mandar a home con click en titulo */
+
+document.getElementById("titleText").addEventListener("click", () => {
+  printPokemonCards(dataPokemon);
+  activeFilterAndSortContainer.style.visibility = "hidden";
+  document.documentElement.scrollTop = 0;
+  
 });
 
 /************************  Search modal  *********************************/
