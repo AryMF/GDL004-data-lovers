@@ -122,7 +122,7 @@ For any questions make sure to contact us to clear them for you.
 ## 6. Finished Product
 ![Finished Product Main](src/images/readme/finishedProductss.png)
 ![Finished Product Prompts](src/images/readme/finishedProductPromptss.png)
-![Finished Product Character Window](src/images/readme/prototypeCharacterWindow.png)
+![Finished Product Character Window](src/images/readme/ssLiveSiteCardandWindow.png)
 
 ## 6. User Testing and Feedback
 
