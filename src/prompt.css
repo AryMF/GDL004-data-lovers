@@ -136,12 +136,13 @@
     justify-content: center;
 }
 
-h1 {
+h2 {
     font-family: 'Helvetica',sans-serif;
     font-size: 2.5em;
     font-weight: bold;
     text-align: center;
     margin: 3px;
+    color: #fff;
 }
 
 @media screen and (max-width: 500px) {
