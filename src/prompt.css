@@ -142,6 +142,7 @@ h2 {
     font-weight: bold;
     text-align: center;
     margin: 3px;
+    color: #fff;
 }
 
 @media screen and (max-width: 500px) {
