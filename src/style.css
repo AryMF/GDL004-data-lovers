@@ -23,7 +23,7 @@ a {
   text-decoration: none;
 }
 #homeButton, #toggleLanguageEN, #toggleLanguageES {
-  visibility: hidden; 
+  display: none;
 }
 
 #toggleLanguageEN:checked ~ #languageEN{
@@ -48,7 +48,7 @@ a {
 
 .headerNavColumn{
   display: flex;
-  flex-direction: column; 
+  flex-direction: row; 
   flex: 1;
   align-self: center;
   width: fit-content;
@@ -60,8 +60,21 @@ a {
   flex: 1;
   align-self: center;
 }
-.headerNav li{
-  align-self: center;
+.headerNavColumn ul{
+  font-family: "Rajdhani", sans-serif;
+  font-size: 22px;
+  text-align: left;
+}
+.headerNavColumn li {
+  /* display: inline;  */ /* comentar para hacerlo columna */
+  font-family: "Rajdhani", sans-serif;
+  font-size: 28px;
+  font-weight: bold;
+  text-align: center;
+}
+
+#toggleLanguageLines{
+  font-size: 32px;
 }
 
 .topMenuButtonContainer {
@@ -76,11 +89,11 @@ a {
 
 .titleText {
   font-family: "Rajdhani", sans-serif;
-  font-size: 8vmin;
-  letter-spacing: 1vw;
+  font-size: 72px;
+  letter-spacing: 10px;
   font-weight: bold;
   text-align: center;
-  padding: 0.1vh 0.5vw;
+  padding: 5px 5px 15px;
   margin: 15px 0px 0px;
 }
 
@@ -120,10 +133,6 @@ a {
   cursor: pointer;
 }
 
-/**Solo para Usability testing **/
-#menuButton{
-  visibility: hidden;
-}
 /*******************************/
 
 /***** Menu flotante *****/
@@ -311,11 +320,12 @@ a {
   font-family: "Rajdhani", sans-serif;
   font-weight: normal;
   text-align: center;
-  font-size: 17px;
+  font-size: 22px;
   background-color: rgb(53, 46, 46, 40%);
   border-radius: 5px;
-  padding: 0.6vmin;
-  margin: 2vh 0 0 0;
+  padding: 5px 8px;
+  position: absolute;
+  bottom: 50px;
 }
 
 .namePokemon {
@@ -323,7 +333,8 @@ a {
   font-weight: bold;
   font-size: 28px;
   text-align: center;
-  margin: 0.5vh 0 1vh 0;
+  position: absolute;
+  bottom: 15px;
 }
 
 .typePokemonIMG {
@@ -352,7 +363,6 @@ a {
 
 }
 
-/* @media screen and (max-width: 768px) { */
 @media screen and (max-width: 500px) {
   .header{
     height: fit-content;
@@ -361,6 +371,15 @@ a {
   }
   .headerNavColumn{
     order: 1;
+  }
+  .headerNavColumn ul{
+    flex: 0;
+  }
+  .headerNavColumn li {
+    display: initial;
+  }
+  #toggleLanguageLines{
+    display: none;
   }
   .titleDiv {
     order: 3;
@@ -372,6 +391,7 @@ a {
     flex: 1;
     align-self: center;
   }
+  
   #menuButton,
   #favoritesButton,
   #chartButton,
@@ -421,30 +441,32 @@ a {
     height: 12vh;
   }
   .titleText {
-    font-size: 14vmin;
-    letter-spacing: .2vw;
-  }
-  .favoritesButton {
-    width: 16vw;
-    height: 12vh;
-  }
+    font-size: 60px;
+    padding: 0px;
+   }
   .numberPokemon {
-    font-size: 22px;
-  }
-  @media only screen and (orientation: landscape) {
-    .floatingMenuClass {
-      background-color: green;
-    }
-  }
-  
+    font-size: 24px;
+  }  
 }
 
-/* @media only screen and (max-width: 850px) and (orientation: landscape) {*/
-@media only screen and (orientation: landscape) {
+@media only screen and (max-width: 868px) and (orientation: landscape) {
+  .titleText {
+    font-size: 50px;
+    letter-spacing: 2px;
+   }
+  .headerNavColumn ul{
+    flex: 0;
+  }
+  .headerNavColumn li {
+    display: initial;
+  }
+  #toggleLanguageLines{
+    display: none;
+  }
+
   .floatingMenuDIV {
     flex-direction: row-reverse;
   }
-
   .floatingMenuDIV {
     bottom: 0.5vh;
     right: 2vw;
@@ -459,7 +481,6 @@ a {
     width: 60px;
     height: 60px;
   }
-
   .floatingMenuClassNormal i {
     font-size: 50px;
     color: white;

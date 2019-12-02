@@ -8,7 +8,7 @@
     width: 100vw;
     height: 100vh;
     background-color: tomato;
-    /* visibility: hidden; /*Comentar para activar animación intro */
+    /*visibility: hidden; /*Comentar para activar animación intro */
 }
 
 .divLoadingImage{

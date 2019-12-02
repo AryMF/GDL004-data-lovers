@@ -15,6 +15,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.bundle.min.js"></script> 
   </head>
   <body>
+    
     <!-- Animación de intro -->
     <div id="divLoading" class="divLoadingClass"> 
         <div id="divLoadingImage" class="divLoadingImage">
@@ -50,79 +51,73 @@
 
     <!-- Menú flotante -->
     <div id="floatingMenuDIV" class="floatingMenuDIV">
-      <input type="checkbox" id="toggle" checked/>
-          <label id="floatingMenu" class="floatingMenuClass floatingMenuClassNormal" for="toggle" tabindex="0">
-              <i class="fa fa-plus symbolFormat"></i>
-          </label>
-      <nav id="searchButton" class="floatingMenuElement" tabindex="0" aria-label="Búsqueda">
+        <input type="checkbox" id="toggle" checked/>
+            <label id="floatingMenu" class="floatingMenuClass floatingMenuClassNormal" for="toggle" tabindex="0">
+                <i class="fa fa-plus symbolFormat"></i>
+            </label>
+        <nav id="searchButton" class="floatingMenuElement" tabindex="0" aria-label="Búsqueda">
         <i class="fa fa-search"></i>
-      </nav>
-      <nav id="filterButton" class="floatingMenuElement" tabindex="0" aria-label="Filtrado">
+        </nav>
+        <nav id="filterButton" class="floatingMenuElement" tabindex="0" aria-label="Filtrado">
         <i class="fa fa-filter"></i>
-      </nav>
-      <nav id="sortByButton" class="floatingMenuElement" tabindex="0" aria-label="Ordenar">
+        </nav>
+        <nav id="sortByButton" class="floatingMenuElement" tabindex="0" aria-label="Ordenar">
         <i class="fa fa-sort-amount-desc"></i>
-      </nav>
-      <nav id="resetButton" class="floatingMenuElement" tabindex="0">
+        </nav>
+        <nav id="resetButton" class="floatingMenuElement" tabindex="0">
         <i class="fa fa-refresh"></i>
-      </nav>
+        </nav>
     </div>
 
     <!-- Main screen -->
     <div id="mainScreen" class="mainScreenClass">
-      <!-- Barra de menu superior -->
-      <header class="header">
-          <!-- <button class="topMenuButtonContainer" tabindex="-1">
-            <i id="menuButton" class="fa fa-reorder" tabindex="0"></i>
-          </button> -->
-          <nav class="headerNavColumn">
-              <ul>
-                  <li tabindex="0">
-                      <input id="toggleLanguageEN" type="checkbox" checked/>
-                        <i id="languageEN"> EN </i>
-                  </li>
-                  <!-- <li><i>&nbsp;&nbsp;||&nbsp;&nbsp;</i></li> -->
-                  <li tabindex="0">
-                    <input id="toggleLanguageES" type="checkbox"/>
-                      <i id="languageES">ES </i>
-                  </li>
-              </ul>
-          </nav>
-          <div class="titleDiv">
-            <h1 class="titleText"> 
-                Pokedex
-            </h1>
-          </div>
-          <nav class="headerNav">
-            <button class="topMenuButtonContainer" tabindex="-1" >
-                <i id="homeButton" class="fa fa-home" tabindex="0"></i>
-            </button>
-            <input id="toggleFav" type="checkbox"/>
-                <button class="topMenuButtonContainer" tabindex="-1">
-                    <i id="favoritesButton" class="fa fa-star" tabindex="0"></i>
+        <!-- Barra de menu superior -->
+        <header class="header">
+            <nav class="headerNavColumn">
+                <ul> Language:
+                    <li tabindex="0">
+                        <input id="toggleLanguageEN" type="checkbox" checked/>
+                            <i id="languageEN"> EN </i>
+                    </li>
+                    <!-- <li><i id="toggleLanguageLines">&nbsp;||&nbsp;</i></li> comentar para hacerlo columna -->
+                    <li tabindex="0">
+                        <input id="toggleLanguageES" type="checkbox"/>
+                        <i id="languageES">ES </i>
+                    </li>
+                </ul>
+            </nav>
+            <div class="titleDiv">
+                <h1 class="titleText">Pokedex</h1>
+            </div>
+            <nav class="headerNav">
+                <button class="topMenuButtonContainer" tabindex="-1" >
+                    <i id="homeButton" class="fa fa-home" tabindex="0"></i>
                 </button>
-            <input id="toggleCharts" type="checkbox"/>
-                <button class="topMenuButtonContainer" tabindex="-1">
-                    <i id="chartButton" class="fa fa-bar-chart"></i>
+                <input id="toggleFav" type="checkbox"/>
+                    <button class="topMenuButtonContainer" tabindex="-1">
+                        <i id="favoritesButton" class="fa fa-star" tabindex="0"></i>
+                    </button>
+                <input id="toggleCharts" type="checkbox"/>
+                    <button class="topMenuButtonContainer" tabindex="-1">
+                        <i id="chartButton" class="fa fa-bar-chart" tabindex="0"></i>
+                    </button>
+                <button class="topMenuButtonContainer" tabindex="-1" >
+                <a id="gitHubButton" class="fa fa-github" tabindex="0" href="https://arymf.github.io/GDL004-data-lovers/" target="_blank"></a>
                 </button>
-            <button class="topMenuButtonContainer" tabindex="-1" >
-              <a id="gitHubButton" class="fa fa-github" tabindex="0" href="https://arymf.github.io/GDL004-data-lovers/"></a>
-            </button>
-          </nav>
-      </header>
-      
-
-      <div id="activeFilterAndSort">
-        <p> Filter by: </p>
-        <p id="filterByTag"> placeholder </p>
-        <p style="font-size: 5.5vmin;"> | </p>
-        <p> Sort by: </p>
-        <p id="sortByTag"> placeholder </p>
-      </div>
-      <!-- Despliegue de pokemons -->
-      <main id="pokemonContainer" class="pokemonContainerGrid" ></main>
-      <!-- Sección de Gráficas -->
-      <main id="chartsContainer" class="chartsContainerClass"></main>
+            </nav>
+        </header>
+        
+        <div id="activeFilterAndSort">
+            <p> Filter by: </p>
+            <p id="filterByTag"> placeholder </p>
+            <p style="font-size: 5.5vmin;"> | </p>
+            <p> Sort by: </p>
+            <p id="sortByTag"> placeholder </p>
+        </div>
+        <!-- Despliegue de pokemons -->
+        <main id="pokemonContainer" class="pokemonContainerGrid" > </main>
+        <!-- Sección de Gráficas -->
+        <main class="chartsContainerClass"> </main>
     </div>
 
     <!-- Prompt container -->

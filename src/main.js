@@ -15,7 +15,7 @@ let toggleFavElement = document.getElementById("toggleFav");
 let toggleChartsElement = document.getElementById("toggleCharts");
 let activeFilterAndSortContainer = document.getElementById("activeFilterAndSort");
 let activeFilterAndSortTags= document.querySelectorAll("#activeFilterAndSort p");
-let chartsContainerElement = document.getElementById("chartsContainer");
+let chartsContainerElement = document.querySelector(".chartsContainerClass");
 /***********Popup windows (Search, FilterBy, SortBy) *********************/
 let promptContainerElement = document.getElementById("promptContainer");
 let searchByPromptElement = document.getElementById("searchByPrompt");
@@ -161,8 +161,6 @@ let rippler = document.getElementById('ripple');
 let finish = false;
 let soundControl = document.getElementById("soundControl");
 
-
-// loadingImage.addEventListener("click", () => {
 const animationDataLoadingEnd = () => {
     let time = 1;
     let i = 1;
@@ -186,7 +184,7 @@ const animationDataLoadingEnd = () => {
                     rippler.style.animationPlayState = "running";
                     setTimeout(function() {
                         loadingImageDiv.style.visibility = "hidden";
-                        mainScreenDiv.style.visibility = "visible"; //Cambiar por pantalla main
+                        mainScreenDiv.style.visibility = "visible";
                         floatingMenu.style.visibility = "visible";
                         openFloatingMenu();
                     },1000);
@@ -253,8 +251,8 @@ const main = () => {
       dataPokemon = dataJSON.pokemon;
       getPokemonData().then( () => {
         console.log("Carga de data finalizada");
-        printPokemonCards(dataPokemon); /**Comentar para animación intro */
-        animationDataLoadingEnd();
+        printPokemonCards(dataPokemon);
+        animationDataLoadingEnd(); /**Descomentar para animación intro */
       });
     })
     .catch(error => {
@@ -707,19 +705,18 @@ const hiddenPromptWindow = () => {
 
 /************************ Favorites window ************************/
 /** Show favorites*/
-
-
 document.getElementById("favoritesButton").addEventListener("click", () => {
   closeFloatingMenu();
   toggleFavElement.checked = true;
   toggleChartsElement.checked = false;
-  homeButtonElement.style.visibility = "visible";
+  homeButtonElement.setAttribute("style", "display: initial;");
   pokemonContainerElement.style.visibility = "visible";
   /***Cerrar Main */
   pokemonContainerElement.innerHTML = "";
   floatingMenu.style.visibility = "hidden";
   activeFilterAndSortContainer.style.visibility = "hidden";
   /***Cerrar Charts */
+  chartsContainerElement.innerHTML = "";
   chartsContainerElement.style.visibility = "hidden";
   showFavorites();
 });
@@ -727,10 +724,11 @@ document.getElementById("favoritesButton").addEventListener("click", () => {
 document.getElementById("homeButton").addEventListener("click", () => {
   toggleFavElement.checked = false;
   toggleChartsElement.checked = false;
-  homeButtonElement.style.visibility = "hidden";
+  homeButtonElement.setAttribute("style", "display: none;");
   /***Cerrar Favoritos */
   floatingMenu.style.visibility = "visible";
   /***Cerrar Charts */
+  chartsContainerElement.innerHTML = "";
   chartsContainerElement.style.visibility = "hidden";
   /***Abrir Main */
   pokemonContainerElement.style.visibility = "visible";
@@ -795,11 +793,15 @@ const showFavorites = () => {
 };
 
 /************************** Charts window **************************/
+let chartCategory = "weight";
+let chartFilter = 1;
+let chartElement;
+
 document.getElementById("chartButton").addEventListener("click", () => {
     closeFloatingMenu();
     toggleChartsElement.checked = true;
     toggleFavElement.checked = false;
-    homeButtonElement.style.visibility = "visible";
+    homeButtonElement.setAttribute("style", "display: initial;");
 
     pokemonContainerElement.innerHTML = "";
     pokemonContainerElement.style.visibility = "hidden";
@@ -809,173 +811,128 @@ document.getElementById("chartButton").addEventListener("click", () => {
     chartsWindowPrint();
 });
 
-const generateData = () =>{
-    let data = "Mock data";
-
-    return data;
-};
-
 const chartsWindowPrint = () => {
-    let dataForCharts = generateData();
+    const chartsWindowTemplate = `
+      <h2 class="textFormatBig" style="letter-spacing: 10px;">Charts</h2>
+      <br/>
+      <div class="chartDynamicContent">
+          <div class="chartOptions columnAlignmentClass">
+              <p class="textFormatMedium">Category</p>
+              <nav>
+                  <label class="container textFormatBig">Weight
+                      <input type="radio" name="chartCategory" value="weight" checked>
+                      <span class="checkmark"></span>
+                  </label>
+                  <label class="container textFormatBig">Height
+                      <input type="radio" name="chartCategory" value="height">
+                      <span class="checkmark"></span>
+                  </label>
+                  <label class="container textFormatBig">Spawn Chances
+                      <input type="radio" name="chartCategory" value="spawn_chance"> 
+                      <span class="checkmark"></span>
+                  </label>
+              </nav>
+              <p class="textFormatMedium">Show</p>
+              <nav>
+                  <label class="container textFormatBig">Top ten
+                      <input type="radio" name="chartFilter" value="1" checked>
+                      <span class="checkmark"></span>
+                  </label>
+                  <label class="container textFormatBig">Bottom ten
+                      <input type="radio" name="chartFilter" value="2">
+                      <span class="checkmark"></span>
+                  </label>
+              </nav>
+              <section>
+                <hr>
+                <p class="textFormatSmall"> Average bla bla</p>
+                <hr>
+              </section>
+          </div>
+          <div class="canvasContainer columnAlignmentClass ">
+              <canvas id="chartCanvas"></canvas>
+          </div>
+      </div>`;
 
+    chartsContainerElement.innerHTML = chartsWindowTemplate;
 
-    const chartWindowTemplate = `
-        <h2>Charts</h2>
-        <br/><br/>
-        <div class="chartDynamicContent">
-            <p>${dataForCharts}</p>
+    let chartCategoryButton = document.querySelectorAll('[name="chartCategory"]');
+    let chartFilterButton = document.querySelectorAll('[name="chartFilter"]');
 
-            <canvas id="weightNHeight" width="200px" height="150px" style="border:1px solid #000000;">
-            </canvas>
-            <canvas id="line-chart" width="200px" height="150px" style="border:1px solid #000000;">
-            </canvas>
-            <canvas id="polar-chart" width="200px" height="150px" style="border:1px solid #000000;">
-            </canvas>
-            <button id="buttonData"> Data </button>
-
-        </div>
-    `;
-
-    chartsContainerElement.innerHTML = chartWindowTemplate;
-
-    //Ejemplo 01
-    let ctx = document.getElementById('weightNHeight').getContext('2d');
-
-    let data = {
-    labels: ['20-30', "10-20", "0-10"],
-    datasets: [{
-        label: "Male",
-        backgroundColor: "rgba(54, 162, 235, 0.2)",
-        borderColor: "rgb(54, 162, 235)",
-        borderWidth: 2,
-        data: [-65, -59, -20],
-        }, {
-        label: "Female",
-        backgroundColor: "rgba(255,99,132,0.2)",
-        borderColor: "rgba(255,99,132,1)",
-        borderWidth: 2,
-        data: [72, 45, 18],
-        },
-
-    ]
-    };
-
-    let myBarChart = new Chart(ctx, {
-        type: 'bar',
-        data: data,
-        options: {
-          scales: {
-            yAxes: [{
-              stacked: false
-            }],
-            xAxes: [{
-                ticks: {
-                   callback: function(value, index, values) {
-                    return Math.abs(value);
-                }
-              }
-            }]
-          },
-          tooltips: {
-            callbacks: {
-              label: function(tooltipItems, data) {
-                  return data.datasets[tooltipItems.datasetIndex].label  + ": " +  Math.abs(tooltipItems.xLabel);
-              }
-            }
-          }
-        }
+    chartCategoryButton.forEach(element =>{
+      element.addEventListener("change", (e) =>{
+        console.log(element.checked, element.value);
+        chartCategory = element.value;
+        canvasChartDraw(chartCategory, chartFilter);
+      });
     });
 
-    // Our labels along the x-axis
-    var years = [1500,1600,1700,1750,1800,1850,1900,1950,1999,2050];
-    // For drawing the lines
-    var africa = [86,114,106,106,107,111,133,221,783,2478];
-    var asia = [282,350,411,502,635,809,947,1402,3700,5267];
-    var europe = [168,170,178,190,203,276,408,547,675,734];
-    var latinAmerica = [40,20,10,16,24,38,74,167,508,784];
-    var northAmerica = [6,3,2,2,7,26,82,172,312,433];
-
-    //Ejemplo 02
-    var ctx2 = document.getElementById("line-chart");
-
-    var myChart = new Chart(ctx2, {
-    type: 'line',
-    data: {
-        labels: years,
-        datasets: [
-            {
-                data: africa,
-                label: "Africa",
-                borderColor: "#3e95cd",
-                fill: false
-              },
-              {
-                data: asia,
-                label: "Asia",
-                borderColor: "#3e95cd",
-                fill: false
-              },
-              {
-                data: europe,
-                label: "Europe",
-                borderColor: "#3e95cd",
-                fill: false
-              },
-              {
-                data: latinAmerica,
-                label: "Latin America",
-                borderColor: "#3e95cd",
-                fill: false
-              },
-              {
-                data: northAmerica,
-                label: "North America",
-                borderColor: "#3e95cd",
-                fill: false
-              }
-        ]
-
-    }
+    chartFilterButton.forEach(element =>{
+      element.addEventListener("change", (e) =>{
+        console.log(element.checked, parseInt(element.value, 10));
+        chartFilter = parseInt(element.value, 10);
+        canvasChartDraw(chartCategory, chartFilter);
+      });
     });
 
-
-    //Ejemplo 03
-    new Chart(document.getElementById("polar-chart"), {
-        type: 'polarArea',
-        data: {
-          labels: ["Normal", "Fire", "Water", "Flying", "Grass"],
-          datasets: [
-            {
-              label: "Population (millions)",
-              backgroundColor: ["#3e95cd", "#8e5ea2","#3cba9f","#e8c3b9","#c45850"],
-              data: [24, 12, 32, 19, 14]
-            }
-          ]
-        },
-        options: {
-          title: {
-            display: true,
-            text: 'Algún dato genial sobre Pokémon [Sección en construcción]'
-          },
-          tooltips: {
-            callbacks: {
-              label: function(tooltipItems, data) {
-                  return data.datasets[tooltipItems.datasetIndex].labels;
-              }
-            }
-          }
-        }
-    });
-
-    /*************** Event listener boton *********************** */
-
-
-    let button = document.getElementById("buttonData");
-    button.addEventListener("click", () => {
-        generateData();
-    });
-
+    canvasChartDraw(chartCategory, chartFilter);
 };
+
+const canvasChartDraw = (chartCategory, chartFilter) => {
+  if(chartElement){
+    chartElement.destroy();
+  }
+
+  let chartCanvas = document.querySelector("#chartCanvas");
+  let chartData;
+  let chartDataLabels;
+
+  switch(chartFilter){
+    case 1 :
+        chartData = window.data.sortDataResultAsc(dataPokemon, chartCategory);
+        chartData = chartData.slice(0, 10);
+    break;
+    case 2:
+        chartData = window.data.sortDataResultDesc(dataPokemon, chartCategory);
+        chartData = chartData.slice(0, 10);
+    break;
+    case 3:
+        chartData = dataPokemon;
+    break;
+  }
+
+  chartDataLabels = chartData.map(element => {
+    return element.name
+  });
+  let chartDataContent = chartData.map(element => {
+    return parseFloat(element[chartCategory]);
+  });
+
+  let chartDataColor = [];
+  for(let i=0; i < chartData.length; i++){
+    chartDataColor.push(typeArray[i].color);
+  }
+
+  chartElement = new Chart(chartCanvas, {
+    type: 'polarArea',
+    data: {
+        labels: chartDataLabels,
+        datasets: [
+          {
+            label: "Population (millions)",
+            backgroundColor: chartDataColor,
+            data: chartDataContent
+          }
+        ]
+    },
+    options: {
+        title: {
+          display: true,
+          text: chartCategory.toUpperCase()
+        }
+    }
+  });
+}
 
 
 /******************** Character window ********************/
@@ -1166,9 +1123,9 @@ const characterWindowTemplate2  = `
 
     characterDynamicDiv.innerHTML = characterWindowTemplate2;
 
-    let elementDivPokeballImage = document.querySelector("#divPokeballImage"); 
+    let elementDivPokeballImage = document.querySelector("#divPokeballImage");
     let elementPokeballImage = document.querySelector("#pokeballImage");
-    let elementDivFavImage = document.querySelector("#divFavImage"); 
+    let elementDivFavImage = document.querySelector("#divFavImage");
     let elementStarFavImage = document.querySelector("#starFavImage");
     let characterTitleName = document.querySelector("#characterPokemonName").innerHTML;
 
@@ -1180,11 +1137,11 @@ const characterWindowTemplate2  = `
         shrinkAnimationDelay = 300;
         showElementDelay = 1000;
       }
-    
+
       if (status === 1) {
         elementPokeballImage.classList.remove("pokeballImage");
         elementPokeballImage.classList.add("onClickImage");
-    
+
         setTimeout(() => {
           elementPokeballImage.classList.add("onClickShrink");
         }, shrinkAnimationDelay);
@@ -1211,7 +1168,7 @@ const characterWindowTemplate2  = `
     }else {
         catchItAnimation(2, 0);
     }
-    
+
     elementPokeballImage.addEventListener("click", () => {
       catchItAnimation(1, 1);
       //**Create cookie
