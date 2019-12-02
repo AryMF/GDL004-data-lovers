@@ -48,7 +48,7 @@ a {
 
 .headerNavColumn{
   display: flex;
-  flex-direction: row; 
+  flex-direction: row;
   flex: 1;
   align-self: center;
   width: fit-content;
@@ -56,7 +56,7 @@ a {
 
 .headerNav{
   display: flex;
-  flex-direction: row; 
+  flex-direction: row;
   flex: 1;
   align-self: center;
 }
@@ -141,8 +141,8 @@ a {
   display: flex;
   align-items: center;
   flex-direction: column-reverse;
-  bottom: 0.5vh;
-  right: 0.5vw;
+  bottom: 0px;
+  right: 10px;
   width: fit-content;
   background-color: transparent;
   z-index: 1;
@@ -164,31 +164,33 @@ a {
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: 0 0 3vh 0;
+  /* 1988 */
+  margin: 10px 10px 10px 10px;
   background-color: rgb(0, 3, 187);
   border-radius: 100px;
+  border: whitesmoke 6px solid;
   transition: all 0.5s ease-in-out;
 }
 
 .floatingMenuClassNormal {
-  width: 90px;
-  height: 90px;
+  width: 70px;
+  height: 70px;
 }
 
 .floatingMenuClassNormal i {
-  font-size: 60px;
+  font-size: 50px;
   color: white;
 }
 
 .floatingMenuClassSmall {
-  width: 45px;
-  height: 45px;
+  width: 38px;
+  height: 38px;
   color: black;
   animation: pop 0.3s linear 1;
 }
 
 .floatingMenuClassSmall i {
-  font-size: 30px;
+  font-size: 28px;
   color: black;
 }
 
@@ -204,16 +206,21 @@ a {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 90px;
-  height: 90px;
-  margin: 0 0 3vh 0;
+  width: 70px;
+  height: 70px;
+  margin: 10px 0 0 0;
   background-color:  rgb(0, 3, 187);
   border-radius: 100px;
+  border: whitesmoke 6px solid;
   visibility: hidden;
 }
 
+.floatingMenuElement:focus, .floatingMenuClass:focus {
+  border: black 6px solid;;
+}
+
 .floatingMenuElement i {
-  font-size: 50px;
+  font-size: 40px;
   color: white;
 }
 
@@ -226,7 +233,7 @@ a {
 #activeFilterAndSort{
   display: flex;
   flex-flow: row wrap;
-  justify-content: flex-end;
+  justify-content: flex-start;
   align-items: center;
   position: absolute;
   top: 10vmin;
@@ -250,6 +257,7 @@ a {
   color: orangered !important;
 }
 
+/****** Cards *********/
 .pokemonContainerGrid {
   position: absolute;
   top: 20vmin;
@@ -303,12 +311,16 @@ a {
   cursor: pointer;
 }
 
-.divCardClass:hover .divPokemonCardFaceClass--front {
+.divCardClass:hover .divPokemonCardFaceClass--front, .divCardClass:focus .divPokemonCardFaceClass--front{
   transform: rotateY(-180deg);
 }
 
-.divCardClass:hover .divPokemonCardFaceClass--back {
+.divCardClass:hover .divPokemonCardFaceClass--back, .divCardClass:focus .divPokemonCardFaceClass--back {
   transform: rotateY(0deg);
+}
+/*//TODO: preguntar a Majo como lo prefiere */
+.divCardClass:focus .divPokemonCardFaceClass--back { 
+  border: 5px solid black;
 }
 
 .imagePokemon {
@@ -359,10 +371,6 @@ a {
   }
 }
 
-@media screen and (max-width: 768px) {
-
-}
-
 @media screen and (max-width: 500px) {
   .header{
     height: fit-content;
@@ -387,11 +395,11 @@ a {
   .headerNav{
     order: 2;
     display: flex;
-    flex-direction: row; 
+    flex-direction: row;
     flex: 1;
     align-self: center;
   }
-  
+
   #menuButton,
   #favoritesButton,
   #chartButton,
@@ -407,7 +415,7 @@ a {
   .floatingMenu {
     width: 18vw;
     height: 10vh;
-    margin: 0 0 3vh 0;
+    margin: 0 0 10px 0;
   }
   .floatingMenuClassNormal {
     width: 60px;
@@ -427,7 +435,6 @@ a {
   .floatingMenuElement {
     width: 60px;
     height: 60px;
-    margin: 0 0 3vh 0;
   }
   .floatingMenuElement i {
     font-size: 35px;
@@ -446,7 +453,7 @@ a {
    }
   .numberPokemon {
     font-size: 24px;
-  }  
+  }
 }
 
 @media only screen and (max-width: 868px) and (orientation: landscape) {
@@ -475,7 +482,6 @@ a {
   .floatingMenu {
     width: 18vw;
     height: 10vh;
-    margin: 0 0 3vh 0;
   }
   .floatingMenuClassNormal {
     width: 60px;
@@ -494,7 +500,7 @@ a {
   .floatingMenuElement {
     width: 60px;
     height: 60px;
-    margin: 0 0 3vh 0;
+    margin: 0 0 0 10px;
   }
   .floatingMenuElement i {
     font-size: 35px;

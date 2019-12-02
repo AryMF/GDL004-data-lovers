@@ -296,8 +296,8 @@ const printPokemonCards = (dataArray, filterByText = "All", sortByText = "All") 
 
     const pokemonCardsTemplate = `
     <div class="divContainerClass">
-        <div class="divCardClass">
-            <div id="divPokemonCard" style = ${"background-color:" + colorByType} tabindex="0" class="divPokemonCardFaceClass divPokemonCardFaceClass--front">
+        <div class="divCardClass" tabindex="0">
+            <div id="divPokemonCard" style = ${"background-color:" + colorByType}  class="divPokemonCardFaceClass divPokemonCardFaceClass--front">
                 <img class="imagePokemon" src = ${element.img} alt= ${element.name}>
                 <p class="numberPokemon">${element.num}</p>
                 <p class="namePokemon">${pokemonName}</p>
@@ -321,36 +321,21 @@ const printPokemonCards = (dataArray, filterByText = "All", sortByText = "All") 
     //impresion en pantalla
     pokemonContainerElement.innerHTML = concatTemplateElements;
 
-    pokemonContainerElement.innerHTML = concatTemplateElements;
+    let cardClass = document.querySelectorAll(".divCardClass");
 
-    let backCards = document.getElementsByClassName("divPokemonCardFaceClass--back");
-
-    for(let i=0; i< backCards.length;i++){
-      backCards[i].addEventListener("click", function() {
+    for(let i=0; i< cardClass.length;i++){
+      cardClass[i].addEventListener("click", function() {
         characterWindowPrint(orderArray[i]);
       });
     }
 
-    /* Intentando camiar a querySelector para usar forEach
-    let backCards = document.querySelectorAll(".divPokemonCardFaceClass--back");
-    // console.log(backCards)
-    backCards.forEach((element, index) => {
-        // console.log(index);
-        element.addEventListener("click", function() {
-            console.log("hola: " + orderArray[index])
-            // characterWindowPrint(orderArray[index].toUpperCase());
-        });
-        index++;
-    });
-    */
-
-    let frontCards = document.getElementsByClassName("divPokemonCardFaceClass--front");
-    for(let i=0; i< frontCards.length; i++){
-        frontCards[i].addEventListener("keyup", function(e) {
-        if (e.keyCode === 13) {
-            characterWindowPrint(orderArray[i]);
+    for(let i=0; i< cardClass.length; i++){
+      cardClass[i].addEventListener("keyup", event => {
+        console.log("cardClass esta escuchando");
+        if (event.key === "Enter") {
+          characterWindowPrint(orderArray[i]);
         }
-        });
+      });
     }
 };
 
@@ -371,9 +356,7 @@ buttonLanguageES.addEventListener("click", () => {
 /*********************** Floating menu ***********************/
 let toggleElement = document.getElementById("toggle");
 let floatingMenuButton = document.getElementById("floatingMenu");
-let floatingMenuElements = document.getElementsByClassName(
-  "floatingMenuElement"
-);
+let floatingMenuElements = document.getElementsByClassName("floatingMenuElement");
 
 toggleElement.addEventListener("change", () => {
   if (toggleElement.checked == true) {
@@ -429,6 +412,15 @@ document.getElementById("resetButton").addEventListener("click", () => {
   activeFilterAndSortContainer.style.visibility = "hidden";
 });
 
+document.getElementById("resetButton").addEventListener("keyup", event => {
+  if (event.key === "Enter") {
+    closeFloatingMenu();
+    filterJSON = [];
+    printPokemonCards(dataPokemon);
+    activeFilterAndSortContainer.style.visibility = "hidden";
+  }
+});
+
 /**** Reset with short cut ****/
 document.addEventListener("keyup", function(event) {
   if (event.altKey && event.key === "r") {
@@ -469,11 +461,7 @@ const searchPromptCreator = () => {
 document.getElementById("searchPromptButton").addEventListener("click", () => {
   if (searchPromptInputElement.value != "") {
     filterJSON = window.data.filteredByNameOrNumber(dataPokemon, searchPromptInputElement.value);
-    if(filterJSON == ""){
-      printPokemonCards(dataPokemon);
-    } else {
-      printPokemonCards(filterJSON), "\"" + searchPromptInputElement.value + "\"";
-    }
+    searchResultEvaluation();
     hiddenPromptWindow();
   } else {
     printPokemonCards(dataPokemon);
@@ -487,35 +475,46 @@ document.getElementById("searchPromptInput").addEventListener("input", () => {
     document.documentElement.scrollTop = 0;
     if(searchPromptInputElement.value != ""){
         filterJSON = window.data.filteredByNameOrNumber(dataPokemon, searchPromptInputElement.value);
-        printPokemonCards(filterJSON, "\"" + searchPromptInputElement.value + "\"");
+        searchResultEvaluation();
     }else {
         printPokemonCards(dataPokemon);
     }
 });
 
-document
-  .getElementById("searchPromptInput")
-  .addEventListener("keyup", event => {
+document.getElementById("searchPromptInput").addEventListener("keyup", event => {
     if (event.keyCode === 13) {
       searchByInput();
     }
-  });
+});
 
 const searchByInput = () =>{
     /*** Regresar al principio de la pagina ***/
     document.documentElement.scrollTop = 0;
     if(searchPromptInputElement.value != ""){
         filterJSON = window.data.filteredByNameOrNumber(dataPokemon, searchPromptInputElement.value);
-        if(filterJSON == ""){
-          printPokemonCards(dataPokemon);
-        } else {
-          printPokemonCards(filterJSON, "\"" + searchPromptInputElement.value + "\"");
-        }
+        searchResultEvaluation();
         hiddenPromptWindow();
     }else {
         printPokemonCards(dataPokemon);
     }
 };
+
+const searchResultEvaluation = () => {
+  if(filterJSON == ""){
+    pokemonContainerElement.innerHTML = "";
+
+    const favoritesWindowEmptyTemplate = `
+      <div class="favoritesWindowEmptyClass">
+      <p class="textFormatMedium">Wild MISSINGNO. appeared!</p>
+      <img class="favoritesWindowImageClass" src="image/MissingNo.png" alt="Image: Favorites/Search is empty">
+      <p class="textFormatSmall">There's no matching Pokemons for your search.</p>
+      </div>`;
+    
+    pokemonContainerElement.innerHTML = favoritesWindowEmptyTemplate;
+  } else {
+    printPokemonCards(filterJSON, "\"" + searchPromptInputElement.value + "\"");
+  }
+}
 
 /************************  Filter modal  *********************************/
 document.getElementById("filterButton").addEventListener("click", () => {
@@ -775,20 +774,14 @@ const showFavorites = () => {
     printPokemonCards(filterJSON);
   } else {
     pokemonContainerElement.innerHTML = "";
-    let favoritesWindowEmpty = document.createElement("DIV");
-    favoritesWindowEmpty.classList.add("favoritesWindowEmptyClass");
-    pokemonContainerElement.appendChild(favoritesWindowEmpty);
-
-    let favoritesWindowTitle = document.createElement("P");
-    favoritesWindowTitle.classList.add("textFormatBig");
-    favoritesWindowTitle.innerHTML = "You haven't catch any pokemon yet!";
-    favoritesWindowEmpty.appendChild(favoritesWindowTitle);
-
-    let favoritesWindowImage = document.createElement("IMG");
-    favoritesWindowImage.classList.add("favoritesWindowImageClass");
-    favoritesWindowImage.setAttribute("src", "image/psyduck.png");
-    favoritesWindowImage.setAttribute("alt", "Image: Favorites is empty");
-    favoritesWindowEmpty.appendChild(favoritesWindowImage);
+    
+    const favoritesWindowEmptyTemplate = `
+      <div class="favoritesWindowEmptyClass">
+      <p class="textFormatMedium">You haven't catch any pokemon yet!</p>
+      <img class="favoritesWindowImageClass" src="image/psyduck.png" alt="Image: Favorites/Search is empty">
+      </div>`;
+    
+    pokemonContainerElement.innerHTML = favoritesWindowEmptyTemplate;
   }
 };
 
@@ -819,26 +812,26 @@ const chartsWindowPrint = () => {
           <div class="chartOptions columnAlignmentClass">
               <p class="textFormatMedium">Category</p>
               <nav>
-                  <label class="container textFormatBig">Weight
+                  <label class="container textFormatBig" tabindex="0">Weight
                       <input type="radio" name="chartCategory" value="weight" checked>
                       <span class="checkmark"></span>
                   </label>
-                  <label class="container textFormatBig">Height
+                  <label class="container textFormatBig" tabindex="0">Height
                       <input type="radio" name="chartCategory" value="height">
                       <span class="checkmark"></span>
                   </label>
-                  <label class="container textFormatBig">Spawn Chances
+                  <label class="container textFormatBig" tabindex="0">Spawn Chances
                       <input type="radio" name="chartCategory" value="spawn_chance"> 
                       <span class="checkmark"></span>
                   </label>
               </nav>
               <p class="textFormatMedium">Show</p>
               <nav>
-                  <label class="container textFormatBig">Top ten
+                  <label class="container textFormatBig" tabindex="0">Top ten
                       <input type="radio" name="chartFilter" value="1" checked>
                       <span class="checkmark"></span>
                   </label>
-                  <label class="container textFormatBig">Bottom ten
+                  <label class="container textFormatBig" tabindex="0">Bottom ten
                       <input type="radio" name="chartFilter" value="2">
                       <span class="checkmark"></span>
                   </label>
@@ -938,6 +931,7 @@ const canvasChartDraw = (chartCategory, chartFilter) => {
 /******************** Character window ********************/
 
 const characterWindowPrint = (pokemonName) =>{
+  characterWindowElement.focus();
     //Template necesario
     let evolutionPathArrowTemplate = `<div class="columnAlignmentClass evolutionPathArrow">
         <p class="textFormatSmall">&#8594;</p>
@@ -1222,3 +1216,11 @@ const characterWindowTemplate2  = `
     }
    }
  });
+
+ //esc
+ characterWindowElement.addEventListener("keyup", event => {
+   console.log("kek");
+  if (event.key === "Escape") {
+    hiddenPromptWindow();
+  }
+});

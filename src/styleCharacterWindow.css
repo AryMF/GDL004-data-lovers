@@ -324,8 +324,8 @@
 .favoritesWindowEmptyClass{
     position: absolute;
     left: 50%;
-    top: 30px;
-    transform: translate(-50%, 0%);
+    top: -70px;
+    transform: translate(-50%);
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -334,7 +334,7 @@
 }
 
 .favoritesWindowImageClass{
-    height: 250%;
+    height: 300px;
     margin: 10px;
 }
 
@@ -362,6 +362,13 @@
         display: flex;
         flex-direction: column;
         justify-content: center;
+    }
+    .favoritesWindowEmptyClass{
+        top: calc(100vh / 18);
+    }
+    
+    .favoritesWindowImageClass{
+        height: 250px;
     }
 }
 
