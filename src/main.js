@@ -35,7 +35,6 @@ let characterDynamicDiv = document.querySelector("#characterDynamicContent");
 let language = 1; // TODO: probablemente no es necesarios
 let voiceStatusFlag = false;
 var synth = window.speechSynthesis;
-/***********************************************/
 
 const typeArray = [
   {

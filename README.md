@@ -7,9 +7,9 @@
 * [3. Site Instructions](#3-site-instructions)
 * [4. User Stories](#4-user-stories)
 * [5. Prototypes](#5-prototypes)
-* [6. Finished Product ](#7-finished-product)
+* [6. Finished Product](#7-finished-product)
 * [7. User Testing and Feedback](#6-user-testing-and-feedback)
-* [8. Contact Information ](#7-contact-information )
+* [8. Contact Information](#7-contact-information)
 
 
 ***
@@ -20,20 +20,20 @@ The Pokédex is as synonymous with Pokémon as Pokéballs. They’ve been a stap
 ## 2. Project Overview 
 
 This project was created with three different users in mind:
-* a Pokemon beginner,
-* a Pokemon fan, and
+* a Pokemon beginner.
+* a Pokemon fan.
 * a Pokemon expert.
 
 It was created working with a set of data, in this case, Pokemon data, adapting it for specific purposes of our users.
 
 Our finished product allows our users to:
-1. Properly see a list with every Pokemon,
-2. Filter pokemons by their type,
-3. Order pokemons according to their name, weight, height, and id,
-4. Search specific pokemons by name or number,
-5. Save their favorite pokemons, and erase them whenever the want.
-6. Visualize a window for each character with additional data,
-7. See graphic charts and statistics of pokemons.
+1. Properly see a list with every Pokemon
+2. Filter pokemons by their type
+3. Order pokemons according to their name, weight, height, and id
+4. Search specific pokemons by name or number
+5. Save their favorite pokemons, and erase them whenever the want
+6. Visualize a window for each character with additional data
+7. See graphic charts and statistics of pokemons
 
 It was created on our fourth week of coding bootcamp, with a deadline of three weeks for this project.
 
@@ -87,10 +87,10 @@ On the menu, you will have four different options:
 4. A Search Button
 
 While pretty self-explanatory, you will be able to:
-- refresh the site to discard any filter or sorting options you chose,
-- sort pokemons by alphabetical order, weight, height, or id,
+- refresh the site to discard any filter or sorting options you chose
+- sort pokemons by alphabetical order, weight, height, or id
 - filter pokemons to only display the pokemon with the type you chose(there are 15 different types)
-- search a specific pokemon by name or number.
+- search a specific pokemon by name or number
 
 To close the floating menu, just click on the closing button at the bottom.
 
@@ -98,47 +98,48 @@ For any questions make sure to contact us to clear them for you.
 
 ## 4. User Stories
 
-![Pokedex User Stories](src/images/readme/userStories.png)
+![Pokedex User Stories](src/image/readme/userStories.png)
 
-![Pokedex First User Story](src/images/readme/firstUserStory.png)
+![Pokedex First User Story](src/image/readme/firstUserStory.png)
 
-![Pokedex Second User Story](src/images/readme/secondUserStory.png)
+![Pokedex Second User Story](src/image/readme/secondUserStory.png)
 
-![Pokedex Third User Story](src/images/readme/thirdUserStory.png)
+![Pokedex Third User Story](src/image/readme/thirdUserStory.png)
 
 ## 5. Prototypes
 
 ### Sketched Prototypes
 
-![Pokedex Sketched Prototype Main](src/images/readme/prototipoSketchMain.png)
-![Pokedex Sketched Prototype CW](src/images/readme/sketchedPrototype.png)
-![Pokedex Sketched Prototype Mobile Device](src/images/readme/prototipoCW.png)
-![Pokedex Sketched Prototype Mobile Device Filter](src/images/readme/prototipoFilterBy.png)
+![Pokedex Sketched Prototype Main](src/image/readme/prototipoSketchMain.png)
+![Pokedex Sketched Prototype CW](src/image/readme/sketchedPrototype.png)
+![Pokedex Sketched Prototype Mobile Device](src/image/readme/prototipoCW.png)
+![Pokedex Sketched Prototype Mobile Device Filter](src/image/readme/prototipoFilterBy.png)
 
 ### High Fidelity Prototypes
-![Pokedex HF Prototype Intro](src/images/readme/introPrototype.jpeg)
-![Pokedex HF Prototype Main](src/images/readme/prototypeFirstPage.png)
-![Pokedex HF Prototype Character Window](src/images/readme/prototypeCharacterWindow.png)
-![Pokedex HF Prototype Sort](src/images/readme/pokedexSortPrototype.png)
+![Pokedex HF Prototype Intro](src/image/readme/introPrototype.jpeg)
+![Pokedex HF Prototype Main](src/image/readme/prototypeFirstPage.png)
+![Pokedex HF Prototype Character Window](src/image/readme/prototypeCharacterWindow.png)
+![Pokedex HF Prototype Sort](src/image/readme/pokedexSortPrototype.png)
 
 
 ## 6. Finished Product
-![Finished Product Main](src/images/readme/finishedProductss.png)
-![Finished Product Prompts](src/images/readme/finishedProductPromptss.png)
-![Finished Product Character Window](src/images/readme/ssLiveSiteCardandWindow.png)
+![Finished Product Main](src/image/readme/finishedProductss.png)
+![Finished Product Prompts](src/image/readme/finishedProductPromptss.png)
+![Finished Product Character Window](src/image/readme/ssLiveSiteCardandWindow.png)
 
 ## 7. User Testing and Feedback
 
+### Unit Tests 
+
+![Unit Tests](src/image/readme/unitTests.png)
+![Unit Test One](src/image/readme/unitTestOne.png)
+![Unit Test Two](src/image/readme/unitTestTwo.png)
+![More Unit Tests](src/image/readme/moreUnitTests.png)
+<br><br>
+
 ### Sprint working and SCRUM
-![Kanban Board](src/images/readme/sprintPlanningBoard.jpeg)
 
-<!-- #### Testeos de usabilidad
-
-Durante el reto deberás hacer _tests_ de usabilidad con distintos usuarios, y
-en base a los resultados, deberás iterar tus diseños. Cuéntanos
-qué problemas de usabilidad detectaste a través de los _tests_ y cómo los
-mejoraste en tu propuesta final. -->
-
+![Kanban Board](src/image/readme/sprintPlanningBoard.jpeg)
 
 
 
