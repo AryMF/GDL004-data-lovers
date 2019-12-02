@@ -15,54 +15,99 @@ body {
   align-items: center;
   margin: 0%;
   padding: 0%;
-  /* visibility: hidden; /*Descomentar para activar animación intro*/
+  visibility: hidden; /*Descomentar para activar animación intro*/
 }
 
 /***** Menu barra superior *****/
+a {
+  text-decoration: none;
+}
+#homeButton, #toggleLanguageEN, #toggleLanguageES {
+  display: none;
+}
+
+#toggleLanguageEN:checked ~ #languageEN{
+  color: white;
+}
+#toggleLanguageES:checked ~ #languageES{
+  color: whitesmoke;
+}
+
 .header {
   position: fixed;
   display: flex;
   flex-direction: row;
-  justify-content: center;
-  align-content: center;
   top: 0;
   left: 0;
   width: 100vw;
   height: 10vh;
+  padding: 10px 0;
   background-color: crimson;
   z-index: 1;
 }
-.topMenuButtonContainer {
-  background-color: transparent;
-  border: 0;
-  flex: 0;
+
+.headerNavColumn{
+  display: flex;
+  flex-direction: row;
+  flex: 1;
+  align-self: center;
+  width: fit-content;
 }
 
-.header div {
+.headerNav{
+  display: flex;
+  flex-direction: row;
   flex: 1;
+  align-self: center;
+}
+.headerNavColumn ul{
+  font-family: "Rajdhani", sans-serif;
+  font-size: 22px;
+  text-align: left;
+}
+.headerNavColumn li {
+  /* display: inline;  */ /* comentar para hacerlo columna */
+  font-family: "Rajdhani", sans-serif;
+  font-size: 28px;
+  font-weight: bold;
+  text-align: center;
+}
+
+#toggleLanguageLines{
+  font-size: 32px;
+}
+
+.topMenuButtonContainer {
+  border: 0;
+  background-color: transparent;
+}
+
+.titleDiv {
+  flex: 3;
+  align-self: center;
 }
 
 .titleText {
   font-family: "Rajdhani", sans-serif;
-  font-size: 8vmin;
-  letter-spacing: 1vw;
+  font-size: 72px;
+  letter-spacing: 10px;
   font-weight: bold;
   text-align: center;
-  padding: 0.1vh 0.5vw;
+  padding: 5px 5px 15px;
   margin: 15px 0px 0px;
+  cursor: pointer;
 }
 
-/**Solo para Usability testing **/
-#menuButton{
-  visibility: hidden;
-}
-/*******************************/
-
-#homeButton {
-  visibility: hidden;
+.headerNav ul{
+  display: flex;
+  flex-direction: row;
+  font-size: 20px;
+  margin: 0px 10px;
+  color: black;
 }
 
 #menuButton,
+#gitHubButton,
 #favoritesButton,
 #chartButton,
 #homeButton {
@@ -73,6 +118,12 @@ body {
 
 #menuButton:hover,
 #menuButton:focus,
+#gitHubButton:hover,
+#gitHubButton:focus,
+#languageEN:hover,
+#languageEN:focus,
+#languageES:hover,
+#languageES:focus,
 #favoritesButton:hover,
 #favoritesButton:focus,
 #chartButton:hover,
@@ -83,18 +134,20 @@ body {
   cursor: pointer;
 }
 
+/*******************************/
+
 /***** Menu flotante *****/
 .floatingMenuDIV {
   position: fixed;
   display: flex;
   align-items: center;
   flex-direction: column-reverse;
-  bottom: 0.5vh;
-  right: 0.5vw;
+  bottom: 0px;
+  right: 10px;
   width: fit-content;
   background-color: transparent;
   z-index: 1;
-  /*visibility: hidden; /*Descomentar para activar animación intro*/
+  visibility: hidden; /*Descomentar para activar animación intro*/
 }
 
 #toggle, #toggleFav, #toggleCharts{
@@ -112,31 +165,33 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: 0 0 3vh 0;
+  /* 1988 */
+  margin: 10px 10px 10px 10px;
   background-color: rgb(0, 3, 187);
   border-radius: 100px;
+  border: whitesmoke 6px solid;
   transition: all 0.5s ease-in-out;
 }
 
 .floatingMenuClassNormal {
-  width: 90px;
-  height: 90px;
+  width: 70px;
+  height: 70px;
 }
 
 .floatingMenuClassNormal i {
-  font-size: 60px;
+  font-size: 50px;
   color: white;
 }
 
 .floatingMenuClassSmall {
-  width: 45px;
-  height: 45px;
+  width: 38px;
+  height: 38px;
   color: black;
   animation: pop 0.3s linear 1;
 }
 
 .floatingMenuClassSmall i {
-  font-size: 30px;
+  font-size: 28px;
   color: black;
 }
 
@@ -152,16 +207,21 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 90px;
-  height: 90px;
-  margin: 0 0 3vh 0;
+  width: 70px;
+  height: 70px;
+  margin: 10px 0 0 0;
   background-color:  rgb(0, 3, 187);
   border-radius: 100px;
+  border: whitesmoke 6px solid;
   visibility: hidden;
 }
 
+.floatingMenuElement:focus, .floatingMenuClass:focus {
+  border: black 6px solid;;
+}
+
 .floatingMenuElement i {
-  font-size: 50px;
+  font-size: 40px;
   color: white;
 }
 
@@ -174,7 +234,7 @@ body {
 #activeFilterAndSort{
   display: flex;
   flex-flow: row wrap;
-  justify-content: flex-end;
+  justify-content: flex-start;
   align-items: center;
   position: absolute;
   top: 10vmin;
@@ -185,12 +245,12 @@ body {
   border-color: gray;
   border-width: 1.2px;
   visibility: hidden;
-  
+
 }
 #activeFilterAndSort p{
   font-family: 'Rajdhani', sans-serif;
   font-size: 3vmin;
-  color: DarkSlateGrey; 
+  color: DarkSlateGrey;
   margin: 0px 9px;
 }
 
@@ -198,6 +258,7 @@ body {
   color: orangered !important;
 }
 
+/****** Cards *********/
 .pokemonContainerGrid {
   position: absolute;
   top: 20vmin;
@@ -251,12 +312,16 @@ body {
   cursor: pointer;
 }
 
-.divCardClass:hover .divPokemonCardFaceClass--front {
+.divCardClass:hover .divPokemonCardFaceClass--front, .divCardClass:focus .divPokemonCardFaceClass--front{
   transform: rotateY(-180deg);
 }
 
-.divCardClass:hover .divPokemonCardFaceClass--back {
+.divCardClass:hover .divPokemonCardFaceClass--back, .divCardClass:focus .divPokemonCardFaceClass--back {
   transform: rotateY(0deg);
+}
+/*//TODO: preguntar a Majo como lo prefiere */
+.divCardClass:focus .divPokemonCardFaceClass--back { 
+  border: 5px solid black;
 }
 
 .imagePokemon {
@@ -268,11 +333,12 @@ body {
   font-family: "Rajdhani", sans-serif;
   font-weight: normal;
   text-align: center;
-  font-size: 17px;
+  font-size: 22px;
   background-color: rgb(53, 46, 46, 40%);
   border-radius: 5px;
-  padding: 0.6vmin;
-  margin: 2vh 0 0 0;
+  padding: 5px 8px;
+  position: absolute;
+  bottom: 50px;
 }
 
 .namePokemon {
@@ -280,7 +346,8 @@ body {
   font-weight: bold;
   font-size: 28px;
   text-align: center;
-  margin: 0.5vh 0 1vh 0;
+  position: absolute;
+  bottom: 15px;
 }
 
 .typePokemonIMG {
@@ -298,18 +365,42 @@ body {
 }
 /***** Ajustes web responsiva: Main window*****/
 @media(hover: hover) and (pointer: fine) {
-    #menuButton:hover, #favoritesButton:hover, 
-#chartButton:hover{
+  #menuButton:hover, #favoritesButton:hover,
+  #chartButton:hover{
     color: white;
     cursor: pointer;
-}
-}
-
-@media screen and (max-width: 768px) {
-
+  }
 }
 
 @media screen and (max-width: 500px) {
+  .header{
+    height: fit-content;
+    flex-flow: row wrap;
+    justify-content: center;
+  }
+  .headerNavColumn{
+    order: 1;
+  }
+  .headerNavColumn ul{
+    flex: 0;
+  }
+  .headerNavColumn li {
+    display: initial;
+  }
+  #toggleLanguageLines{
+    display: none;
+  }
+  .titleDiv {
+    order: 3;
+  }
+  .headerNav{
+    order: 2;
+    display: flex;
+    flex-direction: row;
+    flex: 1;
+    align-self: center;
+  }
+
   #menuButton,
   #favoritesButton,
   #chartButton,
@@ -325,7 +416,7 @@ body {
   .floatingMenu {
     width: 18vw;
     height: 10vh;
-    margin: 0 0 3vh 0;
+    margin: 0 0 10px 0;
   }
   .floatingMenuClassNormal {
     width: 60px;
@@ -345,7 +436,6 @@ body {
   .floatingMenuElement {
     width: 60px;
     height: 60px;
-    margin: 0 0 3vh 0;
   }
   .floatingMenuElement i {
     font-size: 35px;
@@ -359,14 +449,61 @@ body {
     height: 12vh;
   }
   .titleText {
-    font-size: 14vmin;
-    letter-spacing: .2vw;
-  }
-  .favoritesButton {
-    width: 16vw;
-    height: 12vh;
-  }
+    font-size: 60px;
+    padding: 0px;
+   }
   .numberPokemon {
-    font-size: 22px;
+    font-size: 24px;
+  }
+}
+
+@media only screen and (max-width: 868px) and (orientation: landscape) {
+  .titleText {
+    font-size: 50px;
+    letter-spacing: 2px;
+   }
+  .headerNavColumn ul{
+    flex: 0;
+  }
+  .headerNavColumn li {
+    display: initial;
+  }
+  #toggleLanguageLines{
+    display: none;
+  }
+
+  .floatingMenuDIV {
+    flex-direction: row-reverse;
+  }
+  .floatingMenuDIV {
+    bottom: 0.5vh;
+    right: 2vw;
+    width: fit-content;
+  }
+  .floatingMenu {
+    width: 18vw;
+    height: 10vh;
+  }
+  .floatingMenuClassNormal {
+    width: 60px;
+    height: 60px;
+  }
+  .floatingMenuClassNormal i {
+    font-size: 50px;
+    color: white;
+  }
+  .floatingMenuClassSmall {
+    width: 40px;
+    height: 40px;
+    color: black;
+    animation: pop 0.3s linear 1;
+  }
+  .floatingMenuElement {
+    width: 60px;
+    height: 60px;
+    margin: 0 0 0 10px;
+  }
+  .floatingMenuElement i {
+    font-size: 35px;
   }
 }
