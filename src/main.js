@@ -896,11 +896,11 @@ const showCharts = () => {
                       <span class="checkmark"></span>
                   </label>
               </nav>
-              <section>
+              <!-- <section>
                 <hr>
                 <p class="textFormatSmall"> Average bla bla</p>
                 <hr>
-              </section>
+              </section> --!>
           </div>
           <div class="canvasContainer columnAlignmentClass ">
               <canvas id="chartCanvas"></canvas>
