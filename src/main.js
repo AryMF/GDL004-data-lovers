@@ -12,7 +12,9 @@ let buttonLanguageES = document.querySelector("#languageES");
 let toggleLanguageES = document.querySelector("#toggleLanguageES");
 let homeButtonElement = document.getElementById("homeButton");
 let toggleFavElement = document.getElementById("toggleFav");
+let favoritesButton = document.getElementById("favoritesButton");
 let toggleChartsElement = document.getElementById("toggleCharts");
+let chartButton = document.getElementById("chartButton");
 let activeFilterAndSortContainer = document.getElementById("activeFilterAndSort");
 let activeFilterAndSortTags= document.querySelectorAll("#activeFilterAndSort p");
 let chartsContainerElement = document.querySelector(".chartsContainerClass");
@@ -33,9 +35,6 @@ let characterDynamicDiv = document.querySelector("#characterDynamicContent");
 let language = 1; // TODO: probablemente no es necesarios
 let voiceStatusFlag = false;
 var synth = window.speechSynthesis;
-/*********** Next Character *********************/
-let characterSelectNext = document.getElementById("nextCharacterButton");
-let characterNextWindow = document.getElementById("nextCharacterWindow");
 
 const typeArray = [
   {
@@ -350,10 +349,26 @@ buttonLanguageEN.addEventListener("click", () => {
   language = 1;
 });
 
+buttonLanguageEN.addEventListener("keyup", function(event) {
+  if (event.key === "Enter") {
+    toggleLanguageES.checked = false;
+    toggleLanguageEN.checked = true;
+    language = 1;
+  }
+});
+
 buttonLanguageES.addEventListener("click", () => {
   toggleLanguageEN.checked = false;
   toggleLanguageES.checked = true;
   language = 0;
+});
+
+buttonLanguageES.addEventListener("keyup", function(event) {
+  if (event.key === "Enter") {
+    toggleLanguageEN.checked = false;
+    toggleLanguageES.checked = true;
+    language = 0;
+  }
 });
 
 /*********************** Floating menu ***********************/
@@ -712,25 +727,20 @@ const hiddenPromptWindow = () => {
   synth.cancel();
 };
 
-/************************ Favorites window ************************/
-/** Show favorites*/
-document.getElementById("favoritesButton").addEventListener("click", () => {
-  closeFloatingMenu();
-  toggleFavElement.checked = true;
-  toggleChartsElement.checked = false;
-  homeButtonElement.setAttribute("style", "display: initial;");
-  pokemonContainerElement.style.visibility = "visible";
-  /***Cerrar Main */
-  pokemonContainerElement.innerHTML = "";
-  floatingMenu.style.visibility = "hidden";
-  activeFilterAndSortContainer.style.visibility = "hidden";
-  /***Cerrar Charts */
-  chartsContainerElement.innerHTML = "";
-  chartsContainerElement.style.visibility = "hidden";
-  showFavorites();
+/************************ Home window ************************/
+homeButtonElement.addEventListener("click", () => { //Cambio
+  printHomeWindow();
+  printPokemonCards(dataPokemon);
 });
 
-document.getElementById("homeButton").addEventListener("click", () => {
+homeButtonElement.addEventListener("keyup", event => {
+  if (event.key === "Enter") {
+    printHomeWindow();
+    printPokemonCards(dataPokemon);
+  }
+});
+
+const printHomeWindow = () => {
   toggleFavElement.checked = false;
   toggleChartsElement.checked = false;
   homeButtonElement.setAttribute("style", "display: none;");
@@ -742,8 +752,20 @@ document.getElementById("homeButton").addEventListener("click", () => {
   /***Abrir Main */
   pokemonContainerElement.style.visibility = "visible";
   // activeFilterAndSortContainer.style.visibility = "visible";
+};
 
-  printPokemonCards(dataPokemon);
+/************************ Favorites window ************************/
+/** Show favorites*/ 
+favoritesButton.addEventListener("click", () => {
+  printFavoritesWindow();
+  showFavorites();
+});
+
+favoritesButton.addEventListener("keyup", event => {
+  if (event.key === "Enter") {
+    printFavoritesWindow();
+    showFavorites();
+  }
 });
 
 const loadFavorites = () => {
@@ -766,6 +788,22 @@ const deleteFavorite = (pokemonName) => {
     index > -1 ? pokemonCookiesArray.splice(index, 1) : console.error("No existe ese id en favoritos");
     document.cookie = "favoritePokemon=" + pokemonCookiesArray.join(" ");
 };
+
+const printFavoritesWindow = () => {
+  closeFloatingMenu();
+  toggleFavElement.checked = true;
+  toggleChartsElement.checked = false;
+  homeButtonElement.setAttribute("style", "display: initial;");
+  pokemonContainerElement.style.visibility = "visible";
+  /***Cerrar Main */
+  pokemonContainerElement.innerHTML = "";
+  floatingMenu.style.visibility = "hidden";
+  activeFilterAndSortContainer.style.visibility = "hidden";
+  /***Cerrar Charts */
+  chartsContainerElement.innerHTML = "";
+  chartsContainerElement.style.visibility = "hidden";
+};
+
 
 const showFavorites = () => {
   let pokemonCookiesArray = loadFavorites();
@@ -800,8 +838,20 @@ let chartCategory = "weight";
 let chartFilter = 1;
 let chartElement;
 
-document.getElementById("chartButton").addEventListener("click", () => {
-    closeFloatingMenu();
+chartButton.addEventListener("click", () => {
+    printChartsWindow();
+    showCharts();
+});
+
+chartButton.addEventListener("keyup", event => {
+  if (event.key === "Enter") {
+    printChartsWindow();
+    showCharts();
+  }
+});
+
+const printChartsWindow = () => {
+  closeFloatingMenu();
     toggleChartsElement.checked = true;
     toggleFavElement.checked = false;
     homeButtonElement.setAttribute("style", "display: initial;");
@@ -811,10 +861,9 @@ document.getElementById("chartButton").addEventListener("click", () => {
     activeFilterAndSortContainer.style.visibility = "hidden";
     chartsContainerElement.style.visibility = "visible";
     floatingMenu.style.visibility = "hidden";
-    chartsWindowPrint();
-});
+};
 
-const chartsWindowPrint = () => {
+const showCharts = () => {
     const chartsWindowTemplate = `
       <h2 class="textFormatBig" style="letter-spacing: 10px;">Charts</h2>
       <br/>
@@ -846,11 +895,11 @@ const chartsWindowPrint = () => {
                       <span class="checkmark"></span>
                   </label>
               </nav>
-              <section>
+              <!-- <section>
                 <hr>
                 <p class="textFormatSmall"> Average bla bla</p>
                 <hr>
-              </section>
+              </section> --!>
           </div>
           <div class="canvasContainer columnAlignmentClass ">
               <canvas id="chartCanvas"></canvas>
