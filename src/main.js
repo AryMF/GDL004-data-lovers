@@ -30,6 +30,9 @@ let characterTitleName = "";
 let language = 1; //TODO: Valor que debe almacenarse en cookie
 let voiceStatusFlag = false;
 var synth = window.speechSynthesis;
+/*********** Next Character *********************/
+let characterSelectNext = document.getElementById("nextCharacterButton");
+let characterNextWindow = document.getElementById("nextCharacterWindow");
 
 const typeArray = [
   {
@@ -707,6 +710,8 @@ document.getElementById("homeButton").addEventListener("click", () => {
   toggleFavElement.checked = false;
   toggleChartsElement.checked = false;
   homeButtonElement.style.visibility = "hidden";
+  // /***Cerrar Active Sort and Filter */
+  // activeFilterAndSortContainer.style.visibility = "hidden";
   /***Cerrar Favoritos */
   floatingMenu.style.visibility = "visible";
   /***Cerrar Charts */
@@ -1197,3 +1202,10 @@ const catchItAnimation = (status, animation) => {
     }
    }   
  });
+
+ /*********** Next Character Window*********************/
+ characterSelectNext.addEventListener("click", function() {
+   let aux = dataPokemon.indexOf(querySelector("#characterPokemonName").innerHTML);
+   aux + 1; 
+  // characterWindowPrint(orderArray[2]);
+});
