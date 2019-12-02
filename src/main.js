@@ -435,12 +435,10 @@ document.addEventListener("keyup", function(event) {
 });
 
 /**********Mandar a home con click en titulo */
-
-document.getElementById("titleText").addEventListener("click", () => {
+document.querySelector(".titleText").addEventListener("click", () => {
   printPokemonCards(dataPokemon);
   activeFilterAndSortContainer.style.visibility = "hidden";
   document.documentElement.scrollTop = 0;
-  
 });
 
 /************************  Search modal  *********************************/
