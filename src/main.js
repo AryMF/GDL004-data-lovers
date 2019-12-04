@@ -1,5 +1,5 @@
 const DATA_URL = "https://raw.githubusercontent.com/AryMF/GDL004-data-lovers/master/src/data/pokemon/pokemon.json";
-const DATA_API = "https://pokeapi.co/api/v2/pokemon?limit=151";
+const DATA_API_POKE_ENTRY = "https://pokeapi.co/api/v2/pokemon-species/";
 let dataPokemon = [];
 let filterJSON = [];
 let dataPokedexArray = [];
@@ -166,7 +166,7 @@ let soundControl = document.getElementById("soundControl");
 const animationDataLoadingEnd = () => {
     let time = 1;
     let i = 1;
-    let intervalTime = 600;
+    let intervalTime = 300;
     let interval = setInterval(() => {
         if(i < 5){
             time = time - 0.2;
@@ -212,32 +212,43 @@ const apiCallFunction = (url = "", option = {}) => {
 };
 
 async function getPokemonData (){
-  let dataRequest = await apiCallFunction(DATA_API, {method: "GET"});
-  let call1 = await dataRequest.json();
-  for(let i=0; i< call1.results.length; i++){
-      let call2 = await apiCallFunction(call1.results[i].url, {method: "GET"});
-      let pokemonData = await call2.json();
-      let call3 = await apiCallFunction(pokemonData.species.url, {method: "GET"});
-      let flavorText = await call3.json();
-      let flavorTextArrayES = flavorText.flavor_text_entries.filter(element => {
-          if(element.language.name == "es" && element.version.name == "omega-ruby"){
-              return true;
-          }
-          return false;
+  let URL;
+  let promisesArray = [];
+  for (let i = 0; i < dataPokemon.length; i++){
+    URL = DATA_API_POKE_ENTRY + dataPokemon[i].id;
+    promisesArray.push(apiCallFunction(URL, {method: "GET"}));    
+  }
+
+  Promise.all(promisesArray)
+  .then(responses => Promise.all(responses.map(element => element.json())))
+  .then(jsonObjects => {
+    jsonObjects.forEach(element => {
+      let flavorTextArrayES = element.flavor_text_entries.filter(e => {
+        if(e.language.name == "es" && e.version.name == "omega-ruby"){
+            return true;
+        }
+        return false;
       });
-      let flavorTextArrayEN = flavorText.flavor_text_entries.filter(element => {
-          if(element.language.name == "en" && element.version.name == "omega-ruby"){
+      let flavorTextArrayEN = element.flavor_text_entries.filter(e => {
+          if(e.language.name == "en" && e.version.name == "omega-ruby"){
               return true;
           }
           return false;
       });
       dataPokedexArray.push(
       {
-          "id": pokemonData.id,
+          "id": element.id,
           "flavor_text_es": flavorTextArrayES[0].flavor_text,
           "flavor_text_en": flavorTextArrayEN[0].flavor_text
       });
-  };
+    });
+  })
+  .catch(error => {
+    console.error("Error al cargar pokedex entries");
+    console.error(error);
+  });
+
+  
 };
 
 /**** */
@@ -300,7 +311,7 @@ const printPokemonCards = (dataArray, filterByText = "All", sortByText = "All") 
     <div class="divContainerClass">
         <div class="divCardClass" tabindex="0">
             <div id="divPokemonCard" style = ${"background-color:" + colorByType}  class="divPokemonCardFaceClass divPokemonCardFaceClass--front">
-                <img class="imagePokemon" src = ${element.img} alt= ${element.name}>
+                <img class="imagePokemon" src = "https://pokeres.bastionbot.org/images/pokemon/${element.id}.png" alt= ${element.name}>
                 <p class="numberPokemon">${element.num}</p>
                 <p class="namePokemon">${pokemonName}</p>
             </div>
@@ -451,8 +462,8 @@ document.addEventListener("keyup", function(event) {
 
 /**********Mandar a home con click en titulo */
 document.querySelector(".titleText").addEventListener("click", () => {
-  printPokemonCards(dataPokemon);
-  activeFilterAndSortContainer.style.visibility = "hidden";
+  // printPokemonCards(dataPokemon);
+  // activeFilterAndSortContainer.style.visibility = "hidden";
   document.documentElement.scrollTop = 0;
 });
 
@@ -534,7 +545,7 @@ const searchResultEvaluation = () => {
       <img class="favoritesWindowImageClass" src="image/MissingNo.png" alt="Image: Favorites/Search is empty">
       <p class="textFormatSmall">There's no matching Pokemons for your search.</p>
       </div>`;
-    
+
     pokemonContainerElement.innerHTML = favoritesWindowEmptyTemplate;
   } else {
     printPokemonCards(filterJSON, "\"" + searchPromptInputElement.value + "\"");
@@ -746,6 +757,7 @@ const printHomeWindow = () => {
   homeButtonElement.setAttribute("style", "display: none;");
   /***Cerrar Favoritos */
   floatingMenu.style.visibility = "visible";
+  filterJSON = [];
   /***Cerrar Charts */
   chartsContainerElement.innerHTML = "";
   chartsContainerElement.style.visibility = "hidden";
@@ -755,7 +767,7 @@ const printHomeWindow = () => {
 };
 
 /************************ Favorites window ************************/
-/** Show favorites*/ 
+/** Show favorites*/
 favoritesButton.addEventListener("click", () => {
   printFavoritesWindow();
   showFavorites();
@@ -822,13 +834,13 @@ const showFavorites = () => {
     printPokemonCards(filterJSON);
   } else {
     pokemonContainerElement.innerHTML = "";
-    
+
     const favoritesWindowEmptyTemplate = `
       <div class="favoritesWindowEmptyClass">
       <p class="textFormatMedium">You haven't catch any pokemon yet!</p>
       <img class="favoritesWindowImageClass" src="image/psyduck.png" alt="Image: Favorites/Search is empty">
       </div>`;
-    
+
     pokemonContainerElement.innerHTML = favoritesWindowEmptyTemplate;
   }
 };
@@ -880,7 +892,7 @@ const showCharts = () => {
                       <span class="checkmark"></span>
                   </label>
                   <label class="container textFormatBig" tabindex="0">Spawn Chances
-                      <input type="radio" name="chartCategory" value="spawn_chance"> 
+                      <input type="radio" name="chartCategory" value="spawn_chance">
                       <span class="checkmark"></span>
                   </label>
               </nav>
@@ -1252,12 +1264,27 @@ const characterWindowTemplate2  = `
       voiceStatusFlag = true;
       console.log("Synthesis support. Make your web apps talk!");
       let msg = new SpeechSynthesisUtterance(document.querySelector("#characterPokemonName").innerHTML);
-      language == 0 ? msg.voice = synth.getVoices()[5] : msg.voice = synth.getVoices()[3]; // ES: 5 || EN-GB Male: 3 || EN-GB FEM: 2
+      let msg2 = new SpeechSynthesisUtterance(document.querySelector(".textFormatPokeEntry").innerHTML);
+      if(language == 0){
+        //msg.voice = "Google español de Estados Unidos";
+        msg.lang = "es-US";
+        //msg2.voice = "Google español de Estados Unidos";
+        msg2.lang = "es-US";
+      } else {
+        // msg.voice = "Google UK English Male";
+        msg.lang = "en-GB";
+        // msg2.voice = "Google UK English Male";
+        msg2.lang = "en-GB";
+      }
+
+      //language == 0 ? msg.voice = synth.getVoices()[5] : msg.voice = synth.getVoices()[3]; // ES: 5 || EN-GB Male: 3 || EN-GB FEM: 2
+      // language == 0 ?  : msg.lang = "en-GB";
       msg.onend = function(){
         voiceStatusFlag = false;
       };
-      let msg2 = new SpeechSynthesisUtterance(document.querySelector(".textFormatPokeEntry").innerHTML);
-      language == 0 ? msg2.voice = synth.getVoices()[5] : msg2.voice = synth.getVoices()[3]; // ES: 5 || EN-GB Male: 3 || EN-GB FEM: 2
+      // let msg2 = new SpeechSynthesisUtterance(document.querySelector(".textFormatPokeEntry").innerHTML);
+      //language == 0 ? msg2.voice = synth.getVoices()[5] : msg2.voice = synth.getVoices()[3]; // ES: 5 || EN-GB Male: 3 || EN-GB FEM: 2
+      // language == 0 ? msg2.lang = "es-ES" : msg2.lang = "en-GB";
       msg2.onend = function(){
         voiceStatusFlag = false;
       };
