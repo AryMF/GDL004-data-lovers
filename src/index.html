@@ -14,8 +14,7 @@
     <link href="https://fonts.googleapis.com/css?family=Rajdhani&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.bundle.min.js"></script> 
   </head>
-  <body>
-    
+  <body data-mode="light">    
     <!-- Animación de intro -->
     <div id="divLoading" class="divLoadingClass"> 
         <div id="divLoadingImage" class="divLoadingImage">
@@ -69,27 +68,44 @@
         </nav>
     </div>
 
+    <nav class="sideMenu">
+        <span class="buttonCloseMenu" aria-label="Close" aria-hidden="true" tabindex="0">&times;</span>
+        <ul>
+          <p> Language: </p>
+          <li>
+            <nav class="languageNav">
+                  <input id="toggleLanguageEN" type="checkbox" checked/>
+                  <i id="languageEN" tabindex="0"> EN </i>
+                  <i id="toggleLanguageLines">&nbsp;||&nbsp;</i>
+                  <input id="toggleLanguageES" type="checkbox"/>
+                  <i id="languageES" tabindex="0">ES </i>
+            </nav>
+          </li>
+          <p> Dark mode </p>
+          <li>
+            <label class="switch">
+                <input id="toggleDarkMode" type="checkbox" tabindex="0">
+                <span class="slider round"></span>
+            </label>
+          </li>
+          <li tabindex="0"> Tutorial </li>
+          <li tabindex="0"> About </li>
+        </ul>
+    </nav>
+
     <!-- Main screen -->
     <div id="mainScreen" class="mainScreenClass">
         <!-- Barra de menu superior -->
         <header class="header">
-            <nav class="headerNavColumn">
-                <ul> Language:
-                    <li>
-                        <input id="toggleLanguageEN" type="checkbox" checked/>
-                            <i id="languageEN" tabindex="0"> EN </i>
-                    </li>
-                    <!-- <li><i id="toggleLanguageLines">&nbsp;||&nbsp;</i></li> comentar para hacerlo columna -->
-                    <li>
-                        <input id="toggleLanguageES" type="checkbox"/>
-                        <i id="languageES" tabindex="0">ES </i>
-                    </li>
-                </ul>
+            <nav class="leftHeaderNav">
+                <button class="topMenuButtonContainer" tabindex="-1" >
+                    <i id="menuButton" class="fa fa-bars" tabindex="0"></i>
+                </button>
             </nav>
             <div class="titleDiv">
                 <h1 class="titleText">Pokedex</h1>
             </div>
-            <nav class="headerNav">
+            <nav class="rightHeaderNav">
                 <button class="topMenuButtonContainer" tabindex="-1" >
                     <i id="homeButton" class="fa fa-home" tabindex="0"></i>
                 </button>
@@ -114,6 +130,9 @@
             <p> Sort by: </p>
             <p id="sortByTag"> placeholder </p>
         </div>
+        <div id="clearFavoritesDiv">
+          <button class="clearFavoritesButton" tabindex="0"> Clear favorites </button>
+        </div>
         <!-- Despliegue de pokemons -->
         <main id="pokemonContainer" class="pokemonContainerGrid" > </main>
         <!-- Sección de Gráficas -->
@@ -129,7 +148,7 @@
         </div>
         <div class="centerElements">
           <div class="searchBarMargin">
-            <input id="searchPromptInput" class="searchPromptInputClass" type="text" placeholder="Bulbasaur or 1"/>
+            <input id="searchPromptInput" class="searchPromptInputClass" type="text" placeholder="Name or Number"/>
             <button id="searchPromptButton" class="searchPromptButtonClass fa fa-search"> </button>
           </div>
         </div>
@@ -176,8 +195,8 @@
           </div>
           <!-- Contenido dinámico -->
           <div id="characterDynamicContent"></div>
-          <button id="dexterVoice" >
-            <i class="fa fa-volume-up symbolFormat"></i>
+          <button class="dexterVoice" tabindex="-1">
+            <i class="fa fa-volume-up symbolFormat" tabindex="0"></i>
           </button> 
       </div> <!-- Cierra "Pantalla de personaje" -->
     </div> <!-- Cierra promptContainer -->

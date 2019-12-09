@@ -13,10 +13,10 @@
     top: 50%;
     transform: translate(-50%, -42%);
     padding: 0.5% 1% 0.5% 1%;
-    border: 10px solid white;
+    border: 10px solid var(--characterWindowBorder);
     border-radius: 35px;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-    background-color: whitesmoke;
+    background-color: var(--characterWindowColor);
     -webkit-animation-name: animatetopCharacterWindow;
     -webkit-animation-duration: 0.4s;
     animation-name: animatetopCharacterWindow;
@@ -182,7 +182,20 @@
 #characterDynamicContent{
     display: flex;
     flex-direction: column;
-    overflow: scroll;
+    overflow-y: scroll;
+}
+
+::-webkit-scrollbar {
+    width: 10px;
+}
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+::-webkit-scrollbar-thumb {
+    background: #888;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: #555;
 }
 
 .columnAlignmentClass{
@@ -205,19 +218,19 @@
     font-style: normal;
     font-variant: normal;
     font-size: 30px;
-    color: rgb(58, 57, 57);
+    color: var(--characterWindowPokeNum);
     padding: 6px 10px;  
     width: fit-content;
-    background-color: hsl(0, 0%, 0%, 30%);
+    background-color: var(--characterWindowPokeNumBackground);
     border-radius: 10px;
 }
 
-.textFormat{
+/* .textFormat{
     font-family: 'Rajdhani', sans-serif;
     font-style: normal;
     font-variant: normal;
     text-align: center;    
-}
+} */
 
 .textFormatBig {
     font-family: 'Rajdhani', sans-serif;
@@ -225,7 +238,7 @@
     font-variant: normal;
     text-align: center; 
     font-size: 60px;
-    color: DarkSlateGrey; 
+    color: var(--textFormatBig); 
 }
 
 .textFormatMedium{
@@ -234,16 +247,16 @@
     font-variant: normal;
     text-align: center; 
     font-size: 42px;
-    color: rgb(68, 67, 67);
+    color: var(--textFormatMedium);
 }
 
 .textFormatSmall{
     font-family: 'Rajdhani', sans-serif;
     font-style: normal;
-    font-variant: normal;
+    font-variant: small-caps;
     text-align: center; 
-    font-size: 30px;
-    color: rgb(68, 67, 67);
+    font-size: 36px;
+    color: var(--textFormatSmall);
 }
 
 .textFormatPokeEntry{
@@ -252,18 +265,18 @@
     font-variant: normal;
     text-align: center; 
     font-size: 30px;
-    color: rgb(68, 67, 67);
+    color: var(--characterWindowPokeEntry);
 }
 
 .rightBorderClass{
     border-width: 5px;
-    border-color: DimGrey;
+    border-color: var(--characterWindowDivisions);
     border-right: dotted;
 }
 
 .bottomBorderClass{
     border-width: 5px;
-    border-color: DimGrey;
+    border-color: var(--characterWindowDivisions);
     border-bottom: dotted;
 }
 .characterWeaknessTypeContainer, .characterEachEvolutionContainer{
@@ -283,9 +296,12 @@
     font-variant: normal;
     text-align: center; 
     font-size: 5vmin;
-    color: rgb(68, 67, 67);
+    color: var(--characterWindowPokeEntry);
 }
-
+.evolutionPathImgClass{
+    height: 120px;
+    cursor: pointer;
+}
 .evolutionPathArrow{
     justify-content: center;
     padding: 10px 5px;
@@ -303,21 +319,27 @@
 }
 
 /************ Text to speech button ************/
-#dexterVoice{
+.dexterVoice{
     width: fit-content;
-    border-radius: 50px;
+    border: none;
     background: transparent;
 }
 
-#dexterVoice i{
+.dexterVoice i{
     font-size: 5vmin;
+    color: var(--characterWindowAudio);
     padding: .5px;
     width: 50px;
-    border-radius: 10px;
+    cursor: pointer;
 }
 
-#dexterVoice i:hover{
-    color: maroon;
+.dexterVoice i:hover,
+.dexterVoice i:focus {
+    color: var(--characterWindowAudioHover);
+}
+
+.noHover{
+    pointer-events: none;
 }
 
 /************ Favorite window empty Psyduck ************/

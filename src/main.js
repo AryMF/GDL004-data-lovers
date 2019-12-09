@@ -17,6 +17,8 @@ let toggleChartsElement = document.getElementById("toggleCharts");
 let chartButton = document.getElementById("chartButton");
 let activeFilterAndSortContainer = document.getElementById("activeFilterAndSort");
 let activeFilterAndSortTags= document.querySelectorAll("#activeFilterAndSort p");
+let clearFavoritesContainer = document.querySelector("#clearFavoritesDiv");
+let clearFavoritesButton = document.querySelector(".clearFavoritesButton");
 let chartsContainerElement = document.querySelector(".chartsContainerClass");
 /***********Popup windows (Search, FilterBy, SortBy) *********************/
 let promptContainerElement = document.getElementById("promptContainer");
@@ -32,7 +34,8 @@ let characterWindowElement = document.querySelector("#characterWindow");
 let pokeballAndImagDiv = document.querySelector(".pokeballAndImagDiv");
 let characterDynamicDiv = document.querySelector("#characterDynamicContent");
 /*********** Text to speech *********************/
-let language = 1; // TODO: probablemente no es necesarios
+let dexterVoice = document.querySelector(".dexterVoice");
+let language = 1;
 let voiceStatusFlag = false;
 var synth = window.speechSynthesis;
 
@@ -216,7 +219,7 @@ async function getPokemonData (){
   let promisesArray = [];
   for (let i = 0; i < dataPokemon.length; i++){
     URL = DATA_API_POKE_ENTRY + dataPokemon[i].id;
-    promisesArray.push(apiCallFunction(URL, {method: "GET"}));    
+    promisesArray.push(apiCallFunction(URL, {method: "GET"}));
   }
 
   Promise.all(promisesArray)
@@ -248,7 +251,7 @@ async function getPokemonData (){
     console.error(error);
   });
 
-  
+
 };
 
 /**** */
@@ -275,6 +278,12 @@ const main = () => {
 };
 
 window.addEventListener("load", main);
+
+/************************ Dark mode *************************/
+
+toggleDarkMode.addEventListener("click", () => {
+  document.body.getAttribute("data-mode") == "light" ? document.body.setAttribute("data-mode", "dark"): document.body.setAttribute("data-mode", "light");
+});
 
 /********** Impresión en pantalla de Pokemon cards **********/
 
@@ -462,13 +471,10 @@ document.addEventListener("keyup", function(event) {
 
 /**********Mandar a home con click en titulo */
 document.querySelector(".titleText").addEventListener("click", () => {
-  // printPokemonCards(dataPokemon);
-  // activeFilterAndSortContainer.style.visibility = "hidden";
   document.documentElement.scrollTop = 0;
 });
 
 /************************  Search modal  *********************************/
-//TODO: Mensaje de busqueda sin matches
 document.getElementById("searchButton").addEventListener("click", () => {
   searchPromptCreator();
 });
@@ -491,7 +497,6 @@ const searchPromptCreator = () => {
   showPromptWindow(3);
   searchByPromptElement.style.WebkitAnimationPlayState = "running";
   document.getElementById("searchPromptInput").focus();
-  activeFilterAndSortContainer.style.visibility = "visible";
 };
 
 document.getElementById("searchPromptButton").addEventListener("click", () => {
@@ -505,14 +510,14 @@ document.getElementById("searchPromptButton").addEventListener("click", () => {
 });
 
 document.getElementById("searchPromptInput").addEventListener("input", () => {
-    searchPromptInputElement.value = searchPromptInputElement.value.replace(" ", "");
-    searchPromptInputElement.value = searchPromptInputElement.value.toUpperCase();
-    /*** Regresar al principio de la pagina ***/
+      // Regresar al principio de la pantalla
     document.documentElement.scrollTop = 0;
+    searchPromptInputElement.value = searchPromptInputElement.value.replace(" ", "");
     if(searchPromptInputElement.value != ""){
         filterJSON = window.data.filteredByNameOrNumber(dataPokemon, searchPromptInputElement.value);
         searchResultEvaluation();
     }else {
+        activeFilterAndSortContainer.style.visibility = "visible";
         printPokemonCards(dataPokemon);
     }
 });
@@ -524,13 +529,14 @@ document.getElementById("searchPromptInput").addEventListener("keyup", event => 
 });
 
 const searchByInput = () =>{
-    /*** Regresar al principio de la pagina ***/
-    document.documentElement.scrollTop = 0;
+    // Regresar al principio de la pantalla
+    document.documentElement.scrollTop = 0; 
     if(searchPromptInputElement.value != ""){
         filterJSON = window.data.filteredByNameOrNumber(dataPokemon, searchPromptInputElement.value);
         searchResultEvaluation();
         hiddenPromptWindow();
     }else {
+        activeFilterAndSortContainer.style.visibility = "visible";
         printPokemonCards(dataPokemon);
     }
 };
@@ -538,7 +544,7 @@ const searchByInput = () =>{
 const searchResultEvaluation = () => {
   if(filterJSON == ""){
     pokemonContainerElement.innerHTML = "";
-
+    activeFilterAndSortContainer.style.visibility = "hidden";
     const favoritesWindowEmptyTemplate = `
       <div class="favoritesWindowEmptyClass">
       <p class="textFormatMedium">Wild MISSINGNO. appeared!</p>
@@ -548,6 +554,7 @@ const searchResultEvaluation = () => {
 
     pokemonContainerElement.innerHTML = favoritesWindowEmptyTemplate;
   } else {
+    activeFilterAndSortContainer.style.visibility = "visible";
     printPokemonCards(filterJSON, "\"" + searchPromptInputElement.value + "\"");
   }
 }
@@ -583,16 +590,12 @@ const filterPromptCreator = () => {
         buttonElement.focus();
         buttonElement.addEventListener("click", function() {
             activeFilterAndSortContainer.style.visibility = "visible";
-            /*** Regresar al principio de la pagina ***/
-            document.documentElement.scrollTop = 0;
             filterJSON = window.data.filteredByType(dataPokemon, buttonElement.value);
             filterJSON == "" ? printPokemonCards(dataPokemon): printPokemonCards(filterJSON, "\"" + buttonElement.value + "\"");
             hiddenPromptWindow();
         });
         buttonElement.addEventListener('keyup',function(e){
             if (e.keyCode === 13) {
-                /*** Regresar al principio de la pagina ***/
-                document.documentElement.scrollTop = 0;
                 filterJSON = window.data.filteredByType(dataPokemon, buttonElement.value);
                 filterJSON == "" ? printPokemonCards(dataPokemon): printPokemonCards(filterJSON, "\"" + buttonElement.value + "\"");
                 hiddenPromptWindow();
@@ -637,8 +640,6 @@ const sortByPromptCreator = () => {
     buttonElement.addEventListener("click", function() {
     activeFilterAndSortContainer.style.visibility = "visible";
 
-        /*** Regresar al principio de la pagina ***/
-        document.documentElement.scrollTop = 0;
         if (filterJSON.length > 0) {
         if (i == 0 || i == 2 || i == 4 || i == 6) {
             sortByJSON = window.data.sortDataResultDesc(
@@ -677,20 +678,30 @@ const showPromptWindow = (option) => {
     promptContainerElement.style.visibility = "visible";
     switch(option){
         case 1:
+            blockScroll();
             sortByPromptElement.style.visibility = "visible";
         break;
         case 2:
+            blockScroll();
             filterByPromptElement.style.visibility = "visible";
         break;
         case 3:
             searchByPromptElement.style.visibility = "visible";
         break;
         case 4:
+            blockScroll();
             characterWindowElement.style.visibility = "visible";
         break;
         default:
         break;
     }
+};
+
+const blockScroll = () => {
+    //***Bloquear scroll */
+    let scrollPositionY = `-${window.scrollY}px`;
+    document.body.style.position = 'fixed';
+    document.body.style.top = scrollPositionY;
 };
 
 /************************  Close modal  *********************************/
@@ -718,6 +729,15 @@ Array.from(buttonCloseNode).forEach(element => {
 });
 
 const hiddenPromptWindow = () => {
+  //Reactivar Scroll
+  let scrollPositionY;
+  if (characterWindowElement.style.visibility == "visible"){
+    scrollPositionY = document.body.style.top;
+  }
+  document.body.style.position = '';
+  document.body.style.top = '';
+  window.scrollTo(0, parseInt(scrollPositionY || '0') * -1);
+  //*************
   typeButtonsDiv.innerHTML = "";
   promptContainerElement.style.visibility = "hidden";
   searchPromptInputElement.value = "";
@@ -728,14 +748,13 @@ const hiddenPromptWindow = () => {
   characterWindowElement.style.visibility = "hidden";
   pokeballAndImagDiv.innerHTML = "";
   characterDynamicDiv.innerHTML = "";
-  // elementDivPokeballImage.style.visibility = "hidden"; borrar
-  // elementDivFavImage.style.visibility = "hidden"; borrar
-  // characterImageElement.setAttribute("src", "");
   if(toggleFavElement.checked === true){
     showFavorites();
   }
   /**Detener voz */
   synth.cancel();
+  dexterVoice.disabled = false;
+  dexterVoice.classList.remove("noHover");
 };
 
 /************************ Home window ************************/
@@ -757,13 +776,13 @@ const printHomeWindow = () => {
   homeButtonElement.setAttribute("style", "display: none;");
   /***Cerrar Favoritos */
   floatingMenu.style.visibility = "visible";
+  clearFavoritesContainer.style.visibility = "hidden";
   filterJSON = [];
   /***Cerrar Charts */
   chartsContainerElement.innerHTML = "";
   chartsContainerElement.style.visibility = "hidden";
   /***Abrir Main */
   pokemonContainerElement.style.visibility = "visible";
-  // activeFilterAndSortContainer.style.visibility = "visible";
 };
 
 /************************ Favorites window ************************/
@@ -790,7 +809,6 @@ const createFavoriteCookie = (pokemonName) => {
     let pokemonCookiesArray = loadFavorites();
     pokemonCookiesArray.push(pokemonName);
     document.cookie = "favoritePokemon=" + pokemonCookiesArray.join(" ") + "; expires =Mo, 18 Jan 2038 12:00:00 UTC";
-    console.log("createFavorite: " + document.cookie);
 };
 
 const deleteFavorite = (pokemonName) => {
@@ -832,8 +850,9 @@ const showFavorites = () => {
 
   if (filterJSON.length > 0) {
     printPokemonCards(filterJSON);
+    clearFavoritesContainer.style.visibility = "visible";
   } else {
-    pokemonContainerElement.innerHTML = "";
+    pokemonContainerElement.innerHTML = "";    
 
     const favoritesWindowEmptyTemplate = `
       <div class="favoritesWindowEmptyClass">
@@ -844,6 +863,13 @@ const showFavorites = () => {
     pokemonContainerElement.innerHTML = favoritesWindowEmptyTemplate;
   }
 };
+
+clearFavoritesButton.addEventListener("click", () => {
+  // document.getElementsByTagName("BODY")[0].setAttribute("data-mode", "dark"); //dark mode 
+  clearFavoritesContainer.style.visibility = "hidden";
+  document.cookie = "favoritePokemon=";
+  showFavorites();
+});
 
 /************************** Charts window **************************/
 let chartCategory = "weight";
@@ -871,6 +897,7 @@ const printChartsWindow = () => {
     pokemonContainerElement.innerHTML = "";
     pokemonContainerElement.style.visibility = "hidden";
     activeFilterAndSortContainer.style.visibility = "hidden";
+    clearFavoritesContainer.style.visibility = "hidden";
     chartsContainerElement.style.visibility = "visible";
     floatingMenu.style.visibility = "hidden";
 };
@@ -1033,10 +1060,6 @@ const characterWindowPrint = (pokemonName) =>{
         evolutionPathArray = evolutionPathArray.concat(characterData.prev_evolution
             .map((elementArray) => {
             let found = data.filteredByNameOrNumber(dataPokemon, elementArray.name);
-            /*
-            let found = dataPokemon.filter((element) => {
-                return element.name === elementArray.name;
-            });*/
             return { "name": elementArray.name, "img": found ? found[0].img : ''};
         }));
     }
@@ -1049,9 +1072,7 @@ const characterWindowPrint = (pokemonName) =>{
     if("next_evolution" in characterData){
         evolutionPathArray = evolutionPathArray.concat(characterData.next_evolution
             .map((elementArray) => {
-            let found = dataPokemon.filter((element) => {
-                return element.name === elementArray.name;
-            });
+            let found = data.filteredByNameOrNumber(dataPokemon, elementArray.name);
             return { "name": elementArray.name, "img": found ? found[0].img : ''};
         }));
     }
@@ -1155,7 +1176,7 @@ const characterWindowTemplate2  = `
         </div>
     </div>
     <!-- **************************************************************************************** -->
-    <div class="rowAlignmentClass">
+    <div class="columnAlignmentClass">
         <div class="columnAlignmentClass">
             <p class="textFormatSmall">Pokedex entry</p>
             <p class="textFormatPokeEntry">${pokedexEntry}</p>
@@ -1170,12 +1191,12 @@ const characterWindowTemplate2  = `
                             if(evolutionPathIndex < (evolutionPathArray.length -1)){
                                 evolutionPathIndex++;
                                 return '<div class="columnAlignmentClass">' +
-                                '<img class="weaknessImgClass" src=' + element.img + '>' +
+                                '<img class="evolutionPathImgClass" src=' + element.img + '>' +
                                 '<p class="textFormatSmall">' + element.name + '</p>' +
                                 '</div>' + evolutionPathArrowTemplate
                             }else {
                                 return '<div class="columnAlignmentClass">' +
-                                '<img class="weaknessImgClass" src=' + element.img + '>' +
+                                '<img class="evolutionPathImgClass" src=' + element.img + '>' +
                                 '<p class="textFormatSmall">' + element.name + '</p>' +
                             '</div>'
                             }
@@ -1252,54 +1273,78 @@ const characterWindowTemplate2  = `
         showFavorites();
       }
     });
+
+    //Links in evolution path
+    let evolutionPathImgArray = document.querySelectorAll(".evolutionPathImgClass");
+
+    for(let i=0; i < evolutionPathImgArray.length; i++){
+      evolutionPathImgArray[i].addEventListener("click", () =>{
+        // hiddenPromptWindow();
+        characterWindowPrint(evolutionPathArray[i].name);
+        characterDynamicDiv.scrollTop = 0; //TODO: limitar scroll top a modal.
+      });
+    }
+
 /**********/
     showPromptWindow(4);
 };
 
  /** Text to speech */
- document.getElementById("dexterVoice").addEventListener("click", () =>{
-
+ dexterVoice.addEventListener("click", () =>{
+  dexterVoice.disabled = true;
+  dexterVoice.classList.add("noHover");
+  console.log("dexterVoice", dexterVoice.disabled);
   if ('speechSynthesis' in window) {
+    console.log(buttonLanguageES.checked == true);
     if(!voiceStatusFlag){
       voiceStatusFlag = true;
       console.log("Synthesis support. Make your web apps talk!");
+      let array = synth.getVoices();
+      let voiceEN = "";
+      let voiceES = "";
+      array.map(element => {
+        if (element.name == "Google UK English Male"){
+          voiceEN = array.indexOf(element)
+          console.log("voiceEN", voiceEN);
+        }
+        if (element.name == "Google español de Estados Unidos"){
+          voiceES = array.indexOf(element)
+          console.log("voiceES", voiceES);
+        }
+      });
+
       let msg = new SpeechSynthesisUtterance(document.querySelector("#characterPokemonName").innerHTML);
       let msg2 = new SpeechSynthesisUtterance(document.querySelector(".textFormatPokeEntry").innerHTML);
       if(language == 0){
-        //msg.voice = "Google español de Estados Unidos";
-        msg.lang = "es-US";
-        //msg2.voice = "Google español de Estados Unidos";
-        msg2.lang = "es-US";
+          msg.voice = array[voiceES];
+          msg.lang = "es-US";
+          msg2.voice = array[voiceES];
+          msg2.lang = "es-US";
       } else {
-        // msg.voice = "Google UK English Male";
-        msg.lang = "en-GB";
-        // msg2.voice = "Google UK English Male";
-        msg2.lang = "en-GB";
+          msg.voice = array[voiceEN];
+          msg.lang = "en-GB";
+          msg2.voice = array[voiceEN];
+          msg2.lang = "en-GB";
       }
-
-      //language == 0 ? msg.voice = synth.getVoices()[5] : msg.voice = synth.getVoices()[3]; // ES: 5 || EN-GB Male: 3 || EN-GB FEM: 2
-      // language == 0 ?  : msg.lang = "en-GB";
       msg.onend = function(){
         voiceStatusFlag = false;
       };
-      // let msg2 = new SpeechSynthesisUtterance(document.querySelector(".textFormatPokeEntry").innerHTML);
-      //language == 0 ? msg2.voice = synth.getVoices()[5] : msg2.voice = synth.getVoices()[3]; // ES: 5 || EN-GB Male: 3 || EN-GB FEM: 2
-      // language == 0 ? msg2.lang = "es-ES" : msg2.lang = "en-GB";
+
       msg2.onend = function(){
         voiceStatusFlag = false;
+        dexterVoice.disabled = false;
+        dexterVoice.classList.remove("noHover");
       };
       synth.speak(msg);
       setTimeout(() => {
         synth.speak(msg2);
-      }, 1000);
+      }, 200);
 
-      /* Imprime arreglo de voces disponibles
-      synth.getVoices().forEach(voice => {
-        console.log(voice.name, voice.lang);
-      })*/
     } else {
       synth.cancel();
     }
+   } else {
+     alert("This browser does not support text-to-speech playback\nEste navegador no admite la reproducción de texto a voz");
    }
  });
 
@@ -1308,5 +1353,37 @@ const characterWindowTemplate2  = `
    console.log("kek");
   if (event.key === "Escape") {
     hiddenPromptWindow();
+  }
+});
+
+//****** 
+/* Side menu open */
+let sideMenu = document.querySelector(".sideMenu");
+let sideMenuCloseButton = document.querySelector(".buttonCloseMenu");
+
+document.getElementById("menuButton").addEventListener("click", () => {
+  sideMenu.style.visibility = "visible";
+  sideMenu.style.width = "275px";
+  //document.getElementById("darkMode").focus(); //Focus algo en el side menu
+});
+
+document.getElementById("menuButton").addEventListener("keyup", function(event) {
+  if (event.key === "Enter") {
+    sideMenu.style.visibility = "visible";
+    sideMenu.style.width = "275px";
+    document.getElementById("darkMode").focus();
+  }
+});
+
+/* Side menu close */
+sideMenuCloseButton.addEventListener("click", () => {
+  sideMenu.style.visibility = "hidden";
+  sideMenu.style.width = "0";
+});
+
+sideMenuCloseButton.addEventListener("keyup", function(event) {
+  if (event.key === "Enter") {
+    sideMenu.style.visibility = "hidden";
+    sideMenu.style.width = "0";
   }
 });
