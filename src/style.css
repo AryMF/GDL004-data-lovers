@@ -224,7 +224,7 @@ a {
 
 #activeFilterAndSort p {
   font-family: 'Rajdhani', sans-serif;
-  font-size: 3vmin;
+  font-size: 24px;
   color: var(--pathText);
   margin: 0px 9px;
 }
@@ -398,6 +398,24 @@ a {
     font-size: 28px;
     margin: 0px .5px;
   }
+
+  #activeFilterAndSort, #clearFavoritesDiv{
+    flex-flow: row;
+    justify-content: flex-start;
+    align-items: center;
+  }
+  #activeFilterAndSort, #clearFavoritesDiv{
+    /* top: 10vmin; */
+    top: calc(100vh / 6.5);
+  }
+  #activeFilterAndSort p {
+    text-align: center;
+    margin: 0px 4px;
+  }
+  #lineTag{
+    display: none;
+  }
+
   .floatingMenuDIV {
     bottom: 0.5vh;
     right: 2vw;
@@ -437,6 +455,10 @@ a {
   .menuButton {
     width: 16vw;
     height: 12vh;
+  }
+
+  .pokemonContainerGrid{
+    top: calc(100vh / 3.7);
   }
   .titleText {
     font-size: 60px;
@@ -485,5 +507,17 @@ a {
   }
   .floatingMenuElement i {
     font-size: 35px;
+  }
+
+  #activeFilterAndSort{
+    /* top: 10vmin; */
+    top: calc(100vh / 10);
+  }
+  #clearFavoritesDiv{
+    /* top: 10vmin; */
+    top: calc(100vh / 20);
+  }
+  .pokemonContainerGrid{
+    top: calc(100vh / 3.7);
   }
 }
