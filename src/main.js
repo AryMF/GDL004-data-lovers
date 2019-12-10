@@ -268,6 +268,7 @@ const main = () => {
       getPokemonData().then( () => {
         printPokemonCards(dataPokemon);
         animationDataLoadingEnd(); /**Descomentar para animación intro */
+        console.log(document.cookie.indexOf("favoritePokemon"));
       });
     })
     .catch(error => {
@@ -1457,7 +1458,7 @@ const printTutorialWindow = () => {
       case 0:
               tutorialTemplate = `
               <div class="welcomeWindowImage">
-                      <img class="welcomeWindowSelectionIMG" src="image\Oak.png">
+                      <img class="welcomeWindowSelectionIMG" src="image\\Oak.png">
               </div>
               <div class="welcomeWindowTextContainer">
                   <p class="textFormatBig"> ${tutorialText[language].tutorialWelcomeLine1} </p>
@@ -1482,7 +1483,7 @@ const printTutorialWindow = () => {
                   <p class="textFormatTutorial"> ${tutorialText[language].mainPage} </p>
               </div>
               <div class="columnClass">
-                  <img style="width: 60%;" src="image\tutorial\MainScreen hover.gif">
+                  <img style="width: 60%;" src="image\\tutorial\\MainScreen hover.gif">
               </div>
               <div class="buttonsContainer" style="padding-top: 45px;">
                   <div class="setEnglish">
@@ -1503,7 +1504,7 @@ const printTutorialWindow = () => {
                       <p class="textFormatTutorial"> ${tutorialText[language].floatingMenu} </p>
                   </div>
                   <div class="columnClass" style="flex: 1;">
-                      <img style="width: 60%;" src="image\tutorial\FloatingMenu.gif">
+                      <img style="width: 50%;" src="image\\tutorial\\FloatingMenu.gif">
                   </div>
               </div>
               <div class="buttonsContainer" style="position: absolute; bottom: 0; width: 88%;">
@@ -1524,7 +1525,7 @@ const printTutorialWindow = () => {
                       <p class="textFormatTutorial"> ${tutorialText[language].characterWindow} </p>
                   </div>
                   <div class="columnClass">
-                      <img style="width: 90%;" src="image\tutorial\CharacterWindow.gif">
+                      <img style="width: 90%;" src="image\\tutorial\\CharacterWindow.gif">
                   </div>
                   <div class="buttonsContainer" style="padding-top: 45px;">
                       <div class="setEnglish">
@@ -1544,7 +1545,7 @@ const printTutorialWindow = () => {
                   <p class="textFormatTutorial"> ${tutorialText[language].textToSpeechButton} </p>
               </div>
               <div class="columnClass">
-                  <img style="width: 40%;" src="image\tutorial\CharacterWindowSound.gif">
+                  <img style="width: 40%;" src="image\\tutorial\\CharacterWindowSound.gif">
               </div>
               <div class="buttonsContainer" style="padding-top: 45px;">
                   <div class="setEnglish">
@@ -1563,7 +1564,7 @@ const printTutorialWindow = () => {
                   <p class="textFormatTutorial"> ${tutorialText[language].pokeballButton} </p>
               </div>
               <div class="columnClass">
-                  <img style="width: 30%;" src="image\tutorial\CharacterWindowFav.gif">
+                  <img style="width: 30%;" src="image\\tutorial\\CharacterWindowFav.gif">
               </div>
               <div class="buttonsContainer" style="padding-top: 45px;">
                   <div class="setEnglish">
@@ -1582,7 +1583,7 @@ const printTutorialWindow = () => {
                   <p class="textFormatTutorial"> ${tutorialText[language].favoritesWindow} </p>
               </div>
               <div class="columnClass">
-                  <img style="width: 35%;" src="image\tutorial\FavoritesButton.gif">
+                  <img style="width: 35%;" src="image\\tutorial\\FavoritesButton.gif">
               </div>
               <div class="buttonsContainer" style="padding-top: 45px;">
                   <div class="setEnglish">
@@ -1603,7 +1604,7 @@ const printTutorialWindow = () => {
                   document to know more about the making of this website. </p>
               </div>
               <div class="columnClass">
-                  <img style="width: 50%;" src="image\tutorial\ChartsNAbout.gif">
+                  <img style="width: 50%;" src="image\\tutorial\\ChartsNAbout.gif">
               </div>
               <div class="buttonsContainer" style="padding-top: 45px;">
                   <div class="setEnglish">
@@ -1623,7 +1624,7 @@ const printTutorialWindow = () => {
                       <p class="textFormatTutorial"> ${tutorialText[language].sideMenu} </p>
                   </div>
                   <div class="columnClass" style="flex: 1;">
-                      <img style="width: 155px; height: 450px;" src="image\tutorial\SideMenu.gif">
+                      <img style="width: 40%; " src="image\\tutorial\\SideMenu.gif">
                   </div>
               </div>
               <div class="buttonsContainer" style="position: absolute; bottom: 0; width: 88%;">
@@ -1644,8 +1645,8 @@ const printTutorialWindow = () => {
                   <p class="textFormatTutorial"> ${tutorialText[language].tutorialEnd} </p>
               </div>
               <div class="columnClass">
-                  <img style="width: 90%; margin: 40px 0 0;" src="image\tutorial\English_motto.png">
-                  <img style="width: 40%; margin: 20px 0 100px;" src="image\tutorial\SignatureBlack.png">
+                  <img style="width: 90%; margin: 40px 0 0;" src="image\\tutorial\\English_motto.png">
+                  <img style="width: 40%; margin: 20px 0 100px;" src="image\\tutorial\\SignatureBlack.png">
               </div>
               <div class="buttonsContainer" style="padding-top: 45px;">
                   <div class="setEnglish">
