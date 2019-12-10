@@ -5,6 +5,7 @@
 @import "prompt.css";
 @import "styleCharacterWindow.css";
 @import "styleCharts.css";
+@import "tutorialStyle.css";
 
 body {
   background-color: var(--bodyBackground);
@@ -207,7 +208,8 @@ a {
 
 /***** Body pokemons *****/
 #activeFilterAndSort, #clearFavoritesDiv{
-  display: flex;
+  /* display: flex; //TODO: quitar si lo otro funciona*/
+  display: none;
   flex-flow: row wrap;
   justify-content: flex-start;
   align-items: center;
@@ -219,7 +221,7 @@ a {
   border-bottom: solid;
   border-color: var(--pathUnderlineColor);
   border-width: 1.2px;
-  visibility: hidden;
+  /* visibility: hidden; //TODO: quitar si lo otro funciona*/
 }
 
 #activeFilterAndSort p {

@@ -89,6 +89,7 @@
 }
 
 .slider {
+  border-radius: 34px;
   position: absolute;
   cursor: pointer;
   top: 0;
@@ -101,8 +102,9 @@
 }
 
 .slider:before {
+  border-radius: 50%;
   position: absolute;
-  content: "☀"; /* ☼ */
+  content: "☀";
   font-size: 30px;
   text-align: center;
   line-height: 36px;
@@ -112,8 +114,8 @@
   left: 2px;
   bottom: 3px;
   background-color: white;
-  -webkit-transition: 1s;
-  transition: 1s;
+  -webkit-transition: .6s;
+  transition: .6s;
 }
 
 input:checked + .slider {
@@ -134,15 +136,6 @@ input:checked + .slider:before {
   -webkit-transform: translateX(84px);
   -ms-transform: translateX(84px);
   transform: translateX(84px);
-}
-
-/* Rounded sliders */
-.slider.round {
-  border-radius: 34px;
-}
-
-.slider.round:before {
-  border-radius: 50%;
 }
   
 /**************************************/

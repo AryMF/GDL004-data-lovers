@@ -48,6 +48,27 @@
       Your browser does not support the audio element.
     </audio>
 
+    <!-- Tutorial -->
+    <div class="tutorialContainer">
+        <div class="languageSelection windowConfiguration">
+            <div class="imageContainer">
+                    <img class="languageSelectionIMG" src="image\Pikachu.png">
+            </div>
+            <p class="textFormatSmall"> Please select a language </p>
+            <p class="textFormatSmall"> Por favor selecciona un idioma </p>
+            <div class="buttonsContainer">
+                <div class="setEnglish">
+                    <button id="setEnglishButton"> English </button>
+                </div>
+                <div class="setSpanish">
+                    <button id="setSpanishButton"> Español </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="tutorialWindow windowConfiguration"></div> 
+    </div>
+
     <!-- Menú flotante -->
     <div id="floatingMenuDIV" class="floatingMenuDIV">
         <input type="checkbox" id="toggle" checked/>
@@ -85,11 +106,10 @@
           <li>
             <label class="switch">
                 <input id="toggleDarkMode" type="checkbox" tabindex="0">
-                <span class="slider round"></span>
+                <span class="slider"></span>
             </label>
           </li>
-          <li tabindex="0"> Tutorial </li>
-          <li tabindex="0"> About </li>
+          <li id="tutorialButton" tabindex="0"> Tutorial </li>
         </ul>
     </nav>
 

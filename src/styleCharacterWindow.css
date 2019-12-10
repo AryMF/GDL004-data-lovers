@@ -385,7 +385,7 @@
         justify-content: center;
     }
     .favoritesWindowEmptyClass{
-        top: calc(100vh / 18);
+        top: calc(100vh / 10 * -1);
     }
     
     .favoritesWindowImageClass{
