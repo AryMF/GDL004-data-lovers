@@ -17,7 +17,7 @@
 
 /********** Botón de cerrado para todos los prompt ***********/
 .buttonCloseClass {
-    color: white;
+    color: var(--closeButtonColor);
     float: right;
     font-size: 50px;
     font-weight: bold;
@@ -26,7 +26,7 @@
 
 .buttonCloseClass:hover,
 .buttonCloseClass:focus {
-    color: #000;
+    color: var(--closeButtonColorHover);
     text-decoration: none;
     cursor: pointer;
 }
@@ -44,9 +44,9 @@
     top: 50%;
     transform: translate(-50%,-50%);
     padding: .5% 1% .5% 1%;
-    border: 1px solid #888;
+    border: 1px solid var(--modalWindowBorder);
     box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
-    background-color: rgb(205, 92, 92, 90%);
+    background-color: var(--modalWindowColor);
 
     
     -webkit-animation-name: animatetop;
@@ -120,9 +120,9 @@
     top: 50%;
     transform: translate(-50%,-50%);
     padding: .5% 1% .5% 1%;
-    border: 1px solid #888;
+    border: 1px solid var(--modalWindowBorder);
     box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
-    background-color: rgb(205, 92, 92, 90%);
+    background-color: var(--modalWindowColor);
 
     -webkit-animation-name: animatetop;
     -webkit-animation-duration: 0.4s;
@@ -187,9 +187,9 @@ h2 {
     top: 50%;
     transform: translate(-50%, -50%);
     padding: 0.5% 1% 0.5% 1%;
-    border: 1px solid #888;
+    border: 1px solid var(--modalWindowBorder);
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-    background-color: rgb(205, 92, 92, 90%);
+    background-color: var(--modalWindowColor);
 
     /* -webkit-animation-name: animatetop;
     -webkit-animation-duration: 0.4s;

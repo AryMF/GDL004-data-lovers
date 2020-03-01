@@ -1,0 +1,152 @@
+/* The side navigation menu */
+.sideMenu {
+  height: 100%;
+  width: 0;
+  position: fixed;
+  z-index: 2;
+  top: 0;
+  left: 0;
+  background-color: var(--sideMenuColor);
+  overflow: hidden; 
+  padding-top: 60px;
+  transition: 0.5s;
+  visibility: hidden;
+}
+
+/* Menu items */
+.sideMenu li,
+.sideMenu p,
+#toggleLanguageEN i,
+#toggleLanguageES i {
+  padding: 8px 8px 8px 32px;
+  font-family: "Rajdhani", sans-serif;
+  font-weight: bolder;
+  text-decoration: none;
+  font-size: 30px;
+  color: var(--sideMenuItem);
+  display: block;
+  transition: 0.3s;
+  cursor: pointer;
+}
+
+.languageNav{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+/* Items hover */
+#languageEN:hover,
+#languageES:hover,
+.sideMenu li:hover,
+.sideMenu li:focus,
+.sideMenu .buttonCloseMenu:hover {
+  /*color: #f1f1f1;*/
+  color: var(--sideMenuHover);
+}
+
+#toggleLanguageEN:checked ~ #languageEN,
+#toggleLanguageES:checked ~ #languageES{
+  color: var(--sideMenuSelectedLanguage);
+}
+
+#toggleLanguageLines{ /*lineas or*/
+  font-size: 32px;
+  color: var(--sideMenuItem);
+}
+
+/* Side menu close button */
+.sideMenu .buttonCloseMenu {
+  color: var(--sideMenuItem);
+  position: absolute;
+  top: 5px;
+  right: 15px;
+  font-size: 36px;
+  font-weight: bolder;
+  margin-left: 50px;
+  cursor: pointer;
+}
+
+.sideMenu .buttonCloseMenu:focus,
+#languageES:focus,
+#languageEN:focus {
+  border-bottom: solid 3px var(--sideMenuHover);
+}
+
+/******* Toggle dark mode ***********/
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 120px;
+  height: 38px;
+}
+
+.switch input { 
+  /* opacity: 0;
+  width: 0;
+  height: 0; */
+  visibility: hidden;
+}
+
+.slider {
+  border-radius: 34px;
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0px;
+  right: 0px;
+  bottom: 0;
+  background-color: gray;
+  -webkit-transition: 1s;
+  transition: 1s;
+}
+
+.slider:before {
+  border-radius: 50%;
+  position: absolute;
+  content: "☀";
+  font-size: 30px;
+  text-align: center;
+  line-height: 36px;
+  color: black;
+  height: 32px;
+  width: 32px;
+  left: 2px;
+  bottom: 3px;
+  background-color: white;
+  -webkit-transition: .6s;
+  transition: .6s;
+}
+
+input:checked + .slider {
+  background-color: #FF5252;
+}
+
+input:checked + .slider:before {
+  content: "☽";
+  color: white;
+  background-color: black;
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px #2196F3;
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(84px);
+  -ms-transform: translateX(84px);
+  transform: translateX(84px);
+}
+  
+/**************************************/
+@media screen and (max-width: 500px) {
+  .sideMenu {
+    padding-top: 40px;
+  }
+}
+
+@media only screen and (max-width: 868px) and (orientation: landscape) {
+  .sideMenu {
+    padding-top: 30px;
+  }
+}

@@ -1,5 +1,5 @@
 const DATA_URL = "https://raw.githubusercontent.com/AryMF/GDL004-data-lovers/master/src/data/pokemon/pokemon.json";
-const DATA_API = "https://pokeapi.co/api/v2/pokemon?limit=151";
+const DATA_API_POKE_ENTRY = "https://pokeapi.co/api/v2/pokemon-species/";
 let dataPokemon = [];
 let filterJSON = [];
 let dataPokedexArray = [];
@@ -17,6 +17,8 @@ let toggleChartsElement = document.getElementById("toggleCharts");
 let chartButton = document.getElementById("chartButton");
 let activeFilterAndSortContainer = document.getElementById("activeFilterAndSort");
 let activeFilterAndSortTags= document.querySelectorAll("#activeFilterAndSort p");
+let clearFavoritesContainer = document.querySelector("#clearFavoritesDiv");
+let clearFavoritesButton = document.querySelector(".clearFavoritesButton");
 let chartsContainerElement = document.querySelector(".chartsContainerClass");
 /***********Popup windows (Search, FilterBy, SortBy) *********************/
 let promptContainerElement = document.getElementById("promptContainer");
@@ -32,7 +34,8 @@ let characterWindowElement = document.querySelector("#characterWindow");
 let pokeballAndImagDiv = document.querySelector(".pokeballAndImagDiv");
 let characterDynamicDiv = document.querySelector("#characterDynamicContent");
 /*********** Text to speech *********************/
-let language = 1; // TODO: probablemente no es necesarios
+let dexterVoice = document.querySelector(".dexterVoice");
+let language = 1;
 let voiceStatusFlag = false;
 var synth = window.speechSynthesis;
 
@@ -166,7 +169,7 @@ let soundControl = document.getElementById("soundControl");
 const animationDataLoadingEnd = () => {
     let time = 1;
     let i = 1;
-    let intervalTime = 600;
+    let intervalTime = 300;
     let interval = setInterval(() => {
         if(i < 5){
             time = time - 0.2;
@@ -212,32 +215,43 @@ const apiCallFunction = (url = "", option = {}) => {
 };
 
 async function getPokemonData (){
-  let dataRequest = await apiCallFunction(DATA_API, {method: "GET"});
-  let call1 = await dataRequest.json();
-  for(let i=0; i< call1.results.length; i++){
-      let call2 = await apiCallFunction(call1.results[i].url, {method: "GET"});
-      let pokemonData = await call2.json();
-      let call3 = await apiCallFunction(pokemonData.species.url, {method: "GET"});
-      let flavorText = await call3.json();
-      let flavorTextArrayES = flavorText.flavor_text_entries.filter(element => {
-          if(element.language.name == "es" && element.version.name == "omega-ruby"){
-              return true;
-          }
-          return false;
+  let URL;
+  let promisesArray = [];
+  for (let i = 0; i < dataPokemon.length; i++){
+    URL = DATA_API_POKE_ENTRY + dataPokemon[i].id;
+    promisesArray.push(apiCallFunction(URL, {method: "GET"}));
+  }
+
+  Promise.all(promisesArray)
+  .then(responses => Promise.all(responses.map(element => element.json())))
+  .then(jsonObjects => {
+    jsonObjects.forEach(element => {
+      let flavorTextArrayES = element.flavor_text_entries.filter(e => {
+        if(e.language.name == "es" && e.version.name == "omega-ruby"){
+            return true;
+        }
+        return false;
       });
-      let flavorTextArrayEN = flavorText.flavor_text_entries.filter(element => {
-          if(element.language.name == "en" && element.version.name == "omega-ruby"){
+      let flavorTextArrayEN = element.flavor_text_entries.filter(e => {
+          if(e.language.name == "en" && e.version.name == "omega-ruby"){
               return true;
           }
           return false;
       });
       dataPokedexArray.push(
       {
-          "id": pokemonData.id,
+          "id": element.id,
           "flavor_text_es": flavorTextArrayES[0].flavor_text,
           "flavor_text_en": flavorTextArrayEN[0].flavor_text
       });
-  };
+    });
+  })
+  .catch(error => {
+    console.error("Error al cargar pokedex entries");
+    console.error(error);
+  });
+
+
 };
 
 /**** */
@@ -252,9 +266,9 @@ const main = () => {
     .then(dataJSON => {
       dataPokemon = dataJSON.pokemon;
       getPokemonData().then( () => {
-        console.log("Carga de data finalizada");
         printPokemonCards(dataPokemon);
         animationDataLoadingEnd(); /**Descomentar para animación intro */
+        console.log(document.cookie.indexOf("favoritePokemon"));
       });
     })
     .catch(error => {
@@ -264,6 +278,12 @@ const main = () => {
 };
 
 window.addEventListener("load", main);
+
+/************************ Dark mode *************************/
+
+toggleDarkMode.addEventListener("click", () => {
+  document.body.getAttribute("data-mode") == "light" ? document.body.setAttribute("data-mode", "dark"): document.body.setAttribute("data-mode", "light");
+});
 
 /********** Impresión en pantalla de Pokemon cards **********/
 
@@ -300,7 +320,7 @@ const printPokemonCards = (dataArray, filterByText = "All", sortByText = "All") 
     <div class="divContainerClass">
         <div class="divCardClass" tabindex="0">
             <div id="divPokemonCard" style = ${"background-color:" + colorByType}  class="divPokemonCardFaceClass divPokemonCardFaceClass--front">
-                <img class="imagePokemon" src = ${element.img} alt= ${element.name}>
+                <img class="imagePokemon" src = "https://pokeres.bastionbot.org/images/pokemon/${element.id}.png" alt= ${element.name}>
                 <p class="numberPokemon">${element.num}</p>
                 <p class="namePokemon">${pokemonName}</p>
             </div>
@@ -333,7 +353,6 @@ const printPokemonCards = (dataArray, filterByText = "All", sortByText = "All") 
 
     for(let i=0; i< cardClass.length; i++){
       cardClass[i].addEventListener("keyup", event => {
-        console.log("cardClass esta escuchando");
         if (event.key === "Enter") {
           characterWindowPrint(orderArray[i]);
         }
@@ -427,7 +446,7 @@ document.getElementById("resetButton").addEventListener("click", () => {
   closeFloatingMenu();
   filterJSON = [];
   printPokemonCards(dataPokemon);
-  activeFilterAndSortContainer.style.visibility = "hidden";
+  activeFilterAndSortContainer.style.display = "none";
 });
 
 document.getElementById("resetButton").addEventListener("keyup", event => {
@@ -435,7 +454,7 @@ document.getElementById("resetButton").addEventListener("keyup", event => {
     closeFloatingMenu();
     filterJSON = [];
     printPokemonCards(dataPokemon);
-    activeFilterAndSortContainer.style.visibility = "hidden";
+    activeFilterAndSortContainer.style.display = "none";
   }
 });
 
@@ -445,19 +464,16 @@ document.addEventListener("keyup", function(event) {
     closeFloatingMenu();
     filterJSON = [];
     printPokemonCards(dataPokemon);
-    activeFilterAndSortContainer.style.visibility = "hidden";
+    activeFilterAndSortContainer.style.display = "none";
   }
 });
 
 /**********Mandar a home con click en titulo */
 document.querySelector(".titleText").addEventListener("click", () => {
-  printPokemonCards(dataPokemon);
-  activeFilterAndSortContainer.style.visibility = "hidden";
   document.documentElement.scrollTop = 0;
 });
 
 /************************  Search modal  *********************************/
-//TODO: Mensaje de busqueda sin matches
 document.getElementById("searchButton").addEventListener("click", () => {
   searchPromptCreator();
 });
@@ -480,7 +496,6 @@ const searchPromptCreator = () => {
   showPromptWindow(3);
   searchByPromptElement.style.WebkitAnimationPlayState = "running";
   document.getElementById("searchPromptInput").focus();
-  activeFilterAndSortContainer.style.visibility = "visible";
 };
 
 document.getElementById("searchPromptButton").addEventListener("click", () => {
@@ -494,14 +509,14 @@ document.getElementById("searchPromptButton").addEventListener("click", () => {
 });
 
 document.getElementById("searchPromptInput").addEventListener("input", () => {
-    searchPromptInputElement.value = searchPromptInputElement.value.replace(" ", "");
-    searchPromptInputElement.value = searchPromptInputElement.value.toUpperCase();
-    /*** Regresar al principio de la pagina ***/
+      // Regresar al principio de la pantalla
     document.documentElement.scrollTop = 0;
+    searchPromptInputElement.value = searchPromptInputElement.value.replace(" ", "");
     if(searchPromptInputElement.value != ""){
         filterJSON = window.data.filteredByNameOrNumber(dataPokemon, searchPromptInputElement.value);
         searchResultEvaluation();
     }else {
+        activeFilterAndSortContainer.style.display = "flex";
         printPokemonCards(dataPokemon);
     }
 });
@@ -513,13 +528,14 @@ document.getElementById("searchPromptInput").addEventListener("keyup", event => 
 });
 
 const searchByInput = () =>{
-    /*** Regresar al principio de la pagina ***/
-    document.documentElement.scrollTop = 0;
+    // Regresar al principio de la pantalla
+    document.documentElement.scrollTop = 0; 
     if(searchPromptInputElement.value != ""){
         filterJSON = window.data.filteredByNameOrNumber(dataPokemon, searchPromptInputElement.value);
         searchResultEvaluation();
         hiddenPromptWindow();
     }else {
+        activeFilterAndSortContainer.style.display = "flex";
         printPokemonCards(dataPokemon);
     }
 };
@@ -527,16 +543,17 @@ const searchByInput = () =>{
 const searchResultEvaluation = () => {
   if(filterJSON == ""){
     pokemonContainerElement.innerHTML = "";
-
+    activeFilterAndSortContainer.style.display = "none";
     const favoritesWindowEmptyTemplate = `
       <div class="favoritesWindowEmptyClass">
       <p class="textFormatMedium">Wild MISSINGNO. appeared!</p>
       <img class="favoritesWindowImageClass" src="image/MissingNo.png" alt="Image: Favorites/Search is empty">
       <p class="textFormatSmall">There's no matching Pokemons for your search.</p>
       </div>`;
-    
+
     pokemonContainerElement.innerHTML = favoritesWindowEmptyTemplate;
   } else {
+    activeFilterAndSortContainer.style.display = "flex";
     printPokemonCards(filterJSON, "\"" + searchPromptInputElement.value + "\"");
   }
 }
@@ -571,17 +588,13 @@ const filterPromptCreator = () => {
         buttonElement.tabIndex = 0;
         buttonElement.focus();
         buttonElement.addEventListener("click", function() {
-            activeFilterAndSortContainer.style.visibility = "visible";
-            /*** Regresar al principio de la pagina ***/
-            document.documentElement.scrollTop = 0;
+            activeFilterAndSortContainer.style.display = "flex";
             filterJSON = window.data.filteredByType(dataPokemon, buttonElement.value);
             filterJSON == "" ? printPokemonCards(dataPokemon): printPokemonCards(filterJSON, "\"" + buttonElement.value + "\"");
             hiddenPromptWindow();
         });
         buttonElement.addEventListener('keyup',function(e){
             if (e.keyCode === 13) {
-                /*** Regresar al principio de la pagina ***/
-                document.documentElement.scrollTop = 0;
                 filterJSON = window.data.filteredByType(dataPokemon, buttonElement.value);
                 filterJSON == "" ? printPokemonCards(dataPokemon): printPokemonCards(filterJSON, "\"" + buttonElement.value + "\"");
                 hiddenPromptWindow();
@@ -624,10 +637,8 @@ const sortByPromptCreator = () => {
     buttonElement.tabIndex = 0;
     buttonElement.focus();
     buttonElement.addEventListener("click", function() {
-    activeFilterAndSortContainer.style.visibility = "visible";
+    activeFilterAndSortContainer.style.display = "flex";
 
-        /*** Regresar al principio de la pagina ***/
-        document.documentElement.scrollTop = 0;
         if (filterJSON.length > 0) {
         if (i == 0 || i == 2 || i == 4 || i == 6) {
             sortByJSON = window.data.sortDataResultDesc(
@@ -666,20 +677,42 @@ const showPromptWindow = (option) => {
     promptContainerElement.style.visibility = "visible";
     switch(option){
         case 1:
+            blockScroll();
             sortByPromptElement.style.visibility = "visible";
         break;
         case 2:
+            blockScroll();
             filterByPromptElement.style.visibility = "visible";
         break;
         case 3:
             searchByPromptElement.style.visibility = "visible";
         break;
         case 4:
+            blockScroll();
             characterWindowElement.style.visibility = "visible";
         break;
         default:
         break;
     }
+};
+
+const blockScroll = () => {
+    //***Bloquear scroll */
+    let scrollPositionY = `-${window.scrollY}px`;
+    document.body.style.position = 'fixed';
+    document.body.style.top = scrollPositionY;
+};
+
+const activateScroll = () => {
+  //Reactivar Scroll
+  let scrollPositionY;
+  if (characterWindowElement.style.visibility == "visible"){
+    scrollPositionY = document.body.style.top;
+  }
+  document.body.style.position = '';
+  document.body.style.top = '';
+  window.scrollTo(0, parseInt(scrollPositionY || '0') * -1);
+  //*************
 };
 
 /************************  Close modal  *********************************/
@@ -690,7 +723,7 @@ promptContainerElement.addEventListener("click", element => {
   }
 });
 
-promptContainerElement.addEventListener("keyup", event => {
+promptContainerElement.addEventListener("keyup", event => { //1988
   if (event.key === "Escape") {
     hiddenPromptWindow();
   }
@@ -707,6 +740,7 @@ Array.from(buttonCloseNode).forEach(element => {
 });
 
 const hiddenPromptWindow = () => {
+  activateScroll();
   typeButtonsDiv.innerHTML = "";
   promptContainerElement.style.visibility = "hidden";
   searchPromptInputElement.value = "";
@@ -717,14 +751,13 @@ const hiddenPromptWindow = () => {
   characterWindowElement.style.visibility = "hidden";
   pokeballAndImagDiv.innerHTML = "";
   characterDynamicDiv.innerHTML = "";
-  // elementDivPokeballImage.style.visibility = "hidden"; borrar
-  // elementDivFavImage.style.visibility = "hidden"; borrar
-  // characterImageElement.setAttribute("src", "");
   if(toggleFavElement.checked === true){
     showFavorites();
   }
   /**Detener voz */
   synth.cancel();
+  dexterVoice.disabled = false;
+  dexterVoice.classList.remove("noHover");
 };
 
 /************************ Home window ************************/
@@ -746,16 +779,17 @@ const printHomeWindow = () => {
   homeButtonElement.setAttribute("style", "display: none;");
   /***Cerrar Favoritos */
   floatingMenu.style.visibility = "visible";
+  clearFavoritesContainer.style.display = "none";
+  filterJSON = [];
   /***Cerrar Charts */
   chartsContainerElement.innerHTML = "";
   chartsContainerElement.style.visibility = "hidden";
   /***Abrir Main */
   pokemonContainerElement.style.visibility = "visible";
-  // activeFilterAndSortContainer.style.visibility = "visible";
 };
 
 /************************ Favorites window ************************/
-/** Show favorites*/ 
+/** Show favorites*/
 favoritesButton.addEventListener("click", () => {
   printFavoritesWindow();
   showFavorites();
@@ -778,7 +812,6 @@ const createFavoriteCookie = (pokemonName) => {
     let pokemonCookiesArray = loadFavorites();
     pokemonCookiesArray.push(pokemonName);
     document.cookie = "favoritePokemon=" + pokemonCookiesArray.join(" ") + "; expires =Mo, 18 Jan 2038 12:00:00 UTC";
-    console.log("createFavorite: " + document.cookie);
 };
 
 const deleteFavorite = (pokemonName) => {
@@ -798,7 +831,7 @@ const printFavoritesWindow = () => {
   /***Cerrar Main */
   pokemonContainerElement.innerHTML = "";
   floatingMenu.style.visibility = "hidden";
-  activeFilterAndSortContainer.style.visibility = "hidden";
+  activeFilterAndSortContainer.style.display = "none";
   /***Cerrar Charts */
   chartsContainerElement.innerHTML = "";
   chartsContainerElement.style.visibility = "hidden";
@@ -820,18 +853,26 @@ const showFavorites = () => {
 
   if (filterJSON.length > 0) {
     printPokemonCards(filterJSON);
+    clearFavoritesContainer.style.display = "flex";
   } else {
-    pokemonContainerElement.innerHTML = "";
-    
+    pokemonContainerElement.innerHTML = "";    
+
     const favoritesWindowEmptyTemplate = `
       <div class="favoritesWindowEmptyClass">
       <p class="textFormatMedium">You haven't catch any pokemon yet!</p>
       <img class="favoritesWindowImageClass" src="image/psyduck.png" alt="Image: Favorites/Search is empty">
       </div>`;
-    
+
     pokemonContainerElement.innerHTML = favoritesWindowEmptyTemplate;
   }
 };
+
+clearFavoritesButton.addEventListener("click", () => {
+  // document.getElementsByTagName("BODY")[0].setAttribute("data-mode", "dark"); //dark mode 
+  clearFavoritesContainer.style.display = "none";
+  document.cookie = "favoritePokemon=";
+  showFavorites();
+});
 
 /************************** Charts window **************************/
 let chartCategory = "weight";
@@ -858,7 +899,8 @@ const printChartsWindow = () => {
 
     pokemonContainerElement.innerHTML = "";
     pokemonContainerElement.style.visibility = "hidden";
-    activeFilterAndSortContainer.style.visibility = "hidden";
+    activeFilterAndSortContainer.style.display = "none";
+    clearFavoritesContainer.style.display = "none";
     chartsContainerElement.style.visibility = "visible";
     floatingMenu.style.visibility = "hidden";
 };
@@ -880,7 +922,7 @@ const showCharts = () => {
                       <span class="checkmark"></span>
                   </label>
                   <label class="container textFormatBig" tabindex="0">Spawn Chances
-                      <input type="radio" name="chartCategory" value="spawn_chance"> 
+                      <input type="radio" name="chartCategory" value="spawn_chance">
                       <span class="checkmark"></span>
                   </label>
               </nav>
@@ -1021,10 +1063,6 @@ const characterWindowPrint = (pokemonName) =>{
         evolutionPathArray = evolutionPathArray.concat(characterData.prev_evolution
             .map((elementArray) => {
             let found = data.filteredByNameOrNumber(dataPokemon, elementArray.name);
-            /*
-            let found = dataPokemon.filter((element) => {
-                return element.name === elementArray.name;
-            });*/
             return { "name": elementArray.name, "img": found ? found[0].img : ''};
         }));
     }
@@ -1037,9 +1075,7 @@ const characterWindowPrint = (pokemonName) =>{
     if("next_evolution" in characterData){
         evolutionPathArray = evolutionPathArray.concat(characterData.next_evolution
             .map((elementArray) => {
-            let found = dataPokemon.filter((element) => {
-                return element.name === elementArray.name;
-            });
+            let found = data.filteredByNameOrNumber(dataPokemon, elementArray.name);
             return { "name": elementArray.name, "img": found ? found[0].img : ''};
         }));
     }
@@ -1143,7 +1179,7 @@ const characterWindowTemplate2  = `
         </div>
     </div>
     <!-- **************************************************************************************** -->
-    <div class="rowAlignmentClass">
+    <div class="columnAlignmentClass">
         <div class="columnAlignmentClass">
             <p class="textFormatSmall">Pokedex entry</p>
             <p class="textFormatPokeEntry">${pokedexEntry}</p>
@@ -1158,12 +1194,12 @@ const characterWindowTemplate2  = `
                             if(evolutionPathIndex < (evolutionPathArray.length -1)){
                                 evolutionPathIndex++;
                                 return '<div class="columnAlignmentClass">' +
-                                '<img class="weaknessImgClass" src=' + element.img + '>' +
+                                '<img class="evolutionPathImgClass" src=' + element.img + '>' +
                                 '<p class="textFormatSmall">' + element.name + '</p>' +
                                 '</div>' + evolutionPathArrowTemplate
                             }else {
                                 return '<div class="columnAlignmentClass">' +
-                                '<img class="weaknessImgClass" src=' + element.img + '>' +
+                                '<img class="evolutionPathImgClass" src=' + element.img + '>' +
                                 '<p class="textFormatSmall">' + element.name + '</p>' +
                             '</div>'
                             }
@@ -1240,46 +1276,397 @@ const characterWindowTemplate2  = `
         showFavorites();
       }
     });
+
+    //Links in evolution path
+    let evolutionPathImgArray = document.querySelectorAll(".evolutionPathImgClass");
+
+    for(let i=0; i < evolutionPathImgArray.length; i++){
+      evolutionPathImgArray[i].addEventListener("click", () =>{
+        // hiddenPromptWindow();
+        characterWindowPrint(evolutionPathArray[i].name);
+        characterDynamicDiv.scrollTop = 0; //TODO: limitar scroll top a modal.
+      });
+    }
+
 /**********/
     showPromptWindow(4);
 };
 
  /** Text to speech */
- document.getElementById("dexterVoice").addEventListener("click", () =>{
-
+ dexterVoice.addEventListener("click", () =>{
+  dexterVoice.disabled = true;
+  dexterVoice.classList.add("noHover");
   if ('speechSynthesis' in window) {
     if(!voiceStatusFlag){
       voiceStatusFlag = true;
       console.log("Synthesis support. Make your web apps talk!");
+      let array = synth.getVoices();
+      let voiceEN = "";
+      let voiceES = "";
+      array.map(element => {
+        if (element.name == "Google UK English Male"){
+          voiceEN = array.indexOf(element)
+        }
+        if (element.name == "Google español de Estados Unidos"){
+          voiceES = array.indexOf(element)
+        }
+      });
+
       let msg = new SpeechSynthesisUtterance(document.querySelector("#characterPokemonName").innerHTML);
-      language == 0 ? msg.voice = synth.getVoices()[5] : msg.voice = synth.getVoices()[3]; // ES: 5 || EN-GB Male: 3 || EN-GB FEM: 2
+      let msg2 = new SpeechSynthesisUtterance(document.querySelector(".textFormatPokeEntry").innerHTML);
+      if(language == 0){
+          msg.voice = array[voiceES];
+          msg.lang = "es-US";
+          msg2.voice = array[voiceES];
+          msg2.lang = "es-US";
+      } else {
+          msg.voice = array[voiceEN];
+          msg.lang = "en-GB";
+          msg2.voice = array[voiceEN];
+          msg2.lang = "en-GB";
+      }
       msg.onend = function(){
         voiceStatusFlag = false;
       };
-      let msg2 = new SpeechSynthesisUtterance(document.querySelector(".textFormatPokeEntry").innerHTML);
-      language == 0 ? msg2.voice = synth.getVoices()[5] : msg2.voice = synth.getVoices()[3]; // ES: 5 || EN-GB Male: 3 || EN-GB FEM: 2
+
       msg2.onend = function(){
         voiceStatusFlag = false;
+        dexterVoice.disabled = false;
+        dexterVoice.classList.remove("noHover");
       };
       synth.speak(msg);
       setTimeout(() => {
         synth.speak(msg2);
-      }, 1000);
+      }, 200);
 
-      /* Imprime arreglo de voces disponibles
-      synth.getVoices().forEach(voice => {
-        console.log(voice.name, voice.lang);
-      })*/
     } else {
       synth.cancel();
     }
+   } else {
+     alert("This browser does not support text-to-speech playback\nEste navegador no admite la reproducción de texto a voz");
    }
  });
 
- //esc
+ //Escape
  characterWindowElement.addEventListener("keyup", event => {
    console.log("kek");
   if (event.key === "Escape") {
     hiddenPromptWindow();
   }
 });
+
+//****** 
+/********** Side menu open **********/
+let sideMenu = document.querySelector(".sideMenu");
+let sideMenuCloseButton = document.querySelector(".buttonCloseMenu");
+let tutorialButton = document.querySelector("#tutorialButton");
+
+document.getElementById("menuButton").addEventListener("click", () => {
+  sideMenu.style.visibility = "visible";
+  sideMenu.style.width = "275px";
+  //document.getElementById("darkMode").focus(); //Focus algo en el side menu
+});
+
+document.getElementById("menuButton").addEventListener("keyup", function(event) {
+  if (event.key === "Enter") {
+    sideMenu.style.visibility = "visible";
+    sideMenu.style.width = "275px";
+    document.getElementById("darkMode").focus();
+  }
+});
+
+/* Side menu close */
+sideMenuCloseButton.addEventListener("click", () => {
+  sideMenu.style.visibility = "hidden";
+  sideMenu.style.width = "0";
+});
+
+sideMenuCloseButton.addEventListener("keyup", function(event) {
+  if (event.key === "Enter") {
+    sideMenu.style.visibility = "hidden";
+    sideMenu.style.width = "0";
+  }
+});
+
+/********** Tutorial **********/
+let tutorialContainer = document.querySelector(".tutorialContainer");
+let languageSelection = document.querySelector(".languageSelection");
+let tutorialWindow = document.querySelector(".tutorialWindow");
+let tutorialPageIndex = 0;
+
+let tutorialText = [
+    {
+        "tutorialWelcomeLine1": "Bienvenido al mundo de pokemon",
+        "tutorialWelcomeLine2": "Dejame mostrarte lo que puedes hacer en esta website",
+        "mainPage": "Esta es la página principal, aquí puedes ver todos los pokemons. Si pasas el mouse sobre una carta, se dará la vuelta y revelará el tipo al que pertenece ese Pokémon.",
+        "floatingMenu": "Este menú flotante le da acceso a una variedad de herramientas para filtrar y ordenar los pokemons. También puedes hacer una búsqueda de un pokemon específico por su nombre o número.",
+        "characterWindow": "Si haces clic en una tarjeta de pokemon, aparecerá una ventana con información adicional.",
+        "textToSpeechButton": "En la esquina inferior izquierda de esta ventana hay un botón, haz clic en el para iniciar la lectura de voz de la información que se muestra en la entrada de pokedex.",
+        "pokeballButton": "En la esquina superior izquierda encontrarás una pokebola, puedes hacer clic en ella para 'atrapar' al pokemon a tu lista de favoritos. Un pokemon favorito se marcará con una estrella, si haces clic en esa marca, se eliminará de tu lista de favoritos.",
+        "favoritesWindow": "Puedes ver la lista de pokemons marcados como favoritos en la sección 'Favoritos', para acceder a ella, haz clic en el botón 'Estrella' en el lado derecho del encabezado.",
+        "chartsAndAbout": "Junto al botón 'Favoritos' está el botón 'Gráfico' y el botón 'Github' que lo llevarán al documento 'Read me' para saber más sobre la creación de este sitio web.",
+        "sideMenu": "Por último, en el lado izquierdo del encabezado hay un botón para acceder al menú de configuración. Aquí puede cambiar el idioma, configurar el 'Modo oscuro' o acceder a este tutorial nuevamente.",
+        "tutorialEnd": "Y con eso llegamos al final de este tutorial. Disfruta nuestro sitio web.",
+        "skipTutorialButton": "Omitir tutorial",
+        "continueButton": "Continuar",
+    },
+    {
+        "tutorialWelcomeLine1": "Welcome to the world of Pokemon!",
+        "tutorialWelcomeLine2": "Let me show you what you can do in this website",
+        "mainPage": "This is the main page, in here you can see all the pokemons. If you pass the mouse over a card is going to flip and reveal the type than that pokemon belongs.",
+        "floatingMenu": "This floating menu gives you access to a variety of tools to filter and sort the pokemons. You can also make a search of a specific pokemon by his name or number.",
+        "characterWindow": "If you click on a pokemon card a window with additional information will pop up.",
+        "textToSpeechButton": "In the bottom left corner of this window there's a button, click it to start the voice reading of the information shown in the pokedex entry.",
+        "pokeballButton": "On the top left corner your going to find a pokeball, you can click on it to 'catch' the pokemon to your favorites list. A fav pokemon it's going to be marked with a star, if you click on that mark the pokemon it's goig to be deleted of your favorites list.",
+        "favoritesWindow": "You can view the list of pokemons marked as favorites in the 'Favorites' section, to access it, click on the 'Star' button in the right side of the header.",
+        "chartsAndAbout": "Next to the 'Favorites' button there's the 'Chart' button and the 'Github' button that will take you to the 'Read me' document to know more about the making of this website.",
+        "sideMenu": "Finally, in the left side of the header there's a button to access the configuration menu. Here you can change the language, set on the 'Dark mode' or access this tutorial again.",
+        "tutorialEnd": "And with that we reach the end of this tutorial. Enjoy our website.",
+        "skipTutorialButton": "Skip tutorial",
+        "continueButton": "Continue",
+    }
+];
+
+//********** Boton para abrir tutorial **********
+tutorialButton.addEventListener("click", () => {
+  sideMenu.style.visibility = "hidden";
+  sideMenu.style.width = "0";
+  tutorialContainer.style.display = "block";
+  languageSelection.style.display = "block";
+  tutorialPageIndex = 0;
+  blockScroll();
+});
+
+//********************
+document.getElementById("setEnglishButton").addEventListener("click", () => {
+  language = 1;
+  languageSelection.style.display = "none";
+  tutorialWindow.style.display = "block";
+  printTutorialWindow();
+});
+
+document.getElementById("setSpanishButton").addEventListener("click", () => {
+  language = 0;
+  languageSelection.style.display = "none";
+  tutorialWindow.style.display = "block";
+  printTutorialWindow();
+});
+
+const printTutorialWindow = () => {
+  let tutorialTemplate = "";
+  switch(tutorialPageIndex){
+      case 0:
+              tutorialTemplate = `
+              <div class="welcomeWindowImage">
+                      <img class="welcomeWindowSelectionIMG" src="image\\Oak.png">
+              </div>
+              <div class="welcomeWindowTextContainer">
+                  <p class="textFormatBig"> ${tutorialText[language].tutorialWelcomeLine1} </p>
+                  <p class="textFormatSmall"> ${tutorialText[language].tutorialWelcomeLine2} </p>
+              </div>
+              <div class="welcomeWindowButtons buttonsContainer">
+                  <div class="setEnglish">
+                      <button id="skipButton"> ${tutorialText[language].skipTutorialButton} </button>
+                  </div>
+                  <div class="setSpanish">
+                      <button id="continueButton"> ${tutorialText[language].continueButton} </button>
+                  </div>
+              </div> `;
+
+      break;
+      case 1:
+              tutorialTemplate = `
+              <div class="rowRightClass">
+                  <p class="textFormatTutorial textFormatTutorialSmall"> ${tutorialPageIndex} / 9 </p>
+              </div>
+              <div class="columnClass">
+                  <p class="textFormatTutorial"> ${tutorialText[language].mainPage} </p>
+              </div>
+              <div class="columnClass">
+                  <img style="width: 60%;" src="image\\tutorial\\MainScreen hover.gif">
+              </div>
+              <div class="buttonsContainer" style="padding-top: 45px;">
+                  <div class="setEnglish">
+                          <button id="skipButton"> Skip tutorial </button>
+                  </div>
+                  <div class="setSpanish">
+                      <button id="continueButton"> Continue </button>
+                  </div>
+              </div>`;
+      break;
+      case 2:
+              tutorialTemplate = `
+              <div class="rowRightClass">
+                  <p class="textFormatTutorial textFormatTutorialSmall"> ${tutorialPageIndex} / 9 </p>
+              </div>
+              <div class="rowRightClass">
+                  <div class="columnClass" style="flex: 1;">
+                      <p class="textFormatTutorial"> ${tutorialText[language].floatingMenu} </p>
+                  </div>
+                  <div class="columnClass" style="flex: 1;">
+                      <img style="width: 50%;" src="image\\tutorial\\FloatingMenu.gif">
+                  </div>
+              </div>
+              <div class="buttonsContainer" style="position: absolute; bottom: 0; width: 88%;">
+                  <div class="setEnglish">
+                          <button id="skipButton"> Skip tutorial </button>
+                  </div>
+                  <div class="setSpanish">
+                      <button id="continueButton"> Continue </button>
+                  </div>
+              </div>`;
+      break;
+      case 3:
+              tutorialTemplate = `
+              <div class="rowRightClass">
+                      <p class="textFormatTutorial textFormatTutorialSmall"> ${tutorialPageIndex} / 9 </p>
+                  </div>
+                  <div class="columnClass">
+                      <p class="textFormatTutorial"> ${tutorialText[language].characterWindow} </p>
+                  </div>
+                  <div class="columnClass">
+                      <img style="width: 90%;" src="image\\tutorial\\CharacterWindow.gif">
+                  </div>
+                  <div class="buttonsContainer" style="padding-top: 45px;">
+                      <div class="setEnglish">
+                              <button id="skipButton"> Skip tutorial </button>
+                      </div>
+                      <div class="setSpanish">
+                          <button id="continueButton"> Continue </button>
+                      </div>
+              </div>`;
+      break;
+      case 4:
+              tutorialTemplate = `
+              <div class="rowRightClass">
+                  <p class="textFormatTutorial textFormatTutorialSmall"> ${tutorialPageIndex} / 9 </p>
+              </div>
+              <div class="columnClass">
+                  <p class="textFormatTutorial"> ${tutorialText[language].textToSpeechButton} </p>
+              </div>
+              <div class="columnClass">
+                  <img style="width: 40%;" src="image\\tutorial\\CharacterWindowSound.gif">
+              </div>
+              <div class="buttonsContainer" style="padding-top: 45px;">
+                  <div class="setEnglish">
+                          <button id="skipButton"> Skip tutorial </button>
+                  </div>
+                  <div class="setSpanish">
+                      <button id="continueButton"> Continue </button>
+              </div>`;
+      break;
+      case 5:
+              tutorialTemplate = `
+              <div class="rowRightClass">
+                  <p class="textFormatTutorial textFormatTutorialSmall"> ${tutorialPageIndex} / 9 </p>
+              </div>
+              <div class="columnClass">
+                  <p class="textFormatTutorial"> ${tutorialText[language].pokeballButton} </p>
+              </div>
+              <div class="columnClass">
+                  <img style="width: 30%;" src="image\\tutorial\\CharacterWindowFav.gif">
+              </div>
+              <div class="buttonsContainer" style="padding-top: 45px;">
+                  <div class="setEnglish">
+                          <button id="skipButton"> Skip tutorial </button>
+                  </div>
+                  <div class="setSpanish">
+                      <button id="continueButton"> Continue </button>
+              </div>`;
+      break;
+      case 6:
+              tutorialTemplate = `
+              <div class="rowRightClass">
+                  <p class="textFormatTutorial textFormatTutorialSmall"> ${tutorialPageIndex} / 9 </p>
+              </div>
+              <div class="columnClass">
+                  <p class="textFormatTutorial"> ${tutorialText[language].favoritesWindow} </p>
+              </div>
+              <div class="columnClass">
+                  <img style="width: 35%;" src="image\\tutorial\\FavoritesButton.gif">
+              </div>
+              <div class="buttonsContainer" style="padding-top: 45px;">
+                  <div class="setEnglish">
+                          <button id="skipButton"> Skip tutorial </button>
+                  </div>
+                  <div class="setSpanish">
+                      <button id="continueButton"> Continue </button>
+              </div>`;
+      break;
+      case 7:
+              tutorialTemplate = `
+              <div class="rowRightClass">
+                  <p class="textFormatTutorial textFormatTutorialSmall"> ${tutorialPageIndex} / 9 </p>
+              </div>
+              <div class="columnClass">
+                      <!-- ${tutorialText[language].chartsAndAbout} -->
+                  <p class="textFormatTutorial"> Next to the 'Favorites' button there's the 'Chart' button and the 'Github' button that will take you to the 'Read me' 
+                  document to know more about the making of this website. </p>
+              </div>
+              <div class="columnClass">
+                  <img style="width: 50%;" src="image\\tutorial\\ChartsNAbout.gif">
+              </div>
+              <div class="buttonsContainer" style="padding-top: 45px;">
+                  <div class="setEnglish">
+                          <button id="skipButton"> Skip tutorial </button>
+                  </div>
+                  <div class="setSpanish">
+                      <button id="continueButton"> Continue </button>
+              </div>`;
+      break;
+      case 8:
+              tutorialTemplate = `
+              <div class="rowRightClass">
+                  <p class="textFormatTutorial textFormatTutorialSmall"> ${tutorialPageIndex} / 9 </p>
+              </div>
+              <div class="rowRightClass">
+                  <div class="columnClass" style="flex: 1;">
+                      <p class="textFormatTutorial"> ${tutorialText[language].sideMenu} </p>
+                  </div>
+                  <div class="columnClass" style="flex: 1;">
+                      <img style="width: 40%; " src="image\\tutorial\\SideMenu.gif">
+                  </div>
+              </div>
+              <div class="buttonsContainer" style="position: absolute; bottom: 0; width: 88%;">
+                  <div class="setEnglish">
+                          <button id="skipButton"> Skip tutorial </button>
+                  </div>
+                  <div class="setSpanish">
+                      <button id="continueButton"> Continue </button>
+                  </div>
+              </div>`;
+      break;
+      case 9:
+              tutorialTemplate = `
+              <div class="rowRightClass">
+                  <p class="textFormatTutorial textFormatTutorialSmall"> ${tutorialPageIndex} / 9 </p>
+              </div>
+              <div class="columnClass">
+                  <p class="textFormatTutorial"> ${tutorialText[language].tutorialEnd} </p>
+              </div>
+              <div class="columnClass">
+                  <img style="width: 90%; margin: 40px 0 0;" src="image\\tutorial\\English_motto.png">
+                  <img style="width: 40%; margin: 20px 0 100px;" src="image\\tutorial\\SignatureBlack.png">
+              </div>
+              <div class="buttonsContainer" style="padding-top: 45px;">
+                  <div class="setEnglish">
+                          <button id="skipButton"> Close </button>
+                  </div>
+              </div>`;
+      break;
+  }
+
+  tutorialPageIndex++;
+  tutorialWindow.innerHTML = tutorialTemplate;
+
+  document.getElementById("skipButton").addEventListener("click", () => {
+      tutorialWindow.style.display = "none";
+      tutorialContainer.style.display = "none";
+      activateScroll();
+  });
+  
+  document.getElementById("continueButton").addEventListener("click", () => {
+      tutorialWindow.innerHTML = "";
+      printTutorialWindow();
+  });
+};

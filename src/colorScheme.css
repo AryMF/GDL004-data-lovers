@@ -1,0 +1,103 @@
+:root{
+    /* Fondo para main */
+    --bodyBackground: Gainsboro;
+    /* Menu barra header */
+    --headerColor: crimson;
+    --headerIcon: black;
+    --headerIconHover: white;
+    --headerTitle: black;
+    /* Side menu */
+    --sideMenuColor: whitesmoke;
+    --sideMenuItem: #818181;
+    --sideMenuHover: black;
+    --sideMenuSelectedLanguage: red;
+    /* Floating menu */
+    --floatingMenuColor: #0003bb;
+    --floatingMenuBorder: whitesmoke;
+    --floatingMenuIcon: white;
+    --floatingMenuIconHover: black;
+    --floatingMenuOpen: black;
+    /* FilterShortPath */
+    --pathUnderlineColor: gray;
+    --pathText: DarkSlateGrey;
+    --pathTextActive: orangered;
+    /* Clear favorites button */
+    --buttonColor: #0003bb;
+    --buttonText: #fff;
+    /* Pokecard */
+    --cardBorder: white;
+    /* Pokecard front */
+    --cardFrontColor: white;
+    --cardPokeName: black;
+    --cardPokeNum: black;
+    --cardPokeNumBackground: rgb(53, 46, 46, 40%);
+    /* Pokecard back */
+    --cardBackColor: white;
+    --cardFocus: black;
+    --cardTypeInfo: #fff;
+    /* Character window */
+    --characterWindowColor: whitesmoke;
+    --characterWindowBorder: black;
+    --characterWindowPokeName: black; /**/
+    --characterWindowPokeEntry: DarkSlateGrey;
+    --characterWindowPokeNum: black;
+    --characterWindowPokeNumBackground: hsl(0, 0%, 0%, 30%);
+    --characterWindowDivisions: DimGrey;
+    --characterWindowAudio: black;
+    --characterWindowAudioHover: maroon;
+    /* Modal */
+    --modalWindowColor: rgb(255, 82, 82, 85%);
+    --modalWindowBorder: #888;
+    --closeButtonColor: white;
+    --closeButtonColorHover: #000;
+    /* Varios */
+    --textFormatBig: DarkSlateGrey;
+    --textFormatMedium: DarkSlateGrey;
+    --textFormatSmall: DarkSlateGrey;
+  }
+  
+  [data-mode="dark"]{
+    /* Fondo para main */
+    --bodyBackground: #121212;
+    /* Menu barra header */
+    --headerColor: #272727;
+    --headerIcon: #030203;
+    --headerIconHover: hsl(0, 0%, 60%); /* #999999*/
+    --headerTitle: #FF5252;
+    /* Side menu */
+    --sideMenuColor: #030203;
+    --sideMenuItem: hsl(0, 0%, 60%); 
+    --sideMenuHover: hsl(0, 0%, 100%);
+    --sideMenuSelectedLanguage: #FF5252;
+    /* Floating menu */
+    --floatingMenuColor: #272727;
+    --floatingMenuBorder: hsl(0, 0%, 60%);
+    --floatingMenuIcon: hsl(0, 0%, 87%); /* #DEDEDE */
+    --floatingMenuIconHover: #FF5252;
+    --floatingMenuOpen: #030203;    
+    /* FilterShortPath */
+    --pathUnderlineColor: gray;
+    --pathText: hsl(0, 0%, 87%);
+    --pathTextActive: #FF5252;
+    /* Clear favorites button */
+    --buttonColor: #FF5252;
+    --buttonText: #030203;
+    /* Pokecard */
+    --cardBorder: hsl(0, 0%, 60%);
+    /* Pokecard back */
+    --cardFocus: hsl(0, 0%, 100%);    
+    /* Character window */
+    --characterWindowColor: #272727;
+    --characterWindowBorder: black;
+    --characterWindowPokeEntry: hsl(0, 0%, 85%);
+    --characterWindowPokeNum: hsl(0, 0%, 60%);
+    --characterWindowPokeNumBackground: hsl(0, 0%, 5%);
+    --characterWindowAudio: hsl(0, 0%, 85%);
+    --characterWindowAudioHover: #FF5252;
+    /* Modal */
+    --modalWindowBorder: hsl(0, 0%, 60%);
+    /* Varios */
+    --textFormatBig: hsl(0, 0%, 85%);
+    --textFormatMedium: hsl(0, 0%, 85%);
+    --textFormatSmall: hsl(0, 0%, 60%);
+  }
